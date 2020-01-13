@@ -4,6 +4,7 @@ import { TextInput } from "react-native-gesture-handler";
 import {Header, Left, Right, Title} from 'native-base';
 import axios from 'axios';
 import OrderHeader from "../Component/OrderHeader";
+import MyFooter from "../Component/MyFooter";
 
 export default class SelectRestaurant extends Component {
 
@@ -38,7 +39,7 @@ export default class SelectRestaurant extends Component {
       _renderItem = ({item}) => (
         <TouchableOpacity style = {background} 
         onPress={() => {
-          this.props.navigation.navigate("menu", {username: this.state.username,restaurant_name : item.restaurant_name});
+          this.props.navigation.navigate("menu", {username: this.state.username, restaurant_name : item.restaurant_name});
           console.log(this.props);
         }} >
             <Image style={{width: 84, height : 84, marginRight : 49}}
@@ -105,35 +106,7 @@ export default class SelectRestaurant extends Component {
               numColumns={1}
               contentContainerStyle={listView}
             />
-            <View style = {footer}>
-              <TouchableOpacity style = {footerBox}>
-                <Image
-                style={{width:55, height:55}}
-                source={require('../assets/images/drawable-hdpi/아이콘_주문하기_active.png')}
-                >
-                </Image>
-              </TouchableOpacity>
-              <TouchableOpacity style = {footerBox}
-              onPress={() => {
-                this.props.navigation.navigate("haktalNews");
-                console.log(this.props);
-              }}>
-                <Image
-                  style={{width:55, height:55}}
-                  source={require('../assets/images/drawable-hdpi/아이콘_학탈소식_disabled.png')}>
-                </Image>
-              </TouchableOpacity>
-              <TouchableOpacity style = {footerBox}
-              onPress={() => {
-                this.props.navigation.navigate("mypage");
-                console.log(this.props);
-              }}>
-              <Image
-                style={{width:55, height:55}}
-                source={require('../assets/images/drawable-hdpi/아이콘_마이학탈_disabled.png')}>
-              </Image>
-              </TouchableOpacity>
-            </View>
+            <MyFooter navigation={this.props.navigation} orderBoolean={true}></MyFooter>
           </View>
         );
       }

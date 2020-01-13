@@ -89,7 +89,7 @@ export default class HaktalNews extends React.Component {
             renderItem={({item}) => this.renderItem({ item })}
             keyExtractor={item => item.id}
         />
-        <MyFooter navigation={this.props.navigation}></MyFooter>
+        <MyFooter navigation={this.props.navigation} newsBoolean={true}></MyFooter>
       </SafeAreaView>
     );
   }

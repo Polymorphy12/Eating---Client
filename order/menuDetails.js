@@ -121,7 +121,7 @@ export default class MenuDetails extends Component {
             </ScrollView>
             
         
-            <MyFooter navigation={this.props.navigation}></MyFooter>
+            <MyFooter navigation={this.props.navigation} orderBoolean={true}></MyFooter>
           </View>
         );
       }

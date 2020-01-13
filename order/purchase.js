@@ -59,7 +59,7 @@ export default class Purchase extends Component {
                   borderStyle: "solid",
                   borderWidth: 1,
                   borderColor: "#979797"
-                  }}> 
+                  }}>
                 </Image>
                 <View style = {locationInfoContainer}>
                     <Text style={locationName}>{this.state.data[i].restaurant_name}</Text>
@@ -183,11 +183,11 @@ export default class Purchase extends Component {
                     onPress={() => {
                         navigation.navigate("orderHistory");
                     }}>
-                    <Text style={letsGetStarted}>확인</Text>
+                    <Text style={letsGetStarted}>결제하기</Text>
                 </TouchableOpacity>
             </View>
             </ScrollView>
-            <MyFooter navigation={this.props.navigation}></MyFooter>
+            <MyFooter navigation={this.props.navigation} orderBoolean={true}></MyFooter>
           </View>
         );
       }
