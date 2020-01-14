@@ -112,7 +112,7 @@ export default class ShoppingCart extends Component {
                     <Text style={letsGetStarted}>장소 고르기</Text>
                 </TouchableOpacity>
             </View>
-            <MyFooter navigation={this.props.navigation}></MyFooter>
+            <MyFooter navigation={this.props.navigation} orderBoolean={true}></MyFooter>
           </View>
         );
       }

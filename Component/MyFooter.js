@@ -1,18 +1,26 @@
 import React from 'react';
-import { View, TouchableOpacity, Image, StyleSheet} from 'react-native';
+import { View, TouchableOpacity, Image, StyleSheet, ToastAndroid} from 'react-native';
 import { Header, Title, Left, Right } from 'native-base';
 
 export default class MyFooter extends React.Component {
     render() {
         return(
             <View style = {footer}>
-              <TouchableOpacity style = {footerBox}>
+              <TouchableOpacity style = {footerBox}
+                onPress={() => {
+                  ToastAndroid.show(JSON.stringify(this.props.navigation), ToastAndroid.SHORT);
+                  this.props.navigation.navigate("SelectRestaurant");
+                  console.log(this.props);
+                }}>
                 <Image
                 style={{width:55, height:55}}
-                source={require('../assets/images/drawable-hdpi/아이콘_주문하기_active.png')}
+                source={this.props.orderBoolean ?
+                        require('../assets/images/drawable-hdpi/아이콘_주문하기_active.png')
+                        : require('../assets/images/drawable-hdpi/아이콘_주문하기_disabled.png')}
                 >
                 </Image>
               </TouchableOpacity>
+
               <TouchableOpacity style = {footerBox}
               onPress={() => {
                 this.props.navigation.navigate("haktalNews");
@@ -20,9 +28,12 @@ export default class MyFooter extends React.Component {
               }}>
                 <Image
                   style={{width:55, height:55}}
-                  source={require('../assets/images/drawable-hdpi/아이콘_학탈소식_disabled.png')}>
+                  source={this.props.newsBoolean ?
+                          require('../assets/images/drawable-hdpi/아이콘_학탈소식_active.png')
+                          : require('../assets/images/drawable-hdpi/아이콘_학탈소식_disabled.png')}>
                 </Image>
               </TouchableOpacity>
+
               <TouchableOpacity style = {footerBox}
               onPress={() => {
                 this.props.navigation.navigate("mypage");
@@ -30,7 +41,9 @@ export default class MyFooter extends React.Component {
               }}>
               <Image
                 style={{width:55, height:55}}
-                source={require('../assets/images/drawable-hdpi/아이콘_마이학탈_disabled.png')}>
+                source={this.props.mypageBoolean ?
+                        require('../assets/images/drawable-hdpi/아이콘_마이학탈_active.png')
+                        :require('../assets/images/drawable-hdpi/아이콘_마이학탈_disabled.png')}>
               </Image>
               </TouchableOpacity>
             </View>        

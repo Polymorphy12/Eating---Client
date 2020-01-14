@@ -24,7 +24,7 @@ export default class CustomerSatisfaction extends Component {
                     <MyPageListItem itemTitle = "Eating! 인스타그램" contact = "instagram"></MyPageListItem>
                     <MyPageListItem itemTitle = "Eating! 이메일" contact = "e-mail"></MyPageListItem>
                 </ScrollView>
-                <MyFooter navigation={this.props.navigation}></MyFooter>
+                <MyFooter navigation={this.props.navigation} mypageBoolean={true}></MyFooter>
             </View>
         );
     }

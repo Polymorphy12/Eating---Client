@@ -132,7 +132,7 @@ export default class Menu extends Component {
             />
             
         
-            <MyFooter navigation={this.props.navigation}></MyFooter>
+            <MyFooter navigation={this.props.navigation} orderBoolean={true}></MyFooter>
           </View>
         );
       }

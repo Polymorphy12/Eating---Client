@@ -30,7 +30,7 @@ export default class EventDetail extends React.Component {
                 </Text>
                 </ScrollView>
                 
-                <MyFooter navigation={this.props.navigation}></MyFooter>
+                <MyFooter navigation={this.props.navigation} newsBoolean={true}></MyFooter>
             </View>
             
         );

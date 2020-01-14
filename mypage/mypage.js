@@ -136,9 +136,13 @@ export default class MyPage extends Component {
                     fontStyle: "normal", lineHeight: 20, letterSpacing: -0.41, textAlign: "left", color: "#000000"}}
                     >나이름</Text>
                   </View>
-                  <Image 
-                  style = {{width: 60, height : 60, marginLeft: 'auto', marginRight: '6.67%'}}
-                  source={require('../assets/images/drawable-xxxhdpi/아이콘_수정.png')}></Image>
+                  <TouchableOpacity style={{width: 60, height : 60, marginLeft: 'auto', marginRight: '6.67%'}}
+                    onPress={() => this.props.navigation.navigate('personalInfo')}>
+
+                    <Image 
+                    style = {{width: 60, height : 60, marginLeft: 'auto', marginRight: '6.67%'}}
+                    source={require('../assets/images/drawable-xxxhdpi/아이콘_수정.png')}></Image>
+                  </TouchableOpacity>
                 </View>
               {/*
                 컨테이너 2 : 가로 정렬.
@@ -177,7 +181,7 @@ export default class MyPage extends Component {
                 </View>
             </ScrollView>
               
-            <MyFooter navigation={this.props.navigation}></MyFooter>
+            <MyFooter navigation={this.props.navigation} mypageBoolean={true}></MyFooter>
             
             {/* <View style={orderButtonContainer}>
                 <TouchableOpacity

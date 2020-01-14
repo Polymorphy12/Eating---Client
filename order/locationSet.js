@@ -129,7 +129,7 @@ export default class LocationSet extends Component {
                 </TouchableOpacity>
             </View>
         
-            <MyFooter navigation={this.props.navigation}></MyFooter>
+            <MyFooter navigation={this.props.navigation} orderBoolean={true}></MyFooter>
           </View>
         );
       }
