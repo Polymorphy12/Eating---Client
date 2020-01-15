@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, SafeAreaView, Button, View, Text, TextInput , ProgressBarAndroid, StyleSheet} from 'react-native';
+import { TouchableOpacity, SafeAreaView, Button, View, Text, TextInput , ProgressBarAndroid, StyleSheet, ToastAndroid} from 'react-native';
 import { CheckBox } from 'native-base';
 import MyHeader from '../Component/MyHeader';
 import ProgressBar from '../Component/ProgressBar';
@@ -7,7 +7,19 @@ import ProgressBar from '../Component/ProgressBar';
 export default class SignUp2 extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { progress: 1, empty: false, buttonColor: "#fadee2", pageTitle: "회원가입" }
+    this.state = {
+      progress: 1,
+      blocked: true,
+      mendatoryCheckBoxChecked: false,
+      mendatoryCheckBoxColor: 'white',
+      mendatoryCheckBoxBorderColor: 'black',
+      optionalCheckBoxChecked: false,
+      optionalCheckBoxColor: 'white',
+      optionalCheckBoxBorderColor: 'black',
+      buttonColor: "#fadee2",
+      pageTitle: "회원가입",
+      _userName: props.navigation.getParam('userName'),
+    }
   }
 
   render() {
@@ -20,19 +32,37 @@ export default class SignUp2 extends React.Component {
           <View style={{flex: 0.5, flexDirection:"row", backgroundColor:"blue"}}>
             <View style={{flex:1, backgroundColor:"green"}}>
               <View style={{flex:1, flexDirection:"column", alignItems:"center", justifyContent:"center", }}>
-                <TouchableOpacity style={{width:16, height:16, borderRadius:40, borderColor:"black", borderWidth:1, backgroundColor:"white"}}></TouchableOpacity>
+                <TouchableOpacity style={{width:16, height:16, borderRadius:40, borderColor: this.state.mendatoryCheckBoxBorderColor, borderWidth:1, backgroundColor: "white", alignItems: 'center', justifyContent: 'center'}}
+                                  onPress={() => {
+                                    this.setState({
+                                      buttonColor: !this.state.mendatoryCheckBoxChecked ? '#f08b98' : '#fadee2',
+                                      mendatoryCheckBoxColor: !this.state.mendatoryCheckBoxChecked ? '#d54565' : 'white',
+                                      mendatoryCheckBoxBorderColor: !this.state.mendatoryCheckBoxChecked ? '#d54565' : 'black',
+                                      mendatoryCheckBoxChecked: !this.state.mendatoryCheckBoxChecked,
+                                      blocked: !this.state.blocked,
+                                    })
+                                  }}>
+                  <View style={{width:10, height:10, borderRadius:40, backgroundColor: this.state.mendatoryCheckBoxColor}}></View>
+                </TouchableOpacity>
               </View>
               <View style={{flex:2, backgroundColor:"black"}}></View>
               <View style={{flex:1, flexDirection:"column", alignItems:"center", justifyContent:"center", }}>
-                <TouchableOpacity style={{width:16, height:16, borderRadius:40, borderColor:"black", borderWidth:1, backgroundColor:"white"}}></TouchableOpacity>
+              <TouchableOpacity style={{width:16, height:16, borderRadius:40, borderColor: this.state.optionalCheckBoxBorderColor, borderWidth:1, backgroundColor: "white", alignItems: 'center', justifyContent: 'center'}}
+                                  onPress={() => this.setState({
+                                    optionalCheckBoxColor: !this.state.optionalCheckBoxChecked ? '#d54565' : 'white',
+                                    optionalCheckBoxBorderColor: !this.state.optionalCheckBoxChecked ? '#d54565' : 'black',
+                                    optionalCheckBoxChecked: !this.state.optionalCheckBoxChecked
+                                    })}>
+                  <View style={{width:10, height:10, borderRadius:40, backgroundColor: this.state.optionalCheckBoxColor}}></View>
+                </TouchableOpacity>
               </View>
             </View>
             <View style={{flex:6, backgroundColor:"violet"}}>
               <View style={{flex:1, justifyContent:"center", }}>
-                <Text style={{fontSize:15}}>필수 항목 모두 동의</Text>
+                <Text style={{fontFamily: 'S-CoreDream-6Bold', fontSize:16, letterSpacing: -0.23}}>필수 항목 모두 동의</Text>
               </View>
-              <View style={{flex:2, flexDirection:"column", justifyContent:"space-around", backgroundColor:"white"}}>
-                <Text>학탈이용약관</Text>
+              <View style={{flex:2, flexDirection:"column", justifyContent:"space-around", backgroundColor: "white"}}>
+                <Text>잇힝이용약관</Text>
                 <Text>전자금융거래 이용약관</Text>
                 <Text>개인정보 수집이용</Text>
               </View>
@@ -41,15 +71,15 @@ export default class SignUp2 extends React.Component {
               </View>
             </View>
             <View style={{flex:3, }}>
-              <View style={{flex:1, }}>
-                
-              </View>
+              <View style={{flex:1, }}></View>
               <View style={{flex:2, flexDirection:"column", justifyContent:"space-around", alignItems:"center", backgroundColor:"white"}}>
                 <TouchableOpacity style={{width:"60%", borderRadius:4, borderColor:"black", borderWidth:2, alignItems:"center", backgroundColor:"white"}}><Text>내용확인</Text></TouchableOpacity>
                 <TouchableOpacity style={{width:"60%", borderRadius:4, borderColor:"black", borderWidth:2, alignItems:"center", backgroundColor:"white"}}><Text>내용확인</Text></TouchableOpacity>
                 <TouchableOpacity style={{width:"60%", borderRadius:4, borderColor:"black", borderWidth:2, alignItems:"center", backgroundColor:"white"}}><Text>내용확인</Text></TouchableOpacity>
               </View>
-              <View style={{flex:1, }}></View>
+              <View style={{flex:1, alignItems: 'center', justifyContent: 'center'}}>
+                <TouchableOpacity style={{width:"60%", borderRadius:4, borderColor:"black", borderWidth:2, alignItems:"center", backgroundColor:"white"}}><Text>내용확인</Text></TouchableOpacity>
+              </View>
             </View>
           </View>
         </View>
@@ -57,9 +87,9 @@ export default class SignUp2 extends React.Component {
         
         <View style={{width: "100%", height: 0, alignItems:"center", flex: 1}}>
           <TouchableOpacity style={{width: "84.4%", height: 48, alignItems:"center", borderRadius: 50, backgroundColor: this.state.buttonColor}}
-            onPress={() => this.props.navigation.navigate('SignUp3')}
+            onPress={() => this.props.navigation.navigate('signUp3', {userName: this.state._userName, optionalCheckBoxChecked: this.state.optionalCheckBoxChecked})}
             activeOpacity={0.8}
-            disabled={this.state.empty}>
+            disabled={this.state.blocked}>
             <Text style={{color: "white", fontSize: 20, padding: 10}}>학식 탈출하기</Text>
           </TouchableOpacity>
         </View>

@@ -21,14 +21,14 @@ export default class ProgressBar extends React.Component {
                         progress={progress / 5}
                         style={{width: "74.4%", height: 100}}
                     />
-                    <View style={{width: "100%", height: 8, alignItems: "center", top: -54.3}}>
-                        <View style={{width: "76%", height: 8, display: "flex", flexDirection: "row", justifyContent:"space-between"}}>
-                            <View style={{width: 8, height: 8, backgroundColor: dotColor[0], borderRadius: 20}}></View>
-                            <View style={{width: 8, height: 8, backgroundColor: dotColor[1], borderRadius: 20}}></View>
-                            <View style={{width: 8, height: 8, backgroundColor: dotColor[2], borderRadius: 20}}></View>
-                            <View style={{width: 8, height: 8, backgroundColor: dotColor[3], borderRadius: 20}}></View>
-                            <View style={{width: 8, height: 8, backgroundColor: dotColor[4], borderRadius: 20}}></View>
-                            <View style={{width: 8, height: 8, backgroundColor: dotColor[5], borderRadius: 20}}></View>
+                    <View style={{width: "100%", height: 8, alignItems: "center", top: -57}}>
+                        <View style={{width: "76%", height:13, display: "flex", flexDirection: "row", justifyContent:"space-between"}}>
+                            <View style={{width: 13, height: 13, backgroundColor: dotColor[0], borderRadius: 20}}></View>
+                            <View style={{width: 13, height: 13, backgroundColor: dotColor[1], borderRadius: 20}}></View>
+                            <View style={{width: 13, height: 13, backgroundColor: dotColor[2], borderRadius: 20}}></View>
+                            <View style={{width: 13, height: 13, backgroundColor: dotColor[3], borderRadius: 20}}></View>
+                            <View style={{width: 13, height: 13, backgroundColor: dotColor[4], borderRadius: 20}}></View>
+                            <View style={{width: 13, height: 13, backgroundColor: dotColor[5], borderRadius: 20}}></View>
                         </View>
                     </View>
                 </View>
