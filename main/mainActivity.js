@@ -38,7 +38,7 @@ export default class MainActivity extends Component {
                 </TouchableOpacity>
                 <TouchableOpacity style={signIn}
                 onPress= {() => {
-                    navigation.navigate("signUp3");
+                    navigation.navigate("signUp1");
                 }}>
                     <Text style={signIn3}>새로 오셨어요? </Text>
                     <Text style={signIn2}>회원가입 하기!</Text>

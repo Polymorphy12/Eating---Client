@@ -18,8 +18,9 @@ export default class Menu extends Component {
       username : props.navigation.getParam('username', '')
     }
     //console.log(this.state.restaurant_name);
-    
   }
+
+  numberWithCommas = (x) =>  String(x).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   
       componentDidMount(){
         //console.log('SelectRestaurant componentDidMount!!');
@@ -43,61 +44,64 @@ export default class Menu extends Component {
       _renderItem = ({item}) => {
         if(item.menu_image)
         {
-          return(<View style = {background}
-            >
+          return(
+            <View style = {{flexDirection: 'row', marginHorizontal: '6.7%', justifyContent: 'space-between', paddingBottom: '2%'}}>
+              <View style={{flexDirection: 'row'}}>
                 <Image style={{ 
                   width: 68, 
                   height : 68}}              
-                  source={{uri: 'http://13.124.193.165:3000/static/' + item.menu_image}}
-                  > 
-                </Image>
-                <View style = {foodInfoContainer}>
-                    <Text style={foodName}>{item.menu_name}</Text>
-                    <Text style={foodPrice}>{item.menu_price}원</Text>
+                  source={{uri: 'http://13.124.193.165:3000/static/' + item.menu_image}}></Image>
+                <View style = {{marginLeft: '8.9%', flexDirection: 'column', justifyContent: 'space-evenly'}}>
+                  <Text style={foodName}>{item.menu_name}</Text>
+                  <Text style={foodPrice}>{this.numberWithCommas(item.menu_price)}</Text>
                 </View>
-                <TouchableOpacity 
-                style = {{width: 138, height: 36, borderRadius: 32, backgroundColor: '#ed6578', 
-                alignItems: 'center', justifyContent: "center"}}
-                
-                onPress={() => {
-                  this.props.navigation.navigate("menuDetails", 
-                  {username: this.state.username, restaurant_name : this.state.restaurant_name, menu_image : item.menu_image, 
-                    menu_price : item.menu_price, menu_name : item.menu_name});
-                  console.log(this.props);
-                }}
-                >
-                  <Text style = {{fontFamily: "S-CoreDream-8", fontSize: 14, fontWeight: "900", fontStyle: "normal", lineHeight: 15, letterSpacing: 0.65, textAlign: "center", color: "#ffffff"}}>
+              </View>
+
+              <View style={{justifyContent: 'center'}}>
+                <TouchableOpacity style = {{width: 138, height: 36, borderRadius: 32, backgroundColor: '#ed6578', 
+                                            alignItems: 'center', justifyContent: "center"}}
+                                  onPress={() => {
+                                    this.props.navigation.navigate("menuDetails", 
+                                    {username: this.state.username, restaurant_name : this.state.restaurant_name, menu_image : item.menu_image, 
+                                      menu_price : item.menu_price, menu_name : item.menu_name});
+                                    console.log(this.props);
+                                  }}>
+                  <Text style = {{fontFamily: "S-CoreDream-8Heavy", fontSize: 14, fontWeight: "900", fontStyle: "normal", letterSpacing: 0.65, textAlign: "center", color: "#ffffff"}}>
                     장바구니에 담기</Text>
                 </TouchableOpacity>
+              </View>
             </View>
-            );
+          );
         }
         else{
-          return(<View style = {background}>
+          return(
+            <View style = {{flexDirection: 'row', marginHorizontal: '6.7%', justifyContent: 'space-between', paddingBottom: '2%'}}>
+              <View style={{flexDirection: 'row'}}>
                 <Image style={{ 
                   width: 68, 
                   height : 68}}              
-                  > 
-                </Image>
-                <View style = {foodInfoContainer}>
-                    <Text style={foodName}>{item.menu_name}</Text>
-                    <Text style={foodPrice}>{item.menu_price}원</Text>
+                  source={{uri: 'http://13.124.193.165:3000/static/' + item.menu_image}}></Image>
+                <View style = {{marginLeft: '8.9%', flexDirection: 'column', justifyContent: 'space-evenly'}}>
+                  <Text style={foodName}>{item.menu_name}</Text>
+                  <Text style={foodPrice}>{this.numberWithCommas(item.menu_price)}</Text>
                 </View>
-                <TouchableOpacity 
-                style = {{width: 138, height: 36, borderRadius: 32, backgroundColor: '#ed6578', 
-                alignItems: 'center', justifyContent: "center"}}
-                onPress={() => {
-                  this.props.navigation.navigate("menuDetails", 
-                  {username: this.state.username, restaurant_name : this.state.restaurant_name, menu_name : item.menu_name, 
-                    menu_price : item.menu_price});
-                  console.log(this.props);
-                }}
-                >
-                  <Text style = {{fontFamily: "S-CoreDream-8", fontSize: 14, fontWeight: "900", fontStyle: "normal", lineHeight: 15, letterSpacing: 0.65, textAlign: "center", color: "#ffffff"}}>
+              </View>
+
+              <View style={{justifyContent: 'center'}}>
+                <TouchableOpacity style = {{width: 138, height: 36, borderRadius: 32, backgroundColor: '#ed6578', 
+                                            alignItems: 'center', justifyContent: "center"}}
+                                  onPress={() => {
+                                    this.props.navigation.navigate("menuDetails", 
+                                    {username: this.state.username, restaurant_name : this.state.restaurant_name, menu_image : item.menu_image, 
+                                      menu_price : item.menu_price, menu_name : item.menu_name});
+                                    console.log(this.props);
+                                  }}>
+                  <Text style = {{fontFamily: "S-CoreDream-8Heavy", fontSize: 14, fontWeight: "900", fontStyle: "normal", letterSpacing: 0.65, textAlign: "center", color: "#ffffff"}}>
                     장바구니에 담기</Text>
                 </TouchableOpacity>
+              </View>
             </View>
-            );
+          );
         }
           
     }
@@ -112,26 +116,19 @@ export default class Menu extends Component {
 
         return (
           <View
-            style= {{
-              flex: 1
-            }}>
+            style= {{flex: 1}}>
             <OrderHeader 
             navigation={this.props.navigation} 
             pageTitle={this.state.pageTitle}
             username={this.state.username}></OrderHeader>
             
-            <View>
-                <Text style={titleText}>{this.state.restaurant_name}</Text>
-            </View>
+            <Text style={titleText}>{this.state.restaurant_name}</Text>
             
             <FlatList 
               data={this.state.data}
               renderItem={this._renderItem}
-              
-              contentContainerStyle={listView}
-            />
-            
-        
+              contentContainerStyle={listView}/>
+
             <MyFooter navigation={this.props.navigation} orderBoolean={true}></MyFooter>
           </View>
         );
@@ -141,21 +138,21 @@ export default class Menu extends Component {
 const titleText = {
   // width: 225.6,
   // height: 25,
-  fontFamily: "AppleSDGothicNeo",
-  fontSize: 23,
+  fontFamily: "S-CoreDream-5Medium",
+  fontSize: 20,
   fontWeight: "800",
   fontStyle: "normal",
-  // lineHeight: 25,
-  letterSpacing: -0.24,
+  lineHeight: 24,
+  letterSpacing: 1.31,
   textAlign: "center",
-  color: "#000000"
+  color: "#6e6e6e",
+  marginVertical: '2.5%',
 };
 
 
 const background = {
-  height: 160,
+  height: 80,
   borderRadius: 4,
-  backgroundColor: '#fff',
   borderStyle: "solid",
   borderWidth: 0,
   borderColor: "#ff1d30",
@@ -176,18 +173,17 @@ const foodInfoContainer = {
 
 const foodName = {
   
-  fontFamily: "S-CoreDream-5",
-  fontSize: 15,
+  fontFamily: "S-CoreDream-5Medium",
+  fontSize: 17,
   fontWeight: "500",
   fontStyle: "normal",
   letterSpacing: 0,
   color: "#273951",
-  marginBottom: 10
 }
 
 const foodPrice = {
   fontFamily: "S-CoreDream-5",
-  fontSize: 17,
+  fontSize: 13,
   fontWeight: "500",
   fontStyle: "normal",
   letterSpacing: 0,

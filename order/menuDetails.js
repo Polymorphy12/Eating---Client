@@ -25,6 +25,8 @@ export default class MenuDetails extends Component {
     console.log(this.state.restaurant_name);
     
   }
+
+  numberWithCommas = (x) =>  String(x).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   
       handleIncrease = () => {
         this.setState({
@@ -74,7 +76,7 @@ export default class MenuDetails extends Component {
               {/* 가격 컨테이너 */}
               <View style={priceContainer}>
                 <Text style = {detailsText}>가격</Text>
-                <Text style={priceText}>{this.state.menuPrice}원</Text>
+                <Text style={priceText}>{this.numberWithCommas(this.state.menuPrice)} 원</Text>
               </View>
               
               
@@ -98,7 +100,7 @@ export default class MenuDetails extends Component {
               </View>
 
               <Text style={finalPriceText}>총 주문 금액</Text>
-              <Text style={finalPrice}>{this.state.totalPrice} 원</Text>
+              <Text style={finalPrice}>{this.numberWithCommas(this.state.totalPrice)} 원</Text>
 
               {/* 버튼 컨테이너 */}
               <View style={buttonContainer}>

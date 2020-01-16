@@ -8,12 +8,18 @@ import ProgressBar from '../Component/ProgressBar';
 export default class SignUp1 extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { progress: 0, empty: false, buttonColor: "#fadee2", pageTitle: "회원가입" };
+    this.state = {
+      progress: 0,
+      empty: true,
+      buttonColor: "#fadee2",
+      pageTitle: "회원가입",
+      _userName: '',
+    };
   }
 
   onFill = (text) => {
-    if (text === "") this.setState({empty: true, buttonColor: "#fadee2"});
-    else this.setState({empty: false, buttonColor: "#ed6578"});
+    if (text === "") this.setState({empty: true, buttonColor: "#fadee2", _userName: text});
+    else this.setState({empty: false, buttonColor: "#ed6578", _userName: text});
   }
 
   render() {
@@ -35,7 +41,7 @@ export default class SignUp1 extends React.Component {
         </View>
         <View style={{width: "100%", height: 0, alignItems:"center", flex: 1}}>
           <TouchableOpacity style={{width: "84.4%", height: 48, alignItems:"center", borderRadius: 50, backgroundColor: this.state.buttonColor}}
-            onPress={() => this.props.navigation.navigate('SignUp2')}
+            onPress={() => this.props.navigation.navigate('signUp2', {userName: this.state._userName})}
             activeOpacity={0.8}
             disabled={this.state.empty}>
             <Text style={{color: "white", fontSize: 20, padding: 10}}>학식 탈출하기</Text>

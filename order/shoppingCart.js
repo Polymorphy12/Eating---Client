@@ -3,6 +3,7 @@ import { Text, View, Button, ImageBackground, TouchableOpacity, ScrollView, Flat
 import { TextInput } from "react-native-gesture-handler";
 import OrderHeader from "../Component/OrderHeader";
 import MyFooter from "../Component/MyFooter";
+import ShoppingCartProgressBar from '../Component/ShoppingCartProgressBar';
 import axios from "axios";
 
 export default class ShoppingCart extends Component {
@@ -88,12 +89,9 @@ export default class ShoppingCart extends Component {
 
         return (
           <View
-            style= {{
-              flex: 1              
-            }}
-          >
+            style= {{flex: 1}}>
             <OrderHeader navigation={this.props.navigation} pageTitle={this.state.pageTitle}></OrderHeader>
-            
+            <ShoppingCartProgressBar progress={0}></ShoppingCartProgressBar>
             <FlatList 
               data={this.state.data}
               renderItem={this._renderItem}

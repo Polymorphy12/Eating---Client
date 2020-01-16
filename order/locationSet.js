@@ -4,6 +4,7 @@ import { TextInput } from "react-native-gesture-handler";
 import axios from 'axios';
 import OrderHeader from "../Component/OrderHeader";
 import MyFooter from "../Component/MyFooter";
+import ShoppingCartProgressBar from '../Component/ShoppingCartProgressBar';
 
 export default class LocationSet extends Component {
     
@@ -42,36 +43,50 @@ export default class LocationSet extends Component {
   }
     
       _renderItem = ({item}) => (
-        <TouchableOpacity 
-        style = {[background,{
-          borderWidth : this.state.itemPressed === item.location ? 1 : 0
-        }]}
-        onPress={() => {
-          this.typeSelected(item.location)
-      }}>
-            <Image style={{ 
-              width: 80, 
-              height : 86,
-              borderStyle: "solid",
-              borderWidth: 1,
-              borderColor: "#979797"
-              }}
-              source={{uri: 'http://13.124.193.165:3000/static/' + item.location_image}}
-              > 
-            </Image>
-            <Image style={{ 
-              width: 80, 
-              height : 86,
-              borderStyle: "solid",
-              borderWidth: 1,
-              borderColor: "#979797"
-              }}
-              source={{uri: 'http://13.124.193.165:3000/static/' + item.location_map}}> 
-            </Image>
-            <View style = {locationInfoContainer}>
-                <Text style={locationName}>{item.location}</Text>
-                <Text style={receivingTime}>점심수령시간: 11:50</Text>
+        <TouchableOpacity style = {{marginHorizontal : '3.9%', marginVertical: '3.7%', borderWidth : 1, borderColor: this.state.itemPressed === item.location ? 'red' : '#000000', borderStyle: "solid", borderRadius: 20, flexDirection: 'column'}}
+                          onPress={() => {
+                            this.typeSelected(item.location)
+                          }}>
+          <View style={{marginHorizontal: '4.7%'}}>
+            <View style={{borderBottomWidth: 2, borderBottomColor: '#686868'}}>
+              <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 14, lineHeight: 22, letterSpacing: -0.2, color: '#000000', marginVertical: '2%'}}>{item.location}</Text>
             </View>
+            <View style={{flexDirection: 'row', marginTop: '10%', marginBottom: '5%', justifyContent: 'space-between'}}>
+              <View style={{flexDirection: 'row'}}>
+                <Image style={{ 
+                  width: 80, 
+                  height : 86,
+                  borderStyle: "solid",
+                  borderWidth: 1,
+                  borderColor: "#979797"
+                  }}
+                  source={{uri: 'http://13.124.193.165:3000/static/' + item.location_image}}
+                  > 
+                </Image>
+                <Image style={{ 
+                  width: 80, 
+                  height : 86,
+                  borderStyle: "solid",
+                  borderWidth: 1,
+                  borderColor: "#979797",
+                  marginLeft: '4.7%'
+                  }}
+                  source={{uri: 'http://13.124.193.165:3000/static/' + item.location_map}}> 
+                </Image>
+              </View>
+              <View style={{height: 86, justifyContent: 'space-evenly'}}>
+                <View style={{flexDirection: 'row'}}>
+                  <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 15, lineHeight: 22, letterSpacing: -0.21, color: '#686868'}}>점심  </Text>
+                  <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 15, lineHeight: 22, letterSpacing: -0.21, color: '#000000'}}>11:50</Text>
+                </View>
+                <View style={{flexDirection: 'row'}}>
+                  <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 15, lineHeight: 22, letterSpacing: -0.21, color: '#686868'}}>저녁  </Text>
+                  <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 15, lineHeight: 22, letterSpacing: -0.21, color: '#000000'}}>17:50</Text>
+                </View>
+              </View>
+            </View>
+
+          </View>
         </TouchableOpacity>
       );
 
@@ -82,23 +97,23 @@ export default class LocationSet extends Component {
 
         return (
           <View
-            style= {{
-              flex: 1              
-            }}
-          >
+            style= {{flex: 1}}>
             <OrderHeader 
             navigation={this.props.navigation} 
             pageTitle={this.state.pageTitle}
             username={this.state.username}></OrderHeader>
             
+            <ShoppingCartProgressBar progress={1}></ShoppingCartProgressBar>
             
-            
-            <FlatList 
-              data={this.state.data}
-              renderItem={this._renderItem}
-              extraData={this.state}
-              contentContainerStyle={listView}
-            />
+            <View style = {{height: '63.9%', marginHorizontal : '3.9%', paddingTop: "3.478%", borderWidth : 1, borderStyle: "solid", borderRadius: 4}}>
+              <Text style={{fontFamily: 'S-CoreDream-6Bold', fontSize: 17, lineHeight: 22, letterSpacing: -0.24, color: '#000000', marginHorizontal: '3.9%'}}>배달장소</Text>
+              <FlatList 
+                data={this.state.data}
+                renderItem={this._renderItem}
+                extraData={this.state}
+                contentContainerStyle={listView}
+              />
+            </View>
             
             <View style={orderButtonContainer}>
                 <TouchableOpacity
@@ -124,8 +139,8 @@ export default class LocationSet extends Component {
                       });
                         
                     }}
-                >
-                    <Text style={letsGetStarted}>결제 수단 선택</Text>
+                  >
+                  <Text style={letsGetStarted}>결제 수단 선택</Text>
                 </TouchableOpacity>
             </View>
         
@@ -178,7 +193,9 @@ const listView = {
 }
 
 const locationInfoContainer = {
-    margin: 35
+  margin: 35,
+  justifyContent: 'space-evenly',
+  backgroundColor: 'red',
 }
 
 const locationName = {

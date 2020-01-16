@@ -3,6 +3,8 @@ import { Text, View, Button, ImageBackground, TouchableOpacity, ScrollView, Flat
 import { TextInput } from "react-native-gesture-handler";
 import OrderHeader from "../Component/OrderHeader";
 import MyFooter from "../Component/MyFooter";
+import CutLine from '../Component/CutLine';
+import ShoppingCartProgressBar from '../Component/ShoppingCartProgressBar';
 import axios from "axios";
 
 export default class Purchase extends Component {
@@ -14,9 +16,11 @@ export default class Purchase extends Component {
       username : props.navigation.getParam('username', ''),
       itemPressed : '0',
       data: [],
-      price_info : {}
+      price_info : {},
     }
-  } 
+  }
+
+  numberWithCommas = (x) =>  String(x).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
   componentDidMount(){
     axios.get('http://13.124.193.165:3000/purchase_summary/plan_summary',{
@@ -81,8 +85,7 @@ export default class Purchase extends Component {
             calculateProcess += " = "
           }
         }
-
-
+        
         return (
           <View style= {{ flex: 1 }}>
             
@@ -91,6 +94,8 @@ export default class Purchase extends Component {
             pageTitle={this.state.pageTitle}
             username={this.state.username}></OrderHeader>
             
+            <ShoppingCartProgressBar progress={2}></ShoppingCartProgressBar>
+
             {/* 
             음식점 소개 부분 
             가로 정렬
@@ -143,37 +148,37 @@ export default class Purchase extends Component {
                     </View>
                   </View>
                 </View>
-                {/* 가운데 줄 */}
-                <View>
 
-                </View>
+                {/* 가운데 줄 */}
+                <CutLine></CutLine>
                 
                 {/* 하단 컨테이너 */}
                 <View style = {{paddingHorizontal: "6.6%"}}>
                   {/* 총 금액 결산 부분 */}
-                  
-                  <Text style = {{fontFamily: "S-CoreDream-5",fontSize: 16,fontWeight: "500",fontStyle: "normal",
-                  lineHeight: 22,letterSpacing: -0.23,textAlign: "left",color: "#000000"}}>총 금액</Text>
-                  <View style = {{alignItems: "flex-end"}}>
-                    <View style = {{flexDirection : 'row'}}>
-                      <Text>결제수단 : </Text>
-                      <Text>무통장입금</Text>
-                    </View>
-                    <View style = {{flexDirection : 'row'}}>
-                      <Text>주문 금액 : </Text>
-                      <Text> + {this.state.price_info.total_price}</Text>
-                    </View>
-                    <View style = {{flexDirection : 'row'}}>
-                      <Text>할인 : </Text>
-                      <Text></Text>
-                    </View>
-                    <View style = {{flexDirection : 'row'}}>
-                      <Text>결제 금액 : </Text>
-                      <Text></Text>
+                  <Text style = {{fontFamily: "S-CoreDream-5", fontSize: 16, fontWeight: "500", fontStyle: "normal",
+                  lineHeight: 22,letterSpacing: -0.23, textAlign: "left", color: "#000000"}}>총 금액</Text>
+
+                  <View>
+                    <View style={{marginLeft: '12.7%', marginVertical: '3.5%'}}>
+                      <View style = {textContainerStyle}>
+                        <Text style={leftTextStyle}>결제수단 : </Text>
+                        <Text style={rightTextStyle}>무통장입금</Text>
+                      </View>
+                      <View style = {textContainerStyle}>
+                        <Text style={leftTextStyle}>주문 금액 : </Text>
+                        <Text style={rightTextStyle}> + {this.numberWithCommas(this.state.price_info.total_price)} 원</Text>
+                      </View>
+                      <View style = {textContainerStyle}>
+                        <Text style={leftTextStyle}>할인 : </Text>
+                        <Text style={rightTextStyle}>- {this.numberWithCommas(this.state.price_info.discount_price)} 원</Text>
+                      </View>
+                      <View style = {textContainerStyle}>
+                        <Text style={leftTextStyle}>결제 금액 : </Text>
+                        <Text style={rightTextStyle}>= {this.numberWithCommas(this.state.price_info.total_price - this.state.price_info.discount_price)} 원</Text>
+                      </View>
                     </View>
                   </View>
                 </View>
-                
               </View>
               
             <View style={orderButtonContainer}>
@@ -181,7 +186,7 @@ export default class Purchase extends Component {
                     style={orderButton}
                     title="first"
                     onPress={() => {
-                        navigation.navigate("orderHistory");
+                        navigation.navigate("purchaseFinalCheck");
                     }}>
                     <Text style={letsGetStarted}>결제하기</Text>
                 </TouchableOpacity>
@@ -267,12 +272,10 @@ const orderButton = {
     width: 335,
     height: 58,
     borderRadius: 100,
-    backgroundColor: "#ff3345",
+    backgroundColor: "#ed6578",
     alignItems: "center",
     justifyContent: "center"
 };
-
-
 
 const letsGetStarted = {
     fontFamily: "SCDream6",
@@ -282,4 +285,25 @@ const letsGetStarted = {
     letterSpacing: 0,
     textAlign: "center",
     color: "#fff"
+};
+
+const textContainerStyle = {
+  flexDirection: 'row',
+  justifyContent: 'space-between'
+};
+
+const leftTextStyle = {
+  fontFamily: 'S-CoreDream-4Regular',
+  fontSize: 15,
+  color: '#686868',
+  lineHeight: 22,
+  letterSpacing: -0.21
+};
+
+const rightTextStyle = {
+  fontFamily: 'S-CoreDream-4Regular',
+  fontSize: 15,
+  color: '#000000',
+  lineHeight: 22,
+  letterSpacing: -0.21
 };

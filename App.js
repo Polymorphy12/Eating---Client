@@ -9,6 +9,7 @@ import ShoppingCart from "./order/shoppingCart";
 import LocationSet from "./order/locationSet";
 import SetPurchase from "./order/setPurchase";
 import Purchase from "./order/purchase";
+import PurchaseFinalCheck from './order/purchaseFinalCheck';
 import OrderHistory from "./order/orderHistory";
 import OrderHistoryDetails from "./order/orderHistoryDetails";
 import HaktalNews from "./news/haktalNews";
@@ -36,6 +37,7 @@ const App = createStackNavigator(
     locationSet: {screen: LocationSet},
     setPurchase : {screen: SetPurchase},
     purchase: {screen: Purchase},
+    purchaseFinalCheck: {screen: PurchaseFinalCheck},
     orderHistory:{screen: OrderHistory},
     orderHistoryDetails: {screen: OrderHistoryDetails},
     haktalNews: {screen: HaktalNews},

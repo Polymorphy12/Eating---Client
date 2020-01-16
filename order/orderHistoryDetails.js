@@ -1,301 +1,74 @@
 import React, { Component } from "react";
 import { Text, View, Button, ImageBackground, TouchableOpacity, ScrollView, FlatList, Image } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
+import MyFooter from "../Component/MyFooter";
+import { SafeAreaView } from "react-navigation";
 
 export default class OrderHistoryDetails extends Component {
-    state = {
-        menuPrice : 2500,
-        menuAmount : 1,
-        totalPrice : 2500
+  constructor(props) {
+    super(props);
+    this.state = {
+      menuPrice : 2500,
+      menuAmount : 1,
+      totalPrice : 2500,
+      data: [1, 2,3,4,5,6,7,8,9],
+    };
+  }
 
-      }
+  _renderItem = ({item}) => 
+    <View style={{marginTop: '1.7%', flexDirection: 'row'}}>
+      <Image style={{
+            width: 80, 
+            height : 80}}
+            source={require('../assets/images/drawable-hdpi/메뉴_햄치즈밥버거.png')}></Image>
+      <View style={{marginLeft: '7.2%', flexDirection: 'column', justifyContent: 'space-evenly'}}>
+        <Text style={{fontFamily: 'S-CoreDream-4Regular', fontSize: 12, lineHeight: 15, letterSpacing: 0.47, color: '#000000'}}>햄치즈밥버거</Text>
+        <Text style={{fontFamily: 'S-CoreDream-4Regular', fontSize: 9, lineHeight: 10, letterSpacing: 0.35, color: '#000000'}}>₩ 3,500</Text>
+      </View>
+    </View>
 
-      handleIncrease = () => {
-        this.setState({
-          menuAmount : this.state.menuAmount+1,
-          totalPrice : this.state.menuPrice * (this.state.menuAmount+1)
-        });
-      }
-
-      handleDecrease = () => {
-        if(this.state.menuAmount > 1)
-        {
-          this.setState({
-            menuAmount : this.state.menuAmount-1,
-            totalPrice : this.state.menuPrice * (this.state.menuAmount-1)
-          });
-        }
-      }
-
-      render() {
-
-        const {navigation } = this.props;
-
-        return (
-          <View
-            style= {{
-              flex: 1
-            }}
-          >
-            <View style = {navBar}>
-              <Text style={titleText}>상세주문내역</Text>
-            </View>
-            
-            <ScrollView contentContainerStyle = {totalContainer}>
-              {/* 메뉴 컨테이너 */}
-              <View style={menuContainer}>
-                <Image style={{
-                  width: 106, 
-                  height : 112}}
-                  source={require('../assets/images/drawable-hdpi/메뉴_더블치즈제육.png')}
-                  > 
-                </Image>
-                <Text style={menuName}>햄밥버거</Text>
-              </View>
-
-
-              {/* 가격 컨테이너 */}
-              <View style={priceContainer}>
-                <Text style = {detailsText}>가격</Text>
-                <Text style={priceText}>{this.state.menuPrice}원</Text>
-              </View>
-              
-              
-              {/* 수량 컨테이너 */}
-              <View style={amountContainer}>
-                <Text style={detailsText}>수량</Text>
-                <View style = {plusMinusContainer}>
-                  <TouchableOpacity style={plusMinusButton}
-                  onPress={this.handleDecrease}
-                  >
-                    <Text style={plusMinusButtonText}>-</Text>
-                  </TouchableOpacity>
-                  <View style={amountView}>
-                    <Text style={detailsText}>{this.state.menuAmount}</Text>
-                  </View>
-                  <TouchableOpacity style={plusMinusButton}
-                  onPress={this.handleIncrease}>
-                    <Text style={plusMinusButtonText}>+</Text> 
-                  </TouchableOpacity>
-                </View>
-              </View>
-
-              <Text style={finalPriceText}>총 주문 금액</Text>
-              <Text style={finalPrice}>{this.state.totalPrice} 원</Text>
-
-              {/* 버튼 컨테이너 */}
-              {/* <View style={buttonContainer}>
-                <TouchableOpacity style={navToBasketButton}
-                  onPress={() => {
-                    navigation.navigate("shoppingCart");
-                }}
-                >
-                  <Text style={navText}>장바구니에 담기</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={goBackButton}
-                  onPress={() => {
-                    navigation.goBack(null)
-                  }}
-                >
-                  <Text style={navText}>계속 둘러보기</Text>
-                </TouchableOpacity>
-              </View> */}
-            </ScrollView>
-            
-        
-            <View style = {footer}>
-              <TouchableOpacity style = {footerBox}>
-                <Text>Menu</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style = {footerBox}>
-                <Text>Location</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style = {footerBox}>
-                <Text>History</Text>
-              </TouchableOpacity>
+  render() {
+    return (
+      <View style= {{flex: 1}}>
+        <View style={{marginHorizontal: '5.9%', marginTop: '5.4%'}}>
+          <View style={{borderBottomWidth: 1, borderBottomColor: '#eeeeee'}}>
+            <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 16, lineHeight: 19, letterSpacing: 0.19, color: '#000000'}}>봉구스밥버거</Text>
+            <View style={{flexDirection: 'row', marginVertical: '2.1%'}}>
+              <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 8, letterSpacing: 0.1, color: '#6e6e6e'}}>결제 시간</Text>
+              <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 8, letterSpacing: 0.1, color: '#6e6e6e', marginLeft: '11.8%'}}>2019.09.14  20:43:06</Text>
             </View>
           </View>
-        );
-      }
+
+          <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 8, letterSpacing: 0.1, color: '#6e6e6e', marginTop: '3.3%', marginBottom: '1.7%'}}>주문 내역</Text>
+          
+          <View style={{height: '75%'}}>
+            <FlatList 
+              data={this.state.data}
+              renderItem={this._renderItem}
+              contentContainerStyle={listView}/>
+
+          </View>
+
+          <SafeAreaView style={{borderTopWidth: 1, borderTopColor: '#eeeeee'}}>
+            <View style={{marginVertical: '3.3%', flexDirection: 'row', justifyContent: 'space-between'}}>
+              <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 8, letterSpacing: 0.1, color: '#6e6e6e'}}>결제 금액</Text>
+              <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 8, letterSpacing: 0.1, color: '#000000'}}>₩ 3,500</Text>
+            </View>
+          </SafeAreaView>
+
+          <SafeAreaView style={{borderTopWidth: 1, borderTopColor: '#eeeeee'}}>
+            <View style={{marginVertical: '3.3%', flexDirection: 'row', justifyContent: 'space-between'}}>
+              <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 8, letterSpacing: 0.1, color: '#6e6e6e'}}>결제 수단</Text>
+              <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 8, letterSpacing: 0.1, color: '#000000'}}>무통장입금</Text>
+            </View>
+          </SafeAreaView>
+          
+        </View>
+      </View>
+    );
+  }
 }
 
-const titleText = {
-  fontFamily: "AppleSDGothicNeo",
-  fontSize: 23,
-  fontWeight: "800",
-  fontStyle: "normal",
-  letterSpacing: -0.24,
-  textAlign: "center",
-  color: "#000"
-};
-
-const totalContainer = {
-    flex: 1,
-    backgroundColor: "white",
-    alignItems: "center",
-    justifyContent: "center",
-    zIndex: -1
-}
-
-const plusMinusContainer = {
-  marginLeft : 100,
-  flexDirection: 'row',
-  alignItems: 'center',
-}
-
-
-const menuContainer = {
-  marginBottom: 41
-}
-
-const priceContainer = {
-  flexDirection: 'row',
-  alignItems: 'center',
-  margin: 22
-}
-
-const amountContainer = {
-  flexDirection: 'row',
-  alignItems: 'center',
-  margin: 22
-}
-
-const buttonContainer = {
-  flexDirection: 'row',
-  alignItems: 'center',
-  margin: 20
-}
-
-const plusMinusButton = {
-  width: 40,
-  height: 40,
-  backgroundColor: "#fff",
-  borderStyle: "solid",
-  borderWidth: 0.5,
-  borderColor: "#979797",
-  alignItems: "center",
-  justifyContent: "center",
-}
-
-const plusMinusButtonText = {
-
-}
-
-const amountView = {
-  width: 80,
-  height: 40,
-  backgroundColor: "#fff",
-  borderStyle: "solid",
-  borderWidth: 0.5,
-  borderColor: "#979797",
-  alignItems: "center",
-  justifyContent: "center"
-}
-
-const navToBasketButton = {
-  width: 160,
-  height: 40,
-  borderRadius: 32,
-  backgroundColor: "#ff1d30",
-  alignItems: "center",
-  justifyContent: "center",
-  margin: 4
-}
-
-const navText = {
-  fontFamily: "S-CoreDream-8",
-  fontSize: 13,
-  fontWeight: "900",
-  fontStyle: "normal",
-  letterSpacing: 0.85,
-  textAlign: "center",
-  color: "#fff"
-}
-
-const goBackButton = {
-  width: 160,
-  height: 40,
-  borderRadius: 32,
-  backgroundColor: "#9b9b9b",
-  alignItems: "center",
-  justifyContent: "center",
-  margin: 4
-}
-
-const finalPrice = {
-  fontFamily: "S-CoreDream-7",
-  fontSize: 32,
-  fontWeight: "800",
-  fontStyle: "normal",
-  letterSpacing: 2.09,
-  textAlign: "center",
-  color: "#ff1d30"
-}
-
-const finalPriceText = {
-  fontFamily: "S-CoreDream-7",
-  fontSize: 15,
-  fontWeight: "800",
-  fontStyle: "normal",
-  letterSpacing: 0.98,
-  textAlign: "center",
-  color: "#000",
-  margin: 22
-}
-
-const menuName ={
-  fontFamily: "S-CoreDream-5",
-  fontSize: 19,
-  fontWeight: "500",
-  fontStyle: "normal",
-  letterSpacing: 1.24,
-  textAlign: "center",
-  color: "#000"
-}
-
-const detailsText ={
-  fontFamily: "S-CoreDream-7",
-  fontSize: 20,
-  fontWeight: "800",
-  fontStyle: "normal",
-  letterSpacing: 1.31,
-  textAlign: "center",
-  color: "#000"
-}
-
-const priceText = {
-  fontFamily: "S-CoreDream-7",
-  fontSize: 20,
-  fontWeight: "800",
-  fontStyle: "normal",
-  letterSpacing: 1.31,
-  textAlign: "center",
-  color: "#000",
-  marginLeft: 184 
-}
-
-const navBar = {
-  height: 70,
-  //opacity: 0.51,
-  alignItems: "center",
-  justifyContent: "center",
-  backgroundColor: "#ff1d30"
-};
-
-
-const footer ={
-  height: 70,
-  backgroundColor: "rgba(248, 248, 248, 0.98)",
-  flexDirection: 'row',
-  justifyContent: "center",
-  alignItems: "center"
-}
-
-const footerBox ={
-  margin: 20,
-  justifyContent: "center",
-  alignItems: "center",
-  width: 89.3,
-  height: 40,
-  backgroundColor: "rgba(185, 202, 210, 0)"
+const listView = {
+  marginBottom: '4.2%',
 }
