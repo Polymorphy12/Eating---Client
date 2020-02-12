@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import { Text, View, Button, ImageBackground, TouchableOpacity, ScrollView, FlatList, Image } from "react-native";
+import { Text, View, Button, ImageBackground, TouchableOpacity, ScrollView, FlatList, Image, ToastAndroid } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import {Header, Left, Right, Title} from 'native-base';
 import axios from 'axios';
 import OrderHeader from "../Component/OrderHeader";
 import MyFooter from "../Component/MyFooter";
+import { SafeAreaView } from "react-navigation";
 
 export default class SelectRestaurant extends Component {
 
@@ -13,58 +14,52 @@ export default class SelectRestaurant extends Component {
     super(props)
     this.state = { 
       progress: 1, 
-      empty: false, 
-      buttonColor: "#fadee2", 
       pageTitle: "업체 선택", 
-      data: [1, 2, 3, 4, 5, 6,7,8],
-      username : props.navigation.getParam('username', '')
+      lunchRestList: [],
+      dinnerRestList: [],
+      timeSelect: 'lunch',
+      userEmail : props.navigation.getParam('userEmail', '')
     }
     //console.log(this.state.restaurant_name);
-    
   }
     
-      componentDidMount(){
-        console.log('SelectRestaurant componentDidMount!!');
-        axios.get('http://13.124.193.165:3000/restaurants')
-          .then(response => {
-            this.setState({data : response.data});
-          })
-          .catch(function(error) {
-            console.log('There has been a problem with your fetch operation: ' + error.message);
-          // ADD THIS THROW error
-           throw error;
-         });
+  componentDidMount() {
+    axios.get('http://13.124.193.165:3000/restaurants', {
+      params: {
+        timeSelect : this.state.timeSelect,
       }
+    })
+      .then(response => {
+        for(let i = 0; i < response.data.length; i++) {
+          if (response.data[i].lunch)   this.setState({lunchRestList: this.state.lunchRestList.concat(response.data[i])})
+          if (response.data[i].dinner)  this.setState({dinnerRestList: this.state.dinnerRestList.concat(response.data[i])})
+        }
+      })
+      .catch(function(error) {
+        console.log('There has been a problem with your fetch operation: ' + error.message);
+      // ADD THIS THROW error
+      throw error;
+    });
+  }    
 
-      _renderItem = ({item}) => (
-        <TouchableOpacity style = {background} 
-        onPress={() => {
-          this.props.navigation.navigate("menu", {username: this.state.username, restaurant_name : item.restaurant_name});
-          console.log(this.props);
-        }} >
-            <Image style={{width: 84, height : 84, marginRight : 49}}
-              source={{uri: 'http://13.124.193.165:3000/static/' + item.restaurant_image}}
-              >
-            </Image>
-            <View>
-              <Text style = {restaurantTitle}>{item.restaurant_name}</Text>
-              <Text style = {orderAvailable}>자리 남음!</Text>
-              <Text style = {popularMenu}>인기메뉴 / 대표메뉴</Text>
-            </View>
-        </TouchableOpacity>
-      );
-
-      handleIncrease = () => {
-        this.setState({
-          data: this.state.data.concat( this.state.data.length + 1 )
-        });
-      }
-
-      handleDecrease = () => {
-        this.setState({
-          data: this.state.data.splice( this.state.data.length + 1 )
-        });
-      }
+  _renderItem = ({item}) => (
+    <TouchableOpacity style = {{flexDirection: 'row', alignItems: 'center'}} 
+                      onPress={() => {
+                        this.props.navigation.navigate("menu", {userEmail: this.state.userEmail, restaurant_name : item.restaurant_name, timeSelect: this.state.timeSelect});
+                        console.log(this.props);
+                      }} >
+      <Image style={{width: 72, height : 80, marginRight : 49}}
+        source={{uri: 'http://13.124.193.165:3000/static/' + item.restaurant_image}}
+        resizeMode={'contain'}
+        >
+      </Image>
+      <View style={{flexDirection: 'column', justifyContent: 'space-evenly'}}>
+        <Text style={{fontFamily: 'S-CoreDream-4Regular', fontSize: 14, letterSpacing: -0.7, color: '#000000'}}>{item.restaurant_name}</Text>
+        <Text style={{fontFamily: 'S-CoreDream-4Regular', fontSize: 12, letterSpacing: -0.6, color: '#ff2d3f'}}>자리 남음!</Text>
+        <Text style={{fontFamily: 'S-CoreDream-4Regular', fontSize: 9, letterSpacing: -0.45, color: '#7f7f7f'}}>인기메뉴 / 대표메뉴</Text>
+      </View>
+    </TouchableOpacity>
+  );
 
       render() {
 
@@ -74,39 +69,41 @@ export default class SelectRestaurant extends Component {
         console.log(this.props);
 
         return (
-          <View
-            style= {{
-              flex: 1
-            }}
-          >
+          <View style={{flex: 1}}>
             <OrderHeader 
             navigation={this.props.navigation} 
             pageTitle={this.state.pageTitle}
-            username={this.state.username}></OrderHeader>
+            username={this.state.userEmail}></OrderHeader>
             
-            
+
             <View style = {orderDueContainer}>
-                <View style={toggleContainer}>
-                  <TouchableOpacity style={toggleLunch} onPress={this.handleIncrease}>
-                    <Text>점심</Text>
-                  </TouchableOpacity>
-                  
-                  <TouchableOpacity style={toggleDinner} onPress={this.handleDecrease}>
-                    <Text>저녁</Text>
-                  </TouchableOpacity>
-                </View>
-              
-                <Text style = {orderDue}>점심 주문 마감 시간: 10:30 AM</Text>            
+              <View style={toggleContainer}>
+                <TouchableOpacity style={{width: '50%', height: 40, borderBottomWidth: 2, borderBottomColor: this.state.timeSelect === 'lunch' ? '#ed6578' : '#ffffff', alignItems: 'center', justifyContent: 'center'}}
+                                  disabled={this.state.timeSelect === 'lunch'}
+                                  onPress={() => this.setState({timeSelect: 'lunch'})}>
+                  <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 20, letterSpacing: 1.31, color: this.state.timeSelect === 'lunch' ? '#ed6578' : '#000000'}}>점심</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={{width: '50%', height: 40, borderBottomWidth: 2, borderBottomColor: this.state.timeSelect === 'dinner' ? '#ed6578' : '#ffffff', alignItems: 'center', justifyContent: 'center'}}
+                                  disabled={this.state.timeSelect === 'dinner'}
+                                  onPress={() => this.setState({timeSelect: 'dinner'})}>
+                  <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 20, letterSpacing: 1.31, color: this.state.timeSelect === 'dinner' ? '#ed6578' : '#000000'}}>저녁</Text>
+                </TouchableOpacity>
+              </View>
+
+              <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                <Text style = {orderDue}>{this.state.timeSelect === 'lunch' ? `점심 주문 마감 시간: 09:30 AM` : `저녁 주문 마감 시간: 03:30 PM`}</Text>
+              </View>
+
+              <FlatList 
+                data={this.state.timeSelect === 'lunch' ? this.state.lunchRestList : this.state.dinnerRestList}
+                renderItem={this._renderItem}
+                keyExtractor={item => String(item.id)}
+                numColumns={1}
+              />
+
             </View>
-            
-            <FlatList 
-              data={this.state.data}
-              renderItem={this._renderItem}
-              
-              numColumns={1}
-              contentContainerStyle={listView}
-            />
-            <MyFooter navigation={this.props.navigation} orderBoolean={true}></MyFooter>
+            <MyFooter navigation={this.props.navigation} orderBoolean={true} userEmail={this.state.userEmail}></MyFooter>
           </View>
         );
       }
@@ -161,63 +158,39 @@ const titleText = {
 
 const toggleContainer = {
   marginTop: 20,
-flexDirection: 'row',
-alignItems: 'center'
-}
-
-const toggleLunch = {
-  width: 80,
-  height: 20,
-  borderTopLeftRadius: 100,
-  borderBottomLeftRadius: 100,
-  backgroundColor: "#ff1d30",
-  alignItems: "center",
-  justifyContent: "center"
-}
-
-const toggleDinner = {
-  width: 80,
-  height: 20,
-  borderTopRightRadius: 100,
-  borderBottomRightRadius: 100,
-  backgroundColor: "#dcdcdc",
-  alignItems: "center",
-  justifyContent: "center"
-
+  flexDirection: 'row',
+  alignItems: 'center'
 }
 
 const orderDueContainer = {
-  alignItems: "center",
-  justifyContent: "center"
+  flex: 1,
+  marginHorizontal: 16,
 }
 
 const orderDue = {
-  marginTop: 10,
-  fontFamily: "S-CoreDream-5",
-  fontSize: 10,
+  marginTop: 30,
+  marginBottom: 32,
+  fontFamily: "S-CoreDream-4Regular",
+  fontSize: 18,
   fontWeight: "500",
   fontStyle: "normal",
-  letterSpacing: 1.05,
-  color: "#000"
+  letterSpacing: -0.9,
+  color: "#000000"
 }
 
 const background = {
   flexDirection: 'row',
-  width: 400,
+  width: '100%',
   height: 84,
   borderRadius: 4,
-  backgroundColor: '#fff',
-  // borderStyle: "solid",
-  borderWidth: 0,
-  // borderColor: "#ff1d30",
-  margin: 0.5,
-  marginLeft: 28,
-  // justifyContent: 'center',
-  alignItems: 'center'
+  backgroundColor: '#ffffff',
+  alignItems: 'center',
+  marginHorizontal: 16,
 };
 
 const listView = {
   // flex: 1,
+  backgroundColor: 'red',
   justifyContent: 'center',
   alignItems: 'center'
 }

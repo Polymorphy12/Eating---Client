@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, View, Button, ImageBackground, TouchableOpacity, ScrollView, FlatList, Image, Alert } from "react-native";
+import { Text, View, Button, ImageBackground, TouchableOpacity, ScrollView, FlatList, Image, Alert, ToastAndroid } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import axios from 'axios';
 import OrderHeader from "../Component/OrderHeader";
@@ -12,7 +12,8 @@ export default class LocationSet extends Component {
     super(props)
     this.state = {
       pageTitle: "수령 장소",
-      username : props.navigation.getParam('username', ''),
+      userEmail : props.navigation.getParam('userEmail', ''),
+      timeSelect : props.navigation.getParam('timeSelect'),
       itemPressed : '0'
     }
   } 
@@ -21,7 +22,7 @@ export default class LocationSet extends Component {
   componentDidMount(){
     axios.get('http://13.124.193.165:3000/location',{
           params: {
-            username : this.state.username
+            userEmail : this.state.userEmail
 
           }
       })
@@ -43,34 +44,21 @@ export default class LocationSet extends Component {
   }
     
       _renderItem = ({item}) => (
-        <TouchableOpacity style = {{marginHorizontal : '3.9%', marginVertical: '3.7%', borderWidth : 1, borderColor: this.state.itemPressed === item.location ? 'red' : '#000000', borderStyle: "solid", borderRadius: 20, flexDirection: 'column'}}
+        <TouchableOpacity style = {{marginHorizontal : 16, marginTop: 24, borderWidth : 1, borderColor: this.state.itemPressed === item.location ? '#ed6578' : '#000000', borderStyle: "solid", borderRadius: 20, flexDirection: 'column'}}
                           onPress={() => {
                             this.typeSelected(item.location)
                           }}>
-          <View style={{marginHorizontal: '4.7%'}}>
-            <View style={{borderBottomWidth: 2, borderBottomColor: '#686868'}}>
-              <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 14, lineHeight: 22, letterSpacing: -0.2, color: '#000000', marginVertical: '2%'}}>{item.location}</Text>
+          <View style={{marginHorizontal: 16}}>
+            <View>
+              <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 16, lineHeight: 22, letterSpacing: -0.23, color: '#000000', marginVertical: 16}}>{item.location}</Text>
             </View>
-            <View style={{flexDirection: 'row', marginTop: '10%', marginBottom: '5%', justifyContent: 'space-between'}}>
+            <View style={{flexDirection: 'row', marginBottom: 16, justifyContent: 'space-between'}}>
               <View style={{flexDirection: 'row'}}>
-                <Image style={{ 
-                  width: 80, 
-                  height : 86,
-                  borderStyle: "solid",
-                  borderWidth: 1,
-                  borderColor: "#979797"
-                  }}
+                <Image style={{width: 80, height : 86, borderWidth: 1, borderColor: "#979797"}}
                   source={{uri: 'http://13.124.193.165:3000/static/' + item.location_image}}
                   > 
                 </Image>
-                <Image style={{ 
-                  width: 80, 
-                  height : 86,
-                  borderStyle: "solid",
-                  borderWidth: 1,
-                  borderColor: "#979797",
-                  marginLeft: '4.7%'
-                  }}
+                <Image style={{width: 80, height : 86, borderWidth: 1, borderColor: "#979797", marginLeft: '4.7%' }}
                   source={{uri: 'http://13.124.193.165:3000/static/' + item.location_map}}> 
                 </Image>
               </View>
@@ -101,23 +89,22 @@ export default class LocationSet extends Component {
             <OrderHeader 
             navigation={this.props.navigation} 
             pageTitle={this.state.pageTitle}
-            username={this.state.username}></OrderHeader>
+            username={this.state.userEmail}></OrderHeader>
             
             <ShoppingCartProgressBar progress={1}></ShoppingCartProgressBar>
             
-            <View style = {{height: '63.9%', marginHorizontal : '3.9%', paddingTop: "3.478%", borderWidth : 1, borderStyle: "solid", borderRadius: 4}}>
-              <Text style={{fontFamily: 'S-CoreDream-6Bold', fontSize: 17, lineHeight: 22, letterSpacing: -0.24, color: '#000000', marginHorizontal: '3.9%'}}>배달장소</Text>
+            <ScrollView style = {{marginHorizontal : 16, marginTop: 8, borderWidth : 1, borderRadius: 4}}>
+              <Text style={{fontFamily: 'S-CoreDream-6Bold', fontSize: 20, letterSpacing: -1, color: '#000000', marginHorizontal: 16, marginTop: 16}}>배달장소</Text>
               <FlatList 
                 data={this.state.data}
                 renderItem={this._renderItem}
                 extraData={this.state}
-                contentContainerStyle={listView}
-              />
-            </View>
+                contentContainerStyle={{marginBottom: 12}}/>
+            </ScrollView>
             
-            <View style={orderButtonContainer}>
+            <View style={{alignItems: 'center', justifyContent: 'center'}}>
                 <TouchableOpacity
-                    style={orderButton}
+                    style={{width: '80%', height: 44, borderRadius: 100, alignItems: 'center', justifyContent: 'center', backgroundColor: this.state.itemPressed === '0' ? '#dddddd' : "#ed6578", marginVertical: 32}}
                     title="first"
                     onPress={() => {
                       if(this.state.itemPressed == '0') {
@@ -125,26 +112,24 @@ export default class LocationSet extends Component {
                         return;
                       };
                       axios.put('http://13.124.193.165:3000/location',{
-                          username : this.state.username,
-                          purchase_location : this.state.itemPressed
-                          
+                          userEmail : this.state.userEmail,
+                          purchase_location : this.state.itemPressed,
+                          timeSelect: this.state.timeSelect,                          
                         })
                         .then(response => {
-                          navigation.navigate("purchase", {username : this.state.username});
+                          //ToastAndroid.show(JSON.stringify(response.data), ToastAndroid.SHORT);
+                          navigation.navigate("purchase", {userEmail : this.state.userEmail, timeSelect : this.state.timeSelect});
                         })
                         .catch(function(error) {
                           console.log('There has been a problem with your fetch operation: ' + error.message);
-                        // ADD THIS THROW error
-                        throw error;
+                          // ADD THIS THROW error
+                          throw error;
                       });
-                        
                     }}
                   >
                   <Text style={letsGetStarted}>결제 수단 선택</Text>
                 </TouchableOpacity>
             </View>
-        
-            <MyFooter navigation={this.props.navigation} orderBoolean={true}></MyFooter>
           </View>
         );
       }
@@ -233,8 +218,8 @@ const orderButtonContainer = {
 }
 
 const orderButton = {
-    width: 335,
-    height: 58,
+    width: '100%',
+    height: 44,
     borderRadius: 100,
     backgroundColor: "#ed6578",
     alignItems: "center",

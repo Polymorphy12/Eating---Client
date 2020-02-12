@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import {Text, TextInput, View, TouchableOpacity, Image, StyleSheet} from 'react-native';
+import {Text, TextInput, View, TouchableOpacity, Image, StyleSheet, ToastAndroid, Alert} from 'react-native';
+import axios from "axios";
 import MyHeader from "../Component/MyHeader";
 import MyFooter from "../Component/MyFooter";
 import { ScrollView } from "react-native-gesture-handler";
@@ -10,7 +11,11 @@ export default class personalInfo extends Component {
         this.state =
             {
                 pageTitle: "개인정보 수정",
-                name: '나이름',
+                userEmail: props.navigation.getParam('userEmail'),
+                userName: props.navigation.getParam('userName'),
+                newUserName: '',
+                newPassword: '',
+                data: {},
             }
     }
 
@@ -39,26 +44,55 @@ export default class personalInfo extends Component {
                                     fontStyle: "normal", lineHeight: 20, letterSpacing: -0.41, textAlign: "left", color: "#000000",
                                     margin: 0, padding: 0, borderBottomWidth: 1}}
                                 maxLength={12}
-                                defaultValue={this.state.name}
+                                placeholder={this.state.userName}
+                                onChangeText={(newUserName) => {
+                                    this.setState({newUserName});
+                                }}
                             />
                         </View>
 
                         <TouchableOpacity style={{width: 30, height : 30, marginLeft: 'auto', marginRight: '10%'}}
-                            onPress={() => this.props.navigation.navigate('personalInfo')}>
+                                            disabled={this.state.newUserName == '' ? true : false}
+                                            onPress = {() => {
+                                                Alert.alert('유저명을 변경하려 합니다.', '정말로 변경하시겠습니까?', [
+                                                        {
+                                                            text: '변경',
+                                                            onPress : () => {
+                                                                axios.post('http://13.124.193.165:3000/users/changeUserName', {
+                                                                    params: {
+                                                                        userEmail: this.state.userEmail,
+                                                                        newUserName: this.state.newUserName,
+                                                                    }
+                                                                }).then(response => {
+                                                                    ToastAndroid.show(JSON.stringify(response.data), ToastAndroid.SHORT);
+                                                                    this.setState({userName : this.state.newUserName});
+                                                                }).catch((error) => {
+                                                                    console.log('There has been a problem with your fetch operation: ' + error.message);
+                                                                    // ADD THIS THROW error
+                                                                    throw error;
+                                                                });
+                                                            }
+                                                        },
+                                                        {text: '취소', onPress : () => ToastAndroid.show('취소되었습니다.', ToastAndroid.SHORT)}
+                                                    ],
+                                                    {cancelable: false}
+                                                );
+                                            }}>
                             <Image 
                                 style = {{width: 30, height : 30, marginLeft: 'auto', marginRight: '6.67%',}}
                                 source={require('../assets/images/drawable-xxxhdpi/아이콘_체크.png')}></Image>
                         </TouchableOpacity>
                     </View>
 
-                    {/* 이메일 아이디 수정 */}
+                    {/* 이메일 아이디 수정? 수정이 가능하게 할건가? 이메일이 곧 아이디이니까 아닌 것 같다. 옆에 버튼도 없고 */}
                     <View style={{height: 90, borderTopWidth: 1, borderTopColor: '#d8d8d8'}}>
                         <Text style={{fontFamily: "S-CoreDream4", fontSize: 10, fontWeight: "200", 
                                     fontStyle: "normal", lineHeight: 20, letterSpacing: -0.41, marginLeft: '4.4%', marginTop: '4%', textAlign: "left", color: "#6e6e6e"}}>이메일 아이디</Text>
 
-                        <TextInput style={{height: 35, fontFamily: "S-CoreDream4", fontSize: 12, fontWeight: "200", 
-                                    fontStyle: "normal", lineHeight: 20, letterSpacing: -0.41, marginLeft: '5.5%', padding: 0, textAlign: "left", color: "#000000",}}
-                                    defaultValue={'malinmango77@unist.ac.kr'}></TextInput>
+                        <Text style={{height: 35, fontFamily: "S-CoreDream4", fontSize: 12, fontWeight: "200", 
+                                    fontStyle: "normal", lineHeight: 20, letterSpacing: -0.41, marginLeft: '5.5%', padding: 0, textAlign: "left", color: "#000000",}}>
+                            {this.state.userEmail}
+                        </Text>
                     </View>
                     
                     {/* 비밀번호 수정 */}
@@ -69,12 +103,56 @@ export default class personalInfo extends Component {
                         <View style={{height: 25, flexDirection: 'row'}}>
                             <TextInput style={{fontFamily: "S-CoreDream4", fontSize: 12, fontWeight: "200", flex: 0.6,
                                             fontStyle: "normal", lineHeight: 20, letterSpacing: -0.41, marginLeft: '4.4%', padding: 0, textAlign: "left", color: "#000000", backgroundColor: '#d8d8d8'}}
-                                            placeholder={'4자 이상'}>
+                                        placeholder={'4자 이상'}
+                                        maxLength={20}
+                                        secureTextEntry={true}
+                                        onChangeText={newPassword => {
+                                            this.setState({newPassword});
+                                        }}>
 
                             </TextInput>
 
                             <View style={{flex: 0.4, marginLeft: 'auto', alignItems: 'center', justifyContent: 'center'}}>
-                                <TouchableOpacity style={{marginLeft: '7.5%'}}>
+                                <TouchableOpacity style={{marginLeft: '7.5%'}}
+                                                    disabled={this.state.newPassword == '' ? true : false}
+                                                    onPress = {() => {
+                                                        Alert.alert('비밀번호를 변경하려 합니다.', '정말로 변경하시겠습니까?', [
+                                                                {
+                                                                    text: '변경',
+                                                                    onPress : () => {
+                                                                        axios.post('http://13.124.193.165:3000/users/changePassword', {
+                                                                            params: {
+                                                                                userEmail: this.state.userEmail,
+                                                                                newPassword: this.state.newPassword,
+                                                                            }
+                                                                        }).then(response => {
+                                                                            ToastAndroid.show(JSON.stringify(response.data), ToastAndroid.SHORT);
+                                                                            
+                                                                        }).catch((err) => {
+                                                                            console.log('There has been a problem with your fetch operation: ' + error.message);
+                                                                            // ADD THIS THROW error
+                                                                            throw error;
+                                                                        });
+                                                                    }
+                                                                },
+                                                                {text: '취소', onPress : () => ToastAndroid.show('취소되었습니다.', ToastAndroid.SHORT)}
+                                                            ],
+                                                            {cancelable: false}
+                                                        );
+
+                                                        // axios.post('http://13.124.193.165:3000/users/changePassword', {
+                                                        //     params: {
+                                                        //         userEmail: this.state.userEmail,
+                                                        //         newPassword: this.state.newPassword,
+                                                        //     }
+                                                        // }).then(response => {
+                                                        //     ToastAndroid.show(JSON.stringify(response.data), ToastAndroid.SHORT);
+                                                        // }).catch((err) => {
+                                                        //     console.log('There has been a problem with your fetch operation: ' + error.message);
+                                                        //     // ADD THIS THROW error
+                                                        //     throw error;
+                                                        // });
+                                                    }}>
                                     <Text style={{fontFamily: "S-CoreDream6-Bold", fontSize: 15, lineHeight: 20, letterSpacing: -0.41, color: '#6e6e6e'}}>수정</Text>
                                 </TouchableOpacity>
                             </View>
@@ -93,7 +171,11 @@ export default class personalInfo extends Component {
                         <View style={{height: 25, flexDirection: 'row'}}>
                             <TextInput style={{fontFamily: "S-CoreDream4", fontSize: 12, fontWeight: "200", flex: 0.6,
                                             fontStyle: "normal", lineHeight: 20, letterSpacing: -0.41, marginLeft: '4.4%', padding: 0, textAlign: "left", color: "#000000", backgroundColor: '#d8d8d8'}}
-                                            placeholder={'01012345678'}>
+                                        placeholder={'01012345678'}
+                                        maxLength={11}
+                                        onChangeText={newPhoneNumber => {
+                                            this.setState({newPhoneNumber});
+                                        }}>
 
                             </TextInput>
 
@@ -106,14 +188,14 @@ export default class personalInfo extends Component {
                     </View>
                     <View style={{alignItems: 'flex-end'}}>
                         <TouchableOpacity style={{marginRight: '11%', marginTop: '2.5%',}}
-                                        onPress={() => this.props.navigation.navigate('withdrawal')}>
+                                        onPress={() => this.props.navigation.navigate('withdrawal', {userEmail: this.state.userEmail})}>
                             <Text style={{fontFamily: "S-CoreDream6-Bold", fontSize: 10, lineHeight: 20, letterSpacing: -0.41, color: '#9f9f9f'}}>회원탈퇴</Text>
                         </TouchableOpacity>
                         
                     </View>
 
                 </ScrollView>
-                <MyFooter navigation={this.props.navigation} mypageBoolean={true}></MyFooter>
+                <MyFooter navigation={this.props.navigation} mypageBoolean={true} userEmail={this.state.userEmail}></MyFooter>
 
             </View>
         );

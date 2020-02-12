@@ -16,11 +16,11 @@ export default class OrderHeader extends React.Component {
                 >
                 </Image></TouchableOpacity>
               </Left>
-              <Title style={titleText}> {this.props.pageTitle}</Title>
+              <Title style={titleText}>{this.props.pageTitle}</Title>
               <Right style = {{flex:1}}>
               <TouchableOpacity
                 onPress={() => {
-                  this.props.navigation.navigate("shoppingCart", {is_get : true, username : this.props.username});
+                  this.props.navigation.navigate("shoppingCart", {is_get : true, userEmail : this.props.username});
                 }}><Image
                   style={{width:27, height:23, marginRight: 10}}
                   source={require('../assets/images/drawable-xxhdpi/아이콘_장바구니.png')}>
@@ -39,22 +39,24 @@ const navBar = {
     justifyContent: "center",
     flexDirection: 'row',
     backgroundColor: "#ffffff",
-    borderBottomWidth: 0, 
     //shadowOffset: {height: 0, width: 0}, 
     //shadowOpacity: 0, 
-    elevation: 0
+    elevation: 0,
+    paddingHorizontal: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#d6d6d6',
   };
 
   const titleText = {
     // width: 225.6,
     // height: 25,
     flex:1,
-    fontFamily: "AppleSDGothicNeo",
-    fontSize: 23,
+    fontFamily: "S-CoreDream-5Medium",
+    fontSize: 20,
     fontWeight: "800",
     fontStyle: "normal",
     // lineHeight: 25,
-    letterSpacing: -0.24,
+    letterSpacing: -0.1,
     textAlign: "center",
-    color: "#000"
+    color: "#000000"
   };

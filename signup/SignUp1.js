@@ -1,75 +1,130 @@
 import React from 'react';
-import { TouchableOpacity, SafeAreaView, Button, View, Text, TextInput , ProgressBarAndroid, Image, StyleSheet} from 'react-native';
-import { Container, Body,  Title, Left, Right, Footer, FooterTab } from 'native-base';
-// import { MyHeader, ProgressBar } from './Component';
+import { TouchableOpacity, SafeAreaView, Button, View, Text, TextInput , ProgressBarAndroid, StyleSheet, ToastAndroid} from 'react-native';
+//import { CheckBox } from 'native-base';
 import MyHeader from '../Component/MyHeader';
 import ProgressBar from '../Component/ProgressBar';
+import CheckBox from 'react-native-check-box';
 
 export default class SignUp1 extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       progress: 0,
-      empty: true,
-      buttonColor: "#fadee2",
+      mendatoryCheckBoxChecked: false,
+      eatingCheckBoxChecked: false,
+      EFCheckBoxChecked: false,
+      personalInfoCheckBoxChecked: false,
+      optionalCheckBoxChecked: false,
       pageTitle: "회원가입",
-      _userName: '',
-    };
-  }
-
-  onFill = (text) => {
-    if (text === "") this.setState({empty: true, buttonColor: "#fadee2", _userName: text});
-    else this.setState({empty: false, buttonColor: "#ed6578", _userName: text});
+    }
   }
 
   render() {
     return (
-      <SafeAreaView style={styles.fullscreen}>
-        <MyHeader navigation={this.props.navigation} pageTitle={this.state.pageTitle}></MyHeader>
-        <ProgressBar progress={this.state.progress}></ProgressBar>
+        <View style={{flex: 1}}>
+          <MyHeader navigation={this.props.navigation} pageTitle={this.state.pageTitle}></MyHeader>
 
-        <View style={{width: "100%", height: 44, alignItems: "center", flex: 8}}>
-          <Text
-            style={{ width: "88.2%", height: 40, borderColor: 'gray', borderBottomWidth: 1, fontSize: 24 }}
-          >이름을 입력해주세요.</Text>
-          <TextInput
-            style={{ width: "88.2%", height: 40, borderColor: 'gray', marginTop: 8}}
-            onChangeText={text => this.onFill(text)}
-            maxLength={12}
-            placeholder="김유니"
-          />
+          <View style={{marginHorizontal: 16, marginBottom: 18}}>
+            <ProgressBar progress={this.state.progress}></ProgressBar>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <TouchableOpacity style={{width: 24, height: 24, alignItems: 'center', justifyContent: 'center'}}
+                                onPress={() => this.setState(
+                                    {
+                                      mendatoryCheckBoxChecked: !this.state.mendatoryCheckBoxChecked,
+                                      eatingCheckBoxChecked: !this.state.mendatoryCheckBoxChecked,
+                                      EFCheckBoxChecked: !this.state.mendatoryCheckBoxChecked,
+                                      personalInfoCheckBoxChecked: !this.state.mendatoryCheckBoxChecked,
+                                    }
+                                  )}>
+                <View style={{width: 20, height: 20, borderRadius: 100, borderWidth: 2, borderColor: this.state.mendatoryCheckBoxChecked ? '#ed6578' : '#757575', alignItems: 'center', justifyContent: 'center' }}>
+                  <View style={{width: 10, height: 10, borderRadius: 100, backgroundColor: this.state.mendatoryCheckBoxChecked ? '#ed6578' : '#ffffff'}}></View>
+                </View>
+              </TouchableOpacity>
+              <Text style={{fontFamily: 'S-CoreDream-6Bold', fontSize: 18, letterSpacing: -0.25, color: '#000000', marginLeft: 16}}>필수 항목 모두 동의</Text>
+            </View>
+          </View>
+
+          <View style={{backgroundColor: '#f5f5f5', paddingHorizontal: 16}}>
+            <View style={{flexDirection: 'row', justifyContent: 'space-between', marginTop: 18, marginBottom: 18}}>
+              <View style={{flexDirection: 'row'}}>
+                <CheckBox isChecked={this.state.eatingCheckBoxChecked}
+                          checkedCheckBoxColor={'#ed6578'}
+                          uncheckedCheckBoxColor={'#717171'}
+                          onClick={() => {
+                            this.setState({eatingCheckBoxChecked: !this.state.eatingCheckBoxChecked});
+                            if (!this.state.eatingCheckBoxChecked && this.state.EFCheckBoxChecked && this.state.personalInfoCheckBoxChecked) this.setState({mendatoryCheckBoxChecked: true});
+                            else this.setState({mendatoryCheckBoxChecked: false});
+                          }}></CheckBox>
+                <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize:16, letterSpacing: -0.23, color: '#000000', marginLeft: 16}}>잇힝 이용약관</Text>
+              </View>
+
+              <TouchableOpacity style={{backgroundColor: '#ffffff', width: '15.9%', borderRadius: 8, borderWidth: 1, borderColor: '#000000', alignItems: 'center', justifyContent: 'center'}}>
+                <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 10, letterSpacing: -0.14, color: '#000000'}}>내용확인</Text>
+              </TouchableOpacity>
+            </View>
+
+            <View style={{flexDirection: 'row', justifyContent: 'space-between', marginBottom: 18}}>
+              <View style={{flexDirection: 'row'}}>
+                <CheckBox isChecked={this.state.EFCheckBoxChecked}
+                          checkedCheckBoxColor={'#ed6578'}
+                          uncheckedCheckBoxColor={'#717171'}
+                          onClick={() => {
+                            this.setState({EFCheckBoxChecked: !this.state.EFCheckBoxChecked});
+                            if (this.state.eatingCheckBoxChecked && !this.state.EFCheckBoxChecked && this.state.personalInfoCheckBoxChecked) this.setState({mendatoryCheckBoxChecked: true});
+                            else this.setState({mendatoryCheckBoxChecked: false});
+                          }}></CheckBox>
+                <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize:16, letterSpacing: -0.23, color: '#000000', marginLeft: 16}}>전자금융거래 이용약관</Text>
+              </View>
+
+              <TouchableOpacity style={{backgroundColor: '#ffffff', width: '15.9%', borderRadius: 8, borderWidth: 1, borderColor: '#000000', alignItems: 'center', justifyContent: 'center'}}>
+                <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 10, letterSpacing: -0.14, color: '#000000'}}>내용확인</Text>
+              </TouchableOpacity>
+            </View>
+
+            <View style={{flexDirection: 'row', justifyContent: 'space-between', marginBottom: 18}}>
+              <View style={{flexDirection: 'row'}}>
+                <CheckBox isChecked={this.state.personalInfoCheckBoxChecked}
+                          checkedCheckBoxColor={'#ed6578'}
+                          uncheckedCheckBoxColor={'#717171'}
+                          onClick={() => {
+                            this.setState({personalInfoCheckBoxChecked: !this.state.personalInfoCheckBoxChecked});
+                            if (this.state.eatingCheckBoxChecked && this.state.EFCheckBoxChecked && !this.state.personalInfoCheckBoxChecked) this.setState({mendatoryCheckBoxChecked: true});
+                            else this.setState({mendatoryCheckBoxChecked: false});
+                          }}></CheckBox>
+                <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize:16, letterSpacing: -0.23, color: '#000000', marginLeft: 16}}>개인정보 수집이용</Text>
+              </View>
+
+              <TouchableOpacity style={{backgroundColor: '#ffffff', width: '15.9%', borderRadius: 8, borderWidth: 1, borderColor: '#000000', alignItems: 'center', justifyContent: 'center'}}>
+                <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 10, letterSpacing: -0.14, color: '#000000'}}>내용확인</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          <View style={{marginHorizontal: 16, marginTop: 18}}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <TouchableOpacity style={{width: 24, height: 24, alignItems: 'center', justifyContent: 'center'}}
+                                onPress={() => this.setState({optionalCheckBoxChecked: !this.state.optionalCheckBoxChecked})}>
+                <View style={{width: 20, height: 20, borderRadius: 100, borderWidth: 2, borderColor: this.state.optionalCheckBoxChecked ? '#ed6578' : '#757575', alignItems: 'center', justifyContent: 'center' }}>
+                  <View style={{width: 10, height: 10, borderRadius: 100, backgroundColor: this.state.optionalCheckBoxChecked ? '#ed6578' : '#ffffff'}}></View>
+                </View>
+              </TouchableOpacity>
+              <Text style={{fontFamily: 'S-CoreDream-6Bold', fontSize: 18, letterSpacing: -0.25, color: '#000000', marginLeft: 16}}>(선택) 마케팅 정보 메일 SMS 수신</Text>
+            </View>
+          </View>
+
+          <View style={{flex: 1, width: "100%", alignItems:"center", justifyContent: 'flex-end'}}>
+            <TouchableOpacity style={{width: "84.4%", height: 48, alignItems:"center", justifyContent: 'center', borderRadius: 50, backgroundColor: this.state.mendatoryCheckBoxChecked ? '#ed6578' : '#fadee2', marginBottom: 60}}
+                              disabled={!this.state.mendatoryCheckBoxChecked}
+                              onPress={() => this.props.navigation.navigate('signUp2', {optionalCheckBoxChecked: this.state.optionalCheckBoxChecked})}
+                              activeOpacity={0.8}>
+              <Text style={{fontFamily: 'S-CoreDream-6Bold', fontSize: 24, color: '#ffffff'}}>다음으로</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-        <View style={{width: "100%", height: 0, alignItems:"center", flex: 1}}>
-          <TouchableOpacity style={{width: "84.4%", height: 48, alignItems:"center", borderRadius: 50, backgroundColor: this.state.buttonColor}}
-            onPress={() => this.props.navigation.navigate('signUp2', {userName: this.state._userName})}
-            activeOpacity={0.8}
-            disabled={this.state.empty}>
-            <Text style={{color: "white", fontSize: 20, padding: 10}}>학식 탈출하기</Text>
-          </TouchableOpacity>
-        </View>
-      </SafeAreaView>
-    );
-  }
+      );
+    }
 }
 
 const styles = StyleSheet.create({
   fullscreen: {width: "100%", height: "100%", flex: 1},
 });
-      
-
-      // <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-start' }}>
-      //   <Header>
-      //     <Title>업체</Title>
-      //   </Header>
-      //   <Text>Home Screen</Text>
-      //   <Button style={{ width:}}
-      //     title="Go to dance"
-      //     onPress={() => this.props.navigation.navigate('Detail')}
-      //   />
-      // </View>
-
-
-{/* <Button
-  title="Go to dance"
-  onPress={() => this.props.navigation.navigate('Detail')}
-/> */}

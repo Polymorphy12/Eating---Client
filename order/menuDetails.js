@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { Text, View, Button, ImageBackground, TouchableOpacity, ScrollView, FlatList, Image } from "react-native";
+import { Text, View, Button, ImageBackground, TouchableOpacity, ScrollView, FlatList, Image, ToastAndroid } from "react-native";
+import axios from "axios";
 import { TextInput } from "react-native-gesture-handler";
 import OrderHeader from "../Component/OrderHeader";
 import MyFooter from "../Component/MyFooter";
@@ -12,14 +13,15 @@ export default class MenuDetails extends Component {
       progress: 1, 
       empty: false, 
       buttonColor: "#fadee2", 
-      pageTitle: "메뉴 상세", 
-      username : props.navigation.getParam('username', ""),
+      pageTitle: props.navigation.getParam('restaurant_name', '봉구스밥버거'), 
+      userEmail : props.navigation.getParam('userEmail', ""),
       restaurant_name: props.navigation.getParam('restaurant_name', '봉구스밥버거'),
-      menuPrice : props.navigation.getParam('menu_price', 2500),
+      timeSelect: props.navigation.getParam('timeSelect'),
+      menuImage : props.navigation.getParam('menuImage', ""),
+      menuName : props.navigation.getParam('menuName', '더블치즈제육'),
+      menuPrice : props.navigation.getParam('menuPrice', 2500),
       menuAmount : 1,
-      totalPrice : props.navigation.getParam('menu_price', 2500),
-      menuName : props.navigation.getParam('menu_name', '더블치즈제육'),
-      menuImage : props.navigation.getParam('menu_image', "")
+      totalPrice : props.navigation.getParam('menuPrice', 2500),
     }
 
     console.log(this.state.restaurant_name);
@@ -28,284 +30,114 @@ export default class MenuDetails extends Component {
 
   numberWithCommas = (x) =>  String(x).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   
-      handleIncrease = () => {
-        this.setState({
-          menuAmount : this.state.menuAmount+1,
-          totalPrice : this.state.menuPrice * (this.state.menuAmount+1)
-        });
-      }
+  handleIncrease = () => {
+    this.setState({
+      menuAmount : this.state.menuAmount + 1,
+      totalPrice : this.state.menuPrice * (this.state.menuAmount+1)
+    });
+  }
 
-      handleDecrease = () => {
-        if(this.state.menuAmount > 1)
-        {
-          this.setState({
-            menuAmount : this.state.menuAmount-1,
-            totalPrice : this.state.menuPrice * (this.state.menuAmount-1)
-          });
-        }
-      }
+  handleDecrease = () => {
+    if(this.state.menuAmount > 1)
+    {
+      this.setState({
+        menuAmount : this.state.menuAmount - 1,
+        totalPrice : this.state.menuPrice * (this.state.menuAmount-1)
+      });
+    }
+  }
 
-      render() {
+  render() {
+    return (
+      <View style={{flex: 1}}>
+        <OrderHeader 
+        navigation={this.props.navigation} 
+        pageTitle={this.state.pageTitle}
+        username={this.state.userEmail}></OrderHeader>
 
-        const {navigation } = this.props;
+        <View style={{marginHorizontal: 16}}>
+          <View style={{alignItems: 'center', justifyContent: 'center', marginTop: 24, marginBottom: 40}}>
+            <Image style={{width: 108, height: 108}}
+                    source={{uri: 'http://13.124.193.165:3000/static/' + this.state.menuImage}}></Image>
+            <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 20, letterSpacing: -1, color: '#000000'}}>{this.state.menuName}</Text>
 
-        return (
-          <View
-            style= {{
-              flex: 1
-            }}
-          >
-            <OrderHeader 
-            navigation={this.props.navigation} 
-            pageTitle={this.state.pageTitle}
-            username={this.state.username}></OrderHeader>
-            
-            <ScrollView contentContainerStyle = {totalContainer}>
-              {/* 메뉴 컨테이너 */}
-              <View style={menuContainer}>
-                <Image style={{
-                  width: 106, 
-                  height : 112}}
-                  source={{uri: 'http://13.124.193.165:3000/static/' + this.state.menuImage}}
-                  > 
-                </Image>
-                <Text style={menuName}>{this.state.menuName}</Text>
-              </View>
-
-
-              {/* 가격 컨테이너 */}
-              <View style={priceContainer}>
-                <Text style = {detailsText}>가격</Text>
-                <Text style={priceText}>{this.numberWithCommas(this.state.menuPrice)} 원</Text>
-              </View>
-              
-              
-              {/* 수량 컨테이너 */}
-              <View style={amountContainer}>
-                <Text style={detailsText}>수량</Text>
-                <View style = {plusMinusContainer}>
-                  <TouchableOpacity style={plusMinusButton}
-                  onPress={this.handleDecrease}
-                  >
-                    <Text style={plusMinusButtonText}>-</Text>
-                  </TouchableOpacity>
-                  <View style={amountView}>
-                    <Text style={detailsText}>{this.state.menuAmount}</Text>
-                  </View>
-                  <TouchableOpacity style={plusMinusButton}
-                  onPress={this.handleIncrease}>
-                    <Text style={plusMinusButtonText}>+</Text> 
-                  </TouchableOpacity>
-                </View>
-              </View>
-
-              <Text style={finalPriceText}>총 주문 금액</Text>
-              <Text style={finalPrice}>{this.numberWithCommas(this.state.totalPrice)} 원</Text>
-
-              {/* 버튼 컨테이너 */}
-              <View style={buttonContainer}>
-                <TouchableOpacity style={navToBasketButton}
-                  onPress={() => {
-                    navigation.navigate("shoppingCart", 
-                    {username : this.state.username, menu_name : this.state.menuName, menu_amount : this.state.menuAmount, restaurant_name : this.state.restaurant_name});
-                }}
-                >
-                  <Text style={navText}>장바구니에 담기</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={goBackButton}
-                  onPress={() => {
-                    navigation.goBack(null)
-                  }}
-                >
-                  <Text style={navText}>계속 둘러보기</Text>
-                </TouchableOpacity>
-              </View>
-            </ScrollView>
-            
-        
-            <MyFooter navigation={this.props.navigation} orderBoolean={true}></MyFooter>
           </View>
-        );
-      }
-}
 
-const titleText = {
-  fontFamily: "AppleSDGothicNeo",
-  fontSize: 23,
-  fontWeight: "800",
-  fontStyle: "normal",
-  letterSpacing: -0.24,
-  textAlign: "center",
-  color: "#000"
-};
+          <View style={{flexDirection: 'row', justifyContent: 'space-between', borderBottomWidth: 1, borderBottomColor: '#d5d5d5', paddingBottom: 24}}>
+            <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 20, letterSpacing: -1, color: '#000000'}}>가격</Text>
+            <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 20, letterSpacing: -1, color: '#000000'}}>{this.numberWithCommas(this.state.totalPrice)} 원</Text>
+          </View>
 
-const totalContainer = {
-    flex: 1,
-    backgroundColor: "white",
-    alignItems: "center",
-    justifyContent: "center",
-    zIndex: -1
-}
+          <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderBottomWidth: 1, borderBottomColor: '#d5d5d5', paddingVertical: 32}}>
+            <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 20, letterSpacing: -1, color: '#000000'}}>수량</Text>
 
-const plusMinusContainer = {
-  marginLeft : 100,
-  flexDirection: 'row',
-  alignItems: 'center',
-}
+            <View style={{flexDirection: 'row'}}>
+              <TouchableOpacity onPress={this.handleDecrease}>
+                <Image style={{width: 40, height: 40}}
+                        source={require('../assets/images/drawable-xxxhdpi/아이콘_빼기.png')}></Image>
+              </TouchableOpacity>
 
+              <View style={{width: 94, alignItems: 'center', justifyContent: 'center'}}>
+                <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 24, letterSpacing: 1.57, color: '#000000'}}>{this.state.menuAmount}</Text>
+              </View>
 
-const menuContainer = {
-  marginBottom: 41
-}
+              <TouchableOpacity onPress={this.handleIncrease}>
+                <Image style={{width: 40, height: 40}}
+                        source={require('../assets/images/drawable-xxxhdpi/아이콘_더하기.png')}></Image>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
 
-const priceContainer = {
-  flexDirection: 'row',
-  alignItems: 'center',
-  margin: 22
-}
+        <View style={{flex: 1, justifyContent: 'flex-end'}}>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between', marginBottom: 28}}>
+            <TouchableOpacity style={{width: '49%', height: 50, borderWidth: 1, borderColor: '#ed6578', borderRadius: 100, alignItems: 'center', justifyContent: 'center'}}
+                              onPress={() => {
+                                axios.post('http://13.124.193.165:3000/cart',{
+                                  params: {
+                                    userEmail : this.state.userEmail,
+                                    menu_name : this.state.menuName,
+                                    amount : this.state.menuAmount,
+                                    timeSelect : this.state.timeSelect,
+                                  }
+                                })
+                                .then(response => {
+                                  //ToastAndroid.show(response.data, ToastAndroid.SHORT);
+                                  this.props.navigation.navigate('shoppingCart', {userEmail: this.state.userEmail});
+                                })
+                                .catch(function(error) {
+                                  console.log('There has been a problem with your fetch operation: ' + error.message);
+                                  // ADD THIS THROW error
+                                  throw error;
+                                });}}>
+              <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 15, letterSpacing: -0.75, color: '#ed6578'}}>바로 구매하기</Text>
+            </TouchableOpacity>
 
-const amountContainer = {
-  flexDirection: 'row',
-  alignItems: 'center',
-  margin: 22
-}
+            <TouchableOpacity style={{width: '49%', height: 50, backgroundColor: '#ed6578', borderRadius: 100, alignItems: 'center', justifyContent: 'center'}}
+                              onPress={() => {
+                                axios.post('http://13.124.193.165:3000/cart',{
+                                  params: {
+                                    userEmail : this.state.userEmail,
+                                    menu_name : this.state.menuName,
+                                    amount : this.state.menuAmount,
+                                    timeSelect : this.state.timeSelect,
+                                  }
+                                })
+                                .then(response => {
+                                  ToastAndroid.show(response.data, ToastAndroid.SHORT);
+                                })
+                                .catch(function(error) {
+                                  console.log('There has been a problem with your fetch operation: ' + error.message);
+                                  // ADD THIS THROW error
+                                  throw error;
+                                });}}>
+              <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 15, letterSpacing: -0.75, color: '#ffffff'}}>장바구니에 담기</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
 
-const buttonContainer = {
-  flexDirection: 'row',
-  alignItems: 'center',
-  margin: 20
-}
-
-const plusMinusButton = {
-  width: 40,
-  height: 40,
-  backgroundColor: "#fff",
-  borderStyle: "solid",
-  borderWidth: 0.5,
-  borderColor: "#979797",
-  alignItems: "center",
-  justifyContent: "center",
-}
-
-const plusMinusButtonText = {
-
-}
-
-const amountView = {
-  width: 80,
-  height: 40,
-  backgroundColor: "#fff",
-  borderStyle: "solid",
-  borderWidth: 0.5,
-  borderColor: "#979797",
-  alignItems: "center",
-  justifyContent: "center"
-}
-
-const navToBasketButton = {
-  width: 160,
-  height: 40,
-  borderRadius: 32,
-  backgroundColor: "#ff1d30",
-  alignItems: "center",
-  justifyContent: "center",
-  margin: 4
-}
-
-const navText = {
-  fontFamily: "S-CoreDream-8",
-  fontSize: 13,
-  fontWeight: "900",
-  fontStyle: "normal",
-  letterSpacing: 0.85,
-  textAlign: "center",
-  color: "#fff"
-}
-
-const goBackButton = {
-  width: 160,
-  height: 40,
-  borderRadius: 32,
-  backgroundColor: "#9b9b9b",
-  alignItems: "center",
-  justifyContent: "center",
-  margin: 4
-}
-
-const finalPrice = {
-  fontFamily: "S-CoreDream-7",
-  fontSize: 32,
-  fontWeight: "800",
-  fontStyle: "normal",
-  letterSpacing: 2.09,
-  textAlign: "center",
-  color: "#ff1d30"
-}
-
-const finalPriceText = {
-  fontFamily: "S-CoreDream-7",
-  fontSize: 15,
-  fontWeight: "800",
-  fontStyle: "normal",
-  letterSpacing: 0.98,
-  textAlign: "center",
-  color: "#000",
-  margin: 22
-}
-
-const menuName ={
-  fontFamily: "S-CoreDream-5",
-  fontSize: 19,
-  fontWeight: "500",
-  fontStyle: "normal",
-  letterSpacing: 1.24,
-  textAlign: "center",
-  color: "#000"
-}
-
-const detailsText ={
-  fontFamily: "S-CoreDream-7",
-  fontSize: 20,
-  fontWeight: "800",
-  fontStyle: "normal",
-  letterSpacing: 1.31,
-  textAlign: "center",
-  color: "#000"
-}
-
-const priceText = {
-  fontFamily: "S-CoreDream-7",
-  fontSize: 20,
-  fontWeight: "800",
-  fontStyle: "normal",
-  letterSpacing: 1.31,
-  textAlign: "center",
-  color: "#000",
-  marginLeft: 184 
-}
-
-const navBar = {
-  height: 70,
-  //opacity: 0.51,
-  alignItems: "center",
-  justifyContent: "center",
-  backgroundColor: "#ff1d30"
-};
-
-
-const footer ={
-  height: 70,
-  backgroundColor: "rgba(248, 248, 248, 0.98)",
-  flexDirection: 'row',
-  justifyContent: "center",
-  alignItems: "center"
-}
-
-const footerBox ={
-  margin: 20,
-  justifyContent: "center",
-  alignItems: "center",
-  width: 89.3,
-  height: 40,
-  backgroundColor: "rgba(185, 202, 210, 0)"
+        <MyFooter navigation={this.props.navigation} orderBoolean={true} userEmail={this.state.userEmail}></MyFooter>
+      </View>
+    );
+  }
 }

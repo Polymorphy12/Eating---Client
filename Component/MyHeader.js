@@ -27,7 +27,7 @@ export default class MyHeader extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    header: {height: 65, flexDirection: "row", backgroundColor: "white", alignItems:'center', justifyContent:'center'},
+    header: {height: 65, paddingHorizontal: 16, flexDirection: "row", backgroundColor: "white", alignItems:'center', justifyContent:'center', borderBottomWidth: 1, borderBottomColor: '#d6d6d6'},
     headerLeft: {flex: 1},
     headerRight: {flex: 1},
     headerTitle: {flex: 1, color: "black", alignItems: 'center', justifyContent: 'center', paddingTop: 7},

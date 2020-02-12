@@ -1,8 +1,9 @@
 import React from 'react';
-import { TouchableOpacity, SafeAreaView, Button, View, Text, TextInput , ProgressBarAndroid, Image, StyleSheet} from 'react-native';
+import { TouchableOpacity, SafeAreaView, Button, View, Text, TextInput , ProgressBarAndroid, Image, StyleSheet, ToastAndroid} from 'react-native';
 import { Container, Header,  Body,  Title, Left, Right, CheckBox } from 'native-base';
 import MyHeader from '../Component/MyHeader';
 import ProgressBar from '../Component/ProgressBar';
+import axios from 'axios';
 
 export default class SignUp4 extends React.Component {
   constructor(props) {
@@ -10,50 +11,65 @@ export default class SignUp4 extends React.Component {
     this.state = {
         progress: 3,
         empty: true,
-        buttonColor: "#fadee2",
         pageTitle: "회원가입",
         _userName: props.navigation.getParam('userName'),
         optionalCheckBoxChecked: props.navigation.getParam('optionalCheckBoxChecked'),
-        phoneNum: '',
+        phoneNum: props.navigation.getParam('phoneNum'),
     }
   }
 
   onFill = (text) => {
-    if (text.length !== 11) this.setState({empty: true, buttonColor: "#fadee2", phoneNum: text});
-    else this.setState({empty: false, buttonColor: "#ed6578", phoneNum: text});
+    if (text.length !== 6) this.setState({empty: true});
+    else this.setState({empty: false});
   }
 
   render() {
     return (
         <SafeAreaView style={styles.fullscreen}>
             <MyHeader navigation={this.props.navigation} pageTitle={this.state.pageTitle}></MyHeader>
-            <ProgressBar progress={this.state.progress}></ProgressBar>
+            <View style={{flex: 1, marginHorizontal: 16}}>
+                <ProgressBar progress={this.state.progress}></ProgressBar>
 
-            <View style={{width: "100%", height: 88, alignItems: "center", flex: 8}}>
                 <Text
-                    style={{ width: "88.2%", height: 40, borderColor: 'gray', borderBottomWidth: 1, fontSize: 24 }}
-                >휴대폰 번호를 입력해주세요.</Text>
-                <TextInput
-                    style={{ width: "88.2%", height: 40, borderColor: 'gray', marginTop: 8}}
-                    onChangeText={text => this.onFill(text)}
-                    maxLength={11}
-                    keyboardType='number-pad'
-                    placeholder="01011112222"
-                />
-            </View>
-            <View style={{width: "100%", height: 0, alignItems:"center", flex: 1}}>
-                <TouchableOpacity style={{width: "84.4%", height: 48, alignItems:"center", borderRadius: 50, backgroundColor: this.state.buttonColor}}
-                    onPress={() => this.props.navigation.navigate('signUp5',
-                                {   
-                                    userName: this.state._userName,
-                                    optionalCheckBoxChecked: this.state.optionalCheckBoxChecked,
-                                    phoneNum: this.state.phoneNum,
-                                }
-                    )}
-                    activeOpacity={0.8}
-                    disabled={this.state.empty}>
-                    <Text style={{color: "white", fontSize: 20, padding: 10}}>학식 탈출하기</Text>
-                </TouchableOpacity>
+                    style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 20, letterSpacing: -0.28, color: '#030303', borderBottomWidth: 1, borderColor: 'gray'}}
+                    >인증번호를 입력해주세요.
+                </Text>
+
+                <View style={{flexDirection: "row", justifyContent: "space-between", marginTop: 24}}>
+                    <TextInput
+                        style={{fontFamily: 'S-CoreDream-4Regular', fontSize: 16, letterSpacing: -0.23, color: '#6e6e6e', padding: 0}}
+                        onChangeText={text => this.onFill(text)}
+                        maxLength={6}
+                        keyboardType='number-pad'
+                        placeholder="6자리 숫자 입력"
+                        placeholderTextColor={'#d2d2d2'}
+                    />
+                    <TouchableOpacity style={{width: 60, height:32, alignItems:"center", justifyContent: 'center', borderRadius: 5, backgroundColor: "#ed6578", marginTop: 10}}
+                        onPress={() => {
+                            //ToastAndroid.show(`유저 이름: ${this.state._userName} \n옵션체크: ${this.state.optionalCheckBoxChecked ? 'true' : 'false'} \n연락처: ${this.state.phoneNum}`, ToastAndroid.SHORT);
+                        }}
+                        activeOpacity={0.8}>
+                        <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 14, letterSpacing: -0.2, color: '#ffffff'}}>재발송</Text>
+                    </TouchableOpacity>
+                </View>
+
+                <View style={{flex: 1, width: "100%", alignItems:"center", justifyContent: 'flex-end'}}>
+                    <TouchableOpacity style={{width: "84.4%", height: 48, alignItems:"center", justifyContent: 'center', borderRadius: 50, backgroundColor: this.state.empty ? '#fadee2' : '#ed6578', marginBottom: 60}}
+                                        onPress={() => {
+                                            this.props.navigation.navigate('signUp5', 
+                                                {   
+                                                    userName: this.state._userName,
+                                                    optionalCheckBoxChecked: this.state.optionalCheckBoxChecked,
+                                                    phoneNum: this.state.phoneNum,
+                                                }
+                                            );
+                                        }}
+                                        activeOpacity={0.8}
+                                        disabled={this.state.empty}>
+                        <Text style={{fontFamily: 'S-CoreDream-6Bold', fontSize: 20, color: '#ffffff'}}>다음으로</Text>
+                    </TouchableOpacity>
+                </View>
+
             </View>
         </SafeAreaView>
         );

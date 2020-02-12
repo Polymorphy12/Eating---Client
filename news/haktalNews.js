@@ -1,11 +1,12 @@
 import React from 'react';
-import { TouchableOpacity, SafeAreaView, Button, View, Text, TextInput , ProgressBarAndroid, Image, FlatList, StyleSheet} from 'react-native';
-import { Container, Body,  Title, Left, Right, Footer, FooterTab } from 'native-base';
+import { TouchableOpacity, SafeAreaView, Button, View, Text, TextInput , ProgressBarAndroid, Image, FlatList, StyleSheet, ToastAndroid} from 'react-native';
+import { Container, Body,  Title, Left, Right, Footer, FooterTab, Tab } from 'native-base';
 // import { MyHeader, ProgressBar } from './Component';
 import MyHeader from '../Component/MyHeader';
-import ProgressBar from '../Component/ProgressBar';
+import axios from 'axios';
 import MyFooter from '../Component/MyFooter';
 
+/*
 const DATA = [
     {
       id: '1',
@@ -48,16 +49,33 @@ const DATA = [
         period: 'YYYY.MM.DD ~ YYYY.MM.DD',
     },
   ];
+*/
 
 export default class HaktalNews extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { buttonColor: "#fadee2", pageTitle: "학탈소식" };
+    this.state = {
+      buttonColor: "#fadee2",
+      userEmail: props.navigation.getParam('userEmail'),
+      pageTitle: "학탈소식",
+      data : [],
+    };
   };
 
-  showDetail() {
-
+  componentDidMount(){
+    axios.get('http://13.124.193.165:3000/news')
+      .then(response => {
+        this.setState({data : response.data});
+        //ToastAndroid.show(JSON.stringify(response.data), ToastAndroid.SHORT);
+      })
+      .catch(function(error) {
+        console.log('There has been a problem with your fetch operation: ' + error.message);
+      // ADD THIS THROW error
+       throw error;
+     });
   }
+
+  dateParse = (x) => String(x).substring(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/, '$1.$2.$3')
 
   renderItem({item}) {
       return(
@@ -65,12 +83,12 @@ export default class HaktalNews extends React.Component {
             <Image
             // react-native에서 resizeMode에 대해서 따로 알아볼 것.
                 style={{width:"100%", height:"68.75%", backgroundColor: "#ff0000"}}
-                source={require('../assets/images/drawable-xxxhdpi/배너_포인트충전이벤트.png')}
+                source={{uri: 'http://13.124.193.165:3000/static/' + item.news_image}}
             ></Image>
             <View style={{width:"100%", height:"31.25%", flexDirection:"row", alignItems:'center', justifyContent:"space-between", flex: 1}}>
-                <Text style={{alignItems:'center', justifyContent:"center", flex: 1, fontSize:15, marginHorizontal:5.5}}>기한 : {item.period}</Text>
+                <Text style={{alignItems:'center', justifyContent:"center", flex: 1, fontSize:15, marginHorizontal:5.5}}>기한 : {this.dateParse(item.date_start)} ~ {this.dateParse(item.date_end)}</Text>
                 <TouchableOpacity style={{width: "26.7%", height: "64%", alignItems:"center", justifyContent:"center", borderRadius: 5, backgroundColor: "#ed6578", marginHorizontal: 6}}
-                    onPress={() => this.props.navigation.navigate('EventDetail')}
+                    onPress={() => this.props.navigation.navigate('EventDetail', {id : item.id, userEmail: this.state.userEmail})}
                     activeOpacity={0.8}>
                     <Text style={{color: "white", padding: 5}}>자세히 보기</Text>
                 </TouchableOpacity>
@@ -85,11 +103,11 @@ export default class HaktalNews extends React.Component {
         <MyHeader navigation={this.props.navigation} pageTitle={this.state.pageTitle}></MyHeader>
         <FlatList
             style={{width:"100%", height:"100%",}}
-            data={DATA}
+            data={this.state.data}
             renderItem={({item}) => this.renderItem({ item })}
-            keyExtractor={item => item.id}
+            keyExtractor={item => String(item.id)}
         />
-        <MyFooter navigation={this.props.navigation} newsBoolean={true}></MyFooter>
+        <MyFooter navigation={this.props.navigation} newsBoolean={true} userEmail={this.state.userEmail}></MyFooter>
       </SafeAreaView>
     );
   }
