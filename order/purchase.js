@@ -13,7 +13,8 @@ export default class Purchase extends Component {
     super(props)
     this.state = {
       pageTitle: "결제하기",
-      username : props.navigation.getParam('username', ''),
+      userEmail : props.navigation.getParam('userEmail', ''),
+      timeSelect : props.navigation.getParam('timeSelect'),
       itemPressed : '0',
       data: [],
       price_info : {},
@@ -25,13 +26,14 @@ export default class Purchase extends Component {
   componentDidMount(){
     axios.get('http://13.124.193.165:3000/purchase_summary/plan_summary',{
           params: {
-            username : this.state.username
+            userEmail : this.state.userEmail,
+            timeSelect : this.state.timeSelect,
           }
       })
       .then(response => {
         console.log("ssss",response.data);
         //Alert.alert(JSON.stringify(response.data.menu_info), '');
-        this.setState({data : response.data.menu_info, price_info : response.data.price_info});
+        this.setState({data : response.data.menu_info, price_info : response.data.price_info,});
       })
       .catch(function(error) {
         console.log('There has been a problem with your fetch operation: ' + error.message);
@@ -57,13 +59,8 @@ export default class Purchase extends Component {
           order_history.push(
             <View style = {background} key = {i}>
                 {/* 메뉴 사진 */}
-                <Image style={{ 
-                  width: 80, 
-                  height : 86,
-                  borderStyle: "solid",
-                  borderWidth: 1,
-                  borderColor: "#979797"
-                  }}>
+                <Image style={{width: 80, height : 86, borderWidth: 1, borderColor: "#979797"}}
+                        source={{uri: 'http://13.124.193.165:3000/static/' + this.state.data[i].menu_image}}>
                 </Image>
                 <View style = {locationInfoContainer}>
                     <Text style={locationName}>{this.state.data[i].restaurant_name}</Text>
@@ -77,11 +74,11 @@ export default class Purchase extends Component {
           );
           
           if(i == 0)
-            calculateProcess += this.state.data[i].menu_price + " * " + this.state.data[i].amount;
-          else if (i+1 != this.state.data.length){
-            calculateProcess += " + " + this.state.data[i].menu_price+ " * " + this.state.data[i].amount;
+            calculateProcess += this.numberWithCommas(this.state.data[i].menu_price) + " * " + this.state.data[i].amount;
+          else if (i < this.state.data.length) {
+            calculateProcess += " + " + this.numberWithCommas(this.state.data[i].menu_price)+ " * " + this.state.data[i].amount;
           } 
-          else{
+          if (i == this.state.data.length - 1) {
             calculateProcess += " = "
           }
         }
@@ -92,7 +89,7 @@ export default class Purchase extends Component {
             <OrderHeader 
             navigation={this.props.navigation} 
             pageTitle={this.state.pageTitle}
-            username={this.state.username}></OrderHeader>
+            username={this.state.userEmail}></OrderHeader>
             
             <ShoppingCartProgressBar progress={2}></ShoppingCartProgressBar>
 
@@ -144,7 +141,7 @@ export default class Purchase extends Component {
                         letterSpacing: -0.21,
                         textAlign: "right",
                         color: "#000"
-                      }}>{this.state.price_info.total_price}</Text>
+                      }}>{this.numberWithCommas(this.state.price_info.total_price)}</Text>
                     </View>
                   </View>
                 </View>
@@ -170,11 +167,11 @@ export default class Purchase extends Component {
                       </View>
                       <View style = {textContainerStyle}>
                         <Text style={leftTextStyle}>할인 : </Text>
-                        <Text style={rightTextStyle}>- {this.numberWithCommas(this.state.price_info.discount_price)} 원</Text>
+                        <Text style={rightTextStyle}>- {this.numberWithCommas(this.state.price_info.discount)} 원</Text>
                       </View>
                       <View style = {textContainerStyle}>
                         <Text style={leftTextStyle}>결제 금액 : </Text>
-                        <Text style={rightTextStyle}>= {this.numberWithCommas(this.state.price_info.total_price - this.state.price_info.discount_price)} 원</Text>
+                        <Text style={rightTextStyle}>= {this.numberWithCommas(this.state.price_info.total_price - this.state.price_info.discount)} 원</Text>
                       </View>
                     </View>
                   </View>
@@ -186,13 +183,12 @@ export default class Purchase extends Component {
                     style={orderButton}
                     title="first"
                     onPress={() => {
-                        navigation.navigate("purchaseFinalCheck");
+                        navigation.navigate("purchaseFinalCheck", {userEmail: this.state.userEmail, timeSelect: this.state.timeSelect});
                     }}>
                     <Text style={letsGetStarted}>결제하기</Text>
                 </TouchableOpacity>
             </View>
             </ScrollView>
-            <MyFooter navigation={this.props.navigation} orderBoolean={true}></MyFooter>
           </View>
         );
       }

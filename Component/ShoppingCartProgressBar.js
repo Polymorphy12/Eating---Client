@@ -8,7 +8,7 @@ export default class ShoppingCartProgressBar extends Component {
 
     render() {
         return(
-            <View>
+            <View style={{marginTop: 10}}>
                 <View style={{height: 1.5, marginHorizontal: '12%', backgroundColor: '#686868'}}></View>
                 <View style={{marginHorizontal: '7%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',}}>
                     <View style={{alignItems: 'center'}}>

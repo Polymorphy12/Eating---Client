@@ -1,14 +1,15 @@
 import React from 'react';
-import { View, TouchableOpacity, Image, StyleSheet, ToastAndroid} from 'react-native';
+import { View, TouchableOpacity, Image, StyleSheet, ToastAndroid, Text} from 'react-native';
 import { Header, Title, Left, Right } from 'native-base';
 
 export default class MyFooter extends React.Component {
     render() {
         return(
             <View style = {footer}>
+              
               <TouchableOpacity style = {footerBox}
                 onPress={() => {
-                  ToastAndroid.show(JSON.stringify(this.props.navigation), ToastAndroid.SHORT);
+                  //ToastAndroid.show(JSON.stringify(this.props.navigation), ToastAndroid.SHORT);
                   this.props.navigation.navigate("SelectRestaurant");
                   console.log(this.props);
                 }}>
@@ -23,7 +24,7 @@ export default class MyFooter extends React.Component {
 
               <TouchableOpacity style = {footerBox}
               onPress={() => {
-                this.props.navigation.navigate("haktalNews");
+                this.props.navigation.navigate("haktalNews", {userEmail: this.props.userEmail});
                 console.log(this.props);
               }}>
                 <Image
@@ -36,7 +37,7 @@ export default class MyFooter extends React.Component {
 
               <TouchableOpacity style = {footerBox}
               onPress={() => {
-                this.props.navigation.navigate("mypage");
+                this.props.navigation.navigate("mypage", {userEmail: this.props.userEmail});
                 console.log(this.props);
               }}>
               <Image
@@ -60,7 +61,9 @@ const styles = StyleSheet.create({
 
 const footer ={
     height: 80,
-    backgroundColor: "rgba(248, 248, 248, 0.98)",
+    //backgroundColor: "rgba(248, 248, 248, 0.98)",
+    borderTopWidth: 1,
+    borderTopColor: '#e4e4e4',
     flexDirection: 'row',
     justifyContent: "center",
     alignItems: "center"

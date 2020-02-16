@@ -19,10 +19,10 @@ export default class ProgressBar extends React.Component {
                         color="black"
                         indeterminate={false}
                         progress={progress / 5}
-                        style={{width: "74.4%", height: 100}}
+                        style={{width: "81.7%", height: 100}}
                     />
                     <View style={{width: "100%", height: 8, alignItems: "center", top: -57}}>
-                        <View style={{width: "76%", height:13, display: "flex", flexDirection: "row", justifyContent:"space-between"}}>
+                        <View style={{width: "85%", height:13, flexDirection: "row", justifyContent:"space-between"}}>
                             <View style={{width: 13, height: 13, backgroundColor: dotColor[0], borderRadius: 20}}></View>
                             <View style={{width: 13, height: 13, backgroundColor: dotColor[1], borderRadius: 20}}></View>
                             <View style={{width: 13, height: 13, backgroundColor: dotColor[2], borderRadius: 20}}></View>

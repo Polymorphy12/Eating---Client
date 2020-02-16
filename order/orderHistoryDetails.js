@@ -3,39 +3,67 @@ import { Text, View, Button, ImageBackground, TouchableOpacity, ScrollView, Flat
 import { TextInput } from "react-native-gesture-handler";
 import MyFooter from "../Component/MyFooter";
 import { SafeAreaView } from "react-navigation";
+import axios from "axios";
 
 export default class OrderHistoryDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      menuPrice : 2500,
-      menuAmount : 1,
-      totalPrice : 2500,
-      data: [1, 2,3,4,5,6,7,8,9],
+      data: [],
+      id: props.navigation.getParam('id', ''),
+      sample_restaurant: props.navigation.getParam('sample_restaurant', ''),
+      time: props.navigation.getParam('time'),
     };
   }
+
+  componentDidMount(){
+    axios.get('http://13.124.193.165:3000/purchase_summary/getDetailOrderLog',{
+        params: {
+          id : this.state.id,
+        }
+    }).then(response => {
+        //ToastAndroid.show(JSON.stringify(response.data), ToastAndroid.LONG);
+        this.setState({
+          data : response.data,
+        });
+    }).catch(function(error) {
+        console.log('There has been a problem with your fetch operation: ' + error.message);
+        // ADD THIS THROW error
+        throw error;
+    });
+  }
+
+  datetimeParse = (x) => String(x).substring(0,19).replace(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/, '$1.$2.$3  $4:$5:$6');
+  numberWithCommas = (x) =>  String(x).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
   _renderItem = ({item}) => 
     <View style={{marginTop: '1.7%', flexDirection: 'row'}}>
       <Image style={{
             width: 80, 
             height : 80}}
-            source={require('../assets/images/drawable-hdpi/메뉴_햄치즈밥버거.png')}></Image>
+            source={{uri : 'http://13.124.193.165:3000/static/' + item.menu_image}}></Image>
       <View style={{marginLeft: '7.2%', flexDirection: 'column', justifyContent: 'space-evenly'}}>
-        <Text style={{fontFamily: 'S-CoreDream-4Regular', fontSize: 12, lineHeight: 15, letterSpacing: 0.47, color: '#000000'}}>햄치즈밥버거</Text>
-        <Text style={{fontFamily: 'S-CoreDream-4Regular', fontSize: 9, lineHeight: 10, letterSpacing: 0.35, color: '#000000'}}>₩ 3,500</Text>
+        <Text style={{fontFamily: 'S-CoreDream-4Regular', fontSize: 12, lineHeight: 15, letterSpacing: 0.47, color: '#000000'}}>{item.menu_name} x {item.amount}</Text>
+        <Text style={{fontFamily: 'S-CoreDream-4Regular', fontSize: 9, lineHeight: 10, letterSpacing: 0.35, color: '#000000'}}>₩ {this.numberWithCommas(item.menu_price * item.amount)}</Text>
       </View>
     </View>
 
   render() {
+    
+    var totalPrice = 0;
+    for(var i = 0; i < this.state.data.length; i++) {
+      totalPrice += this.state.data[i].menu_price * this.state.data[i].amount;
+    }
+
     return (
       <View style= {{flex: 1}}>
+        {/*<Text>{JSON.stringify(this.state.data)}</Text>*/}
         <View style={{marginHorizontal: '5.9%', marginTop: '5.4%'}}>
           <View style={{borderBottomWidth: 1, borderBottomColor: '#eeeeee'}}>
-            <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 16, lineHeight: 19, letterSpacing: 0.19, color: '#000000'}}>봉구스밥버거</Text>
+            <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 16, lineHeight: 19, letterSpacing: 0.19, color: '#000000'}}>{this.state.sample_restaurant}</Text>
             <View style={{flexDirection: 'row', marginVertical: '2.1%'}}>
               <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 8, letterSpacing: 0.1, color: '#6e6e6e'}}>결제 시간</Text>
-              <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 8, letterSpacing: 0.1, color: '#6e6e6e', marginLeft: '11.8%'}}>2019.09.14  20:43:06</Text>
+              <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 8, letterSpacing: 0.1, color: '#6e6e6e', marginLeft: '11.8%'}}>{this.datetimeParse(this.state.time)}</Text>
             </View>
           </View>
 
@@ -49,10 +77,12 @@ export default class OrderHistoryDetails extends Component {
 
           </View>
 
+          
+
           <SafeAreaView style={{borderTopWidth: 1, borderTopColor: '#eeeeee'}}>
             <View style={{marginVertical: '3.3%', flexDirection: 'row', justifyContent: 'space-between'}}>
               <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 8, letterSpacing: 0.1, color: '#6e6e6e'}}>결제 금액</Text>
-              <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 8, letterSpacing: 0.1, color: '#000000'}}>₩ 3,500</Text>
+              <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 8, letterSpacing: 0.1, color: '#000000'}}>₩ {this.numberWithCommas(totalPrice)}</Text>
             </View>
           </SafeAreaView>
 

@@ -2,6 +2,9 @@ import {createAppContainer} from "react-navigation"
 import {createStackNavigator} from 'react-navigation-stack'
 import MainActivity from "./main/mainActivity";
 import LogIn from "./login/login";
+import FindEmail from "./login/findEmail";
+import FindEmailResult from "./login/findEmailResult";
+import FindPassword from "./login/findPassword";
 import SelectRestaurant from "./order/selectRestaurant";
 import Menu from "./order/menu";
 import MenuDetails from "./order/menuDetails";
@@ -30,6 +33,9 @@ const App = createStackNavigator(
   {
     Home: { screen: MainActivity},
     LogIn: {screen: LogIn},
+    findEmail: {screen: FindEmail},
+    findEmailResult: {screen: FindEmailResult},
+    findPassword: {screen: FindPassword},
     SelectRestaurant: {screen: SelectRestaurant},
     menu: {screen: Menu},
     menuDetails: {screen: MenuDetails},

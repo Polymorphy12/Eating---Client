@@ -1,11 +1,18 @@
 import React, { Component } from "react";
-import { Text, View, Button, ImageBackground, TouchableOpacity, ScrollView, FlatList, Image } from "react-native";
+import { Text, View, Button, ImageBackground, TouchableOpacity, ScrollView, FlatList, Image, ToastAndroid } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
+import axios from "axios";
 
 export default class SetPurchase extends Component {
-    state = {
-        data: [1, 2, 3, 4, 5, 6,7,8]
-      }
+  constructor(props) {
+    super(props);
+    this.state = {
+        data: [1, 2, 3, 4, 5, 6,7,8],
+        userEmail : props.navigation.getParam('userEmail', ''),
+        timeSelect : props.navigation.getParam('timeSelect'),
+        data: {},
+    };
+  }
     
       _renderItem = ({item}) => (
         <TouchableOpacity style = {background}>
@@ -26,38 +33,30 @@ export default class SetPurchase extends Component {
 
 
       render() {
-        const {navigation } = this.props;
-
         return (
-          <View
-            style= {{
-              flex: 1              
+          <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+            <Text>정보는...</Text>
+            <Text>{JSON.stringify(this.state)}</Text>
+            <TouchableOpacity style={{height: 100, borderWidth: 1}}
+                              onPress={() => {
+                                axios.post('http://13.124.193.165:3000/purchase_summary/completeOrder',{
+                                    params: {
+                                        userEmail : this.state.userEmail,
+                                        timeSelect : this.state.timeSelect,
+                                    }
+                                }).then(response => {
+                                    //ToastAndroid.show(JSON.stringify(response.data), ToastAndroid.SHORT);
+                                    this.setState({data: response.data});
+                                    this.props.navigation.navigate("orderHistory", {userEmail: this.state.userEmail});
+                                }).catch(function(error) {
+                                    console.log('There has been a problem with your fetch operation: ' + error.message);
+                                    // ADD THIS THROW error
+                                    throw error;
+                                });
             }}>
-            <View style = {navBar}>
-              <Text style={titleText}>결제 수단 선택</Text>
-            </View>
-            
-            
-            <FlatList 
-              data={this.state.data}
-              renderItem={this._renderItem}
-              
-              contentContainerStyle={listView}
-            />
-            
-            <View style={orderButtonContainer}>
-                <TouchableOpacity
-                    style={orderButton}
-                    title="first"
-                    onPress={() => {
-                        navigation.navigate("purchase");
-                    }}
-                >
-                    <Text style={letsGetStarted}>결제하기</Text>
-                </TouchableOpacity>
-            </View>
-        
-            
+              <Text>(대충 결제가 완료되는 버튼)</Text>
+            </TouchableOpacity>
+            <Text>{JSON.stringify(this.state.data)}</Text>
           </View>
         );
       }
@@ -152,3 +151,34 @@ const letsGetStarted = {
     textAlign: "center",
     color: "#fff"
 };
+
+/*<View
+            style= {{
+              flex: 1              
+            }}>
+            <View style = {navBar}>
+              <Text style={titleText}>결제 수단 선택</Text>
+            </View>
+            
+            
+            <FlatList 
+              data={this.state.data}
+              renderItem={this._renderItem}
+              
+              contentContainerStyle={listView}
+            />
+            
+            <View style={orderButtonContainer}>
+                <TouchableOpacity
+                    style={orderButton}
+                    title="first"
+                    onPress={() => {
+                        navigation.navigate("purchase");
+                    }}
+                >
+                    <Text style={letsGetStarted}>결제하기</Text>
+                </TouchableOpacity>
+            </View>
+        
+            
+          </View>*/

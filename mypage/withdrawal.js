@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import {Text, TextInput, View, TouchableOpacity, Image, StyleSheet,} from 'react-native';
+import {Text, TextInput, View, TouchableOpacity, Image, StyleSheet, Alert, ToastAndroid} from 'react-native';
+import axios from "axios";
 import CheckBox from 'react-native-check-box';
 import MyHeader from "../Component/MyHeader";
 import MyFooter from "../Component/MyFooter";
@@ -11,11 +12,14 @@ export default class withdrawal extends Component {
         this.state = 
         {
             pageTitle: '회원탈퇴',
+            userEmail: props.navigation.getParam('userEmail'),
             graduationCheckBoxChecked: false,
             securityCheckBoxChecked: false,
             restaurantCheckBoxChecked: false,
-            functionCheckBoxChecked: false,
+            serviceCheckBoxChecked: false,
             somethingElseCheckBoxChecked: false,
+            otherReasonText: '',
+            lastWordText: '',
         }
     }
 
@@ -54,8 +58,8 @@ export default class withdrawal extends Component {
 
                             <View style={checkBoxElementViewStyle}>
                                 <CheckBox
-                                        isChecked={this.state.functionCheckBoxChecked}
-                                        onClick={() => {this.setState({functionCheckBoxChecked: !this.state.functionCheckBoxChecked})}}
+                                        isChecked={this.state.serviceCheckBoxChecked}
+                                        onClick={() => {this.setState({serviceCheckBoxChecked: !this.state.serviceCheckBoxChecked})}}
                                         ></CheckBox>
                                 <Text style={checkBoxTextStyle}>서비스 기능 불편</Text>
                             </View>
@@ -70,22 +74,59 @@ export default class withdrawal extends Component {
 
                             <TextInput style={TextInputStyle}
                                         editable={this.state.somethingElseCheckBoxChecked}
-                                        multiline={true}></TextInput>
+                                        multiline={true}
+                                        onChangeText={(otherReasonText) => {
+                                            this.setState({otherReasonText});
+                                        }}></TextInput>
 
                             <Text style={{marginTop: '10%'}}>마지막으로 해 주실 한 마디가 있나요?</Text>
 
                             <TextInput style={TextInputStyle}
-                                        multiline={true}></TextInput>
+                                        multiline={true}
+                                        onChangeText={(lastWordText) => {
+                                            this.setState({lastWordText});
+                                        }}></TextInput>
 
                             <View style={{alignItems: 'center', marginTop: 27.5}}>
-                                <TouchableOpacity style={{width: 65, height: 26, borderRadius: 4, backgroundColor: '#666666', alignItems: 'center', justifyContent: 'center'}}>
+                                <TouchableOpacity style={{width: 65, height: 26, borderRadius: 4, backgroundColor: '#666666', alignItems: 'center', justifyContent: 'center'}}
+                                                onPress = {() => {
+                                                    Alert.alert('회원탈퇴를 진행합니다.', '정말로 탈퇴하시겠습니까?', [
+                                                            {
+                                                                text: '탈퇴',
+                                                                onPress : () => {
+                                                                    axios.post('http://13.124.193.165:3000/users/deleteAccount', {
+                                                                        params: {
+                                                                            userEmail: this.state.userEmail,
+                                                                            graduation: this.state.graduationCheckBoxChecked,
+                                                                            security: this.state.securityCheckBoxChecked,
+                                                                            restaurantDissatisfaction: this.state.restaurantCheckBoxChecked,
+                                                                            serviceDissatisfaction: this.state.serviceCheckBoxChecked,
+                                                                            somthingElse: this.state.somethingElseCheckBoxChecked,
+                                                                            otherReasonText: this.state.otherReasonText,
+                                                                            lastWordText: this.state.lastWordText,
+                                                                        }
+                                                                    }).then(response => {
+                                                                        ToastAndroid.show(JSON.stringify(response.data), ToastAndroid.SHORT);
+                                                                        this.props.navigation.navigate('Home');
+                                                                    }).catch((error) => {
+                                                                        console.log('There has been a problem with your fetch operation: ' + error.message);
+                                                                        // ADD THIS THROW error
+                                                                        throw error;
+                                                                    });
+                                                                }
+                                                            },
+                                                            {text: '취소', onPress : () => ToastAndroid.show('취소되었습니다.', ToastAndroid.SHORT)}
+                                                        ],
+                                                        {cancelable: false}
+                                                    );
+                                                }}>
                                     <Text style={{fontFamily: 'S-CoreDream5-Medium', fontSize: 15, color: '#ffffff'}}>탈퇴</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
                     </View>
                 </ScrollView>
-                <MyFooter navigation={this.props.navigation} mypageBoolean={true}></MyFooter>
+                <MyFooter navigation={this.props.navigation} mypageBoolean={true} userEmail={this.state.userEmail}></MyFooter>
 
             </View>
         );

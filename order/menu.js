@@ -10,210 +10,135 @@ export default class Menu extends Component {
   constructor(props) {
     super(props)
     this.state = { 
-      progress: 1, 
-      empty: false, 
-      buttonColor: "#fadee2", 
-      pageTitle: "주문하기", 
+      progress: 1,
+      popularList: [],
+      elseList: [],
+      pageTitle: props.navigation.getParam('restaurant_name', '봉구스밥버거'), 
       restaurant_name: props.navigation.getParam('restaurant_name', '봉구스밥버거'),
-      username : props.navigation.getParam('username', '')
+      userEmail : props.navigation.getParam('userEmail', ''),
+      timeSelect: props.navigation.getParam('timeSelect'),
+      showPopularList: true,
+      showElseList: false,
     }
     //console.log(this.state.restaurant_name);
   }
 
   numberWithCommas = (x) =>  String(x).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   
-      componentDidMount(){
-        //console.log('SelectRestaurant componentDidMount!!');
-        
-        axios.get('http://13.124.193.165:3000/menus',{
-              params: {
-                  restaurant_name : this.state.restaurant_name
-              }
-          })
-          .then(response => {
-            //ToastAndroid.show(JSON.stringify(response.data), ToastAndroid.SHORT);
-            this.setState({data : response.data});
-          })
-          .catch(function(error) {
-            console.log('There has been a problem with your fetch operation: ' + error.message);
-          // ADD THIS THROW error
-           throw error;
-         });
-      }
+  componentDidMount(){
+    //console.log('SelectRestaurant componentDidMount!!');
     
-      _renderItem = ({item}) => {
-        if(item.menu_image)
-        {
-          return(
-            <View style = {{flexDirection: 'row', marginHorizontal: '6.7%', justifyContent: 'space-between', paddingBottom: '2%'}}>
-              <View style={{flexDirection: 'row'}}>
-                <Image style={{ 
-                  width: 68, 
-                  height : 68}}              
-                  source={{uri: 'http://13.124.193.165:3000/static/' + item.menu_image}}></Image>
-                <View style = {{marginLeft: '8.9%', flexDirection: 'column', justifyContent: 'space-evenly'}}>
-                  <Text style={foodName}>{item.menu_name}</Text>
-                  <Text style={foodPrice}>{this.numberWithCommas(item.menu_price)}</Text>
-                </View>
-              </View>
-
-              <View style={{justifyContent: 'center'}}>
-                <TouchableOpacity style = {{width: 138, height: 36, borderRadius: 32, backgroundColor: '#ed6578', 
-                                            alignItems: 'center', justifyContent: "center"}}
-                                  onPress={() => {
-                                    this.props.navigation.navigate("menuDetails", 
-                                    {username: this.state.username, restaurant_name : this.state.restaurant_name, menu_image : item.menu_image, 
-                                      menu_price : item.menu_price, menu_name : item.menu_name});
-                                    console.log(this.props);
-                                  }}>
-                  <Text style = {{fontFamily: "S-CoreDream-8Heavy", fontSize: 14, fontWeight: "900", fontStyle: "normal", letterSpacing: 0.65, textAlign: "center", color: "#ffffff"}}>
-                    장바구니에 담기</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          );
+    axios.get('http://13.124.193.165:3000/menus',{
+          params: {
+            restaurant_name : this.state.restaurant_name,
+          }
+      })
+      .then(response => {
+        //ToastAndroid.show(JSON.stringify(response.data), ToastAndroid.SHORT);
+        for(let i = 0; i < response.data.length; i++) {
+          if (response.data[i].popular) this.setState({popularList: this.state.popularList.concat(response.data[i])})
+          else                          this.setState({elseList: this.state.elseList.concat(response.data[i])})
         }
-        else{
-          return(
-            <View style = {{flexDirection: 'row', marginHorizontal: '6.7%', justifyContent: 'space-between', paddingBottom: '2%'}}>
-              <View style={{flexDirection: 'row'}}>
-                <Image style={{ 
-                  width: 68, 
-                  height : 68}}              
-                  source={{uri: 'http://13.124.193.165:3000/static/' + item.menu_image}}></Image>
-                <View style = {{marginLeft: '8.9%', flexDirection: 'column', justifyContent: 'space-evenly'}}>
-                  <Text style={foodName}>{item.menu_name}</Text>
-                  <Text style={foodPrice}>{this.numberWithCommas(item.menu_price)}</Text>
-                </View>
-              </View>
+        // this.setState({data : response.data});
+      })
+      .catch(function(error) {
+        console.log('There has been a problem with your fetch operation: ' + error.message);
+      // ADD THIS THROW error
+        throw error;
+      });
+  }
+    
+  _renderItem = ({item}) => (
+    <TouchableOpacity style = {{width: '100%', height: 72, flexDirection: 'row', borderTopWidth: 1, borderTopColor: '#eeeeee'}}
+                      onPress={() => this.props.navigation.navigate('menuDetails',
+                        {
+                          userEmail: this.state.userEmail,
+                          restaurant_name: this.state.restaurant_name,
+                          timeSelect: this.state.timeSelect,
+                          menuImage: item.menu_image,
+                          menuName: item.menu_name,
+                          menuPrice: item.menu_price,
+                        }
+                      )}>
+      <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <Image style={{width: 56, height : 56}}              
+          source={{uri: 'http://13.124.193.165:3000/static/' + item.menu_image}}></Image>
+        <View style = {{marginLeft: 40, flexDirection: 'column', justifyContent: 'space-evenly'}}>
+          <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 16, letterSpacing: -0.8, color: '#273951'}}>{item.menu_name}</Text>
+          <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 16, letterSpacing: -0.8, color: '#a2a9b3'}}>{this.numberWithCommas(item.menu_price)}원</Text>
+        </View>
+      </View>
+    </TouchableOpacity>      
+  );
 
-              <View style={{justifyContent: 'center'}}>
-                <TouchableOpacity style = {{width: 138, height: 36, borderRadius: 32, backgroundColor: '#ed6578', 
-                                            alignItems: 'center', justifyContent: "center"}}
-                                  onPress={() => {
-                                    this.props.navigation.navigate("menuDetails", 
-                                    {username: this.state.username, restaurant_name : this.state.restaurant_name, menu_image : item.menu_image, 
-                                      menu_price : item.menu_price, menu_name : item.menu_name});
-                                    console.log(this.props);
-                                  }}>
-                  <Text style = {{fontFamily: "S-CoreDream-8Heavy", fontSize: 14, fontWeight: "900", fontStyle: "normal", letterSpacing: 0.65, textAlign: "center", color: "#ffffff"}}>
-                    장바구니에 담기</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          );
-        }
+  render() {
+    return (
+      <View style= {{flex: 1}}>
+        <OrderHeader 
+        navigation={this.props.navigation} 
+        pageTitle={this.state.pageTitle}
+        username={this.state.userEmail}></OrderHeader>
+
+        {/* <Text>{JSON.stringify(this.state.data[0])}</Text> */}
+
+        <View style={{marginHorizontal: 16}}>
+          <TouchableOpacity style={{height: 52, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}
+                            onPress={() => this.setState({showPopularList: !this.state.showPopularList})}>
+            <Text style={{fontFamily: 'S-CoreDream5-Medium', fontSize: 16, letterSpacing: -0.23, color: '#000000'}}>인기메뉴</Text>
+            <Image style={{width: 30, height: 30}} 
+                  source={this.state.showPopularList ? require('../assets/images/drawable-xxxhdpi/아이콘_리스트접기.png') : require('../assets/images/drawable-xxxhdpi/아이콘_리스트펼치기.png')}></Image>
+            
+          </TouchableOpacity>
+
+          {
+            this.state.showPopularList ?
+            <View style={{height: this.state.popularList.length >= 3 ? 216 : this.state.popularList.length * 72}}>
+              <FlatList data={this.state.popularList} renderItem={this._renderItem} keyExtractor={item => String(item.menu_id)} contentContainerStyle={listView}/>
+            </View> :
+            <View></View>
+          }
+
+          {/* <Text>{JSON.stringify(this.state.popularList.length)}</Text> */}
           
-    }
+        </View>
 
-      handleIncrease = () => {
-        this.setState({
-          data: this.state.data.concat( this.state.data.length + 1 )
-        });
-      }
+        <View style={{height : 8, backgroundColor: '#eeeeee'}}></View>
 
-      render() {
+        <View style={{marginHorizontal: 16}}>
 
-        return (
-          <View
-            style= {{flex: 1}}>
-            <OrderHeader 
-            navigation={this.props.navigation} 
-            pageTitle={this.state.pageTitle}
-            username={this.state.username}></OrderHeader>
+          <TouchableOpacity style={{height: 52, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}
+                            onPress={() => this.setState({showElseList: !this.state.showElseList})}>
+            <Text style={{fontFamily: 'S-CoreDream5-Medium', fontSize: 16, letterSpacing: -0.23, color: '#000000'}}>모든메뉴</Text>
+            <Image style={{width: 30, height: 30}} 
+                  source={this.state.showElseList ? require('../assets/images/drawable-xxxhdpi/아이콘_리스트접기.png') : require('../assets/images/drawable-xxxhdpi/아이콘_리스트펼치기.png')}></Image>
             
-            <Text style={titleText}>{this.state.restaurant_name}</Text>
-            
-            <FlatList 
-              data={this.state.data}
-              renderItem={this._renderItem}
-              contentContainerStyle={listView}/>
+          </TouchableOpacity>
 
-            <MyFooter navigation={this.props.navigation} orderBoolean={true}></MyFooter>
-          </View>
-        );
-      }
+          {
+            this.state.showElseList ?
+            <View style={{height: this.state.elseList.length >= 3 ? 216 : this.state.elseList.length * 72}}>
+              <FlatList data={this.state.elseList} renderItem={this._renderItem} keyExtractor={item => String(item.menu_id)} contentContainerStyle={listView}/>
+            </View> :
+            <View></View>
+          }
+
+        </View>
+
+        <View style={{height : 8, backgroundColor: '#eeeeee'}}></View>
+
+        <View style={{flex: 1, marginHorizontal: 16}}>
+          <Text style={{fontFamily: 'S-CoreDream5-Medium', fontSize: 12, letterSpacing: -0.6, color: '#9b9b9b', marginTop: 24}}>메뉴 이미지는 실제 음식과 다를 수 있습니다.</Text>
+        </View>
+        
+
+        <MyFooter navigation={this.props.navigation} orderBoolean={true} userEmail={this.state.userEmail}></MyFooter>
+      </View>
+    );
+  }
 }
-
-const titleText = {
-  // width: 225.6,
-  // height: 25,
-  fontFamily: "S-CoreDream-5Medium",
-  fontSize: 20,
-  fontWeight: "800",
-  fontStyle: "normal",
-  lineHeight: 24,
-  letterSpacing: 1.31,
-  textAlign: "center",
-  color: "#6e6e6e",
-  marginVertical: '2.5%',
-};
-
-
-const background = {
-  height: 80,
-  borderRadius: 4,
-  borderStyle: "solid",
-  borderWidth: 0,
-  borderColor: "#ff1d30",
-  flexDirection: 'row',
-  alignItems: 'center',
-  justifyContent: 'center'
-};
 
 const listView = {
 //   // flex: 1,
 //   justifyContent: 'center',
 //   alignItems: 'center'
-}
-
-const foodInfoContainer = {
-    margin: 35
-}
-
-const foodName = {
-  
-  fontFamily: "S-CoreDream-5Medium",
-  fontSize: 17,
-  fontWeight: "500",
-  fontStyle: "normal",
-  letterSpacing: 0,
-  color: "#273951",
-}
-
-const foodPrice = {
-  fontFamily: "S-CoreDream-5",
-  fontSize: 13,
-  fontWeight: "500",
-  fontStyle: "normal",
-  letterSpacing: 0,
-  color: "#a2a9b3"
-}
-
-
-const navBar = {
-  height: 70,
-  //opacity: 0.51,
-  alignItems: "center",
-  justifyContent: "center",
-//   backgroundColor: "#ff1d30"
-  backgroundColor: "#ffffff"
-};
-
-
-const footer ={
-  height: 80,
-  backgroundColor: "rgba(248, 248, 248, 0.98)",
-  flexDirection: 'row',
-  justifyContent: "center",
-  alignItems: "center"
-}
-
-const footerBox ={
-  margin: 20,
-  justifyContent: "center",
-  alignItems: "center",
-  width: 89.3,
-  height: 40,
-  backgroundColor: "rgba(185, 202, 210, 0)"
 }

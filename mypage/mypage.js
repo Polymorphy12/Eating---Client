@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { Text, View, Button, ImageBackground, TouchableOpacity, ScrollView, FlatList, Image, Modal } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
+import { Text, View, Button, ImageBackground, TouchableOpacity, ScrollView, FlatList, Image, Modal, ToastAndroid } from "react-native";
+import axios from "axios";
 import PlainListItem from "../Component/PlainListItem";
 import MyHeader from "../Component/MyHeader";
 import MyFooter from "../Component/MyFooter";
@@ -9,8 +9,34 @@ export default class MyPage extends Component {
   
   constructor(props) {
     super(props);
-    this.state = { buttonColor: "#fadee2", pageTitle: "마이페이지" , isVisible: false};
+    this.state = {
+      userEmail: props.navigation.getParam('userEmail'),
+      buttonColor: "#fadee2",
+      pageTitle: "마이페이지" ,
+      isVisible: false,
+      data: {},
+
+    };
   };
+
+  componentDidMount(){
+    //console.log('SelectRestaurant componentDidMount!!');
+    
+    axios.post('http://13.124.193.165:3000/users/mypage',{
+          params: {
+            userEmail: this.state.userEmail,
+          }
+      })
+      .then(response => {
+        //ToastAndroid.show(JSON.stringify(response.data), ToastAndroid.SHORT);
+        this.setState({data : response.data});
+      })
+      .catch(function(error) {
+        console.log('There has been a problem with your fetch operation: ' + error.message);
+      // ADD THIS THROW error
+       throw error;
+     });
+  }
   
   
 
@@ -134,10 +160,10 @@ export default class MyPage extends Component {
                     <Text
                     style = {{width: 76, height: 20, fontFamily: "S-CoreDream4", fontSize: 17, fontWeight: "200", 
                     fontStyle: "normal", lineHeight: 20, letterSpacing: -0.41, textAlign: "left", color: "#000000"}}
-                    >나이름</Text>
+                    >{this.state.data.user_name}</Text>
                   </View>
                   <TouchableOpacity style={{width: 60, height : 60, marginLeft: 'auto', marginRight: '6.67%'}}
-                    onPress={() => this.props.navigation.navigate('personalInfo')}>
+                    onPress={() => this.props.navigation.navigate('personalInfo', {userEmail: this.state.userEmail, userName: this.state.data.user_name})}>
 
                     <Image 
                     style = {{width: 60, height : 60, marginLeft: 'auto', marginRight: '6.67%'}}
@@ -178,10 +204,15 @@ export default class MyPage extends Component {
                   onPress = {() => {
                     this.props.navigation.navigate("Announcement");
                   }}/>
+                  <PlainListItem itemTitle = "내 주문내역 보러가기"
+                                  navigation = {this.props.navigation} 
+                                  onPress = {() => {
+                                    this.props.navigation.navigate("orderHistory", {userEmail: this.state.userEmail});
+                  }}/>
                 </View>
             </ScrollView>
               
-            <MyFooter navigation={this.props.navigation} mypageBoolean={true}></MyFooter>
+            <MyFooter navigation={this.props.navigation} mypageBoolean={true} userEmail={this.state.userEmail}></MyFooter>
             
             {/* <View style={orderButtonContainer}>
                 <TouchableOpacity
