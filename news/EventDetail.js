@@ -45,14 +45,17 @@ export default class EventDetail extends React.Component {
                             source={{uri: 'http://13.124.193.165:3000/static/' + this.state.data.news_image}}
                         ></Image>
                     </View>
-                    <View style={{width:"100%", height:"7.8%", alignItems:'flex-start', justifyContent:"center", marginHorizontal:5.5}}>
-                        <Text>기한 : {this.dateParse(this.state.data.date_start)} ~ {this.dateParse(this.state.data.date_end)}</Text>
+                    <View style={{alignItems:'center', justifyContent:"center", marginTop: 24, marginBottom: 15}}>
+                        <Text style={{fontFamily: 'S-CoreDream4-ExtraLight', fontSize: 18, letterSpacing: 0.22, color: '#000000'}}>기한 : {this.dateParse(this.state.data.date_start)} ~ {this.dateParse(this.state.data.date_end)}</Text>
                     </View>
-                    <Text style={{width: "90.8%", height: "9%", marginHorizontal:"4.6%", fontSize:17}}>{this.state.data.title}</Text>
-                    <Text style={{width: "90.8%", marginHorizontal:"4.6%", fontSize:15}}>
-                        {/*`학식탈출이 드디어 어플로 출시 되었습니다~ ${"\n"}와~ 짝짝~ 실제로는 언제 출시 될까요~!${"\n"}출시 기념 프로모션으로${"\n"}${"\n"}라는 파격 프로모션을 준비했습니다~${"\n"}${"\n"}어서어서 충전해서 이득보러 갈까요~~${"\n"}고고링 ><`*/}
-                        {this.state.data.description}
-                    </Text>
+                    <View style={{width: '100%', paddingHorizontal: 13.5}}>
+                        <Text style={{fontFamily: 'S-CoreDream6-Bold', fontSize: 17, letterSpacing: 0.2, color: '#000000', marginBottom: 16}}>{this.state.data.title}</Text>
+                        <Text style={{fontFamily: 'S-CoreDream4-ExtraLight', fontSize: 15, letterSpacing: 0.18, color: '#000000'}}>
+                            {/*`학식탈출이 드디어 어플로 출시 되었습니다~ ${"\n"}와~ 짝짝~ 실제로는 언제 출시 될까요~!${"\n"}출시 기념 프로모션으로${"\n"}${"\n"}라는 파격 프로모션을 준비했습니다~${"\n"}${"\n"}어서어서 충전해서 이득보러 갈까요~~${"\n"}고고링 ><`*/}
+                            {this.state.data.description}
+                        </Text>
+
+                    </View>
                 </ScrollView>
                 
                 <MyFooter navigation={this.props.navigation} newsBoolean={true} userEmail={this.state.userEmail}></MyFooter>
@@ -67,5 +70,7 @@ const totalContainer = {
     backgroundColor: "white",
     alignItems: "center",
     //justifyContent: "center",
-    zIndex: -1
+    zIndex: -1,
+    marginTop: 16,
+    marginHorizontal: 16,
 }

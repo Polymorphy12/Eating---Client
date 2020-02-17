@@ -77,36 +77,40 @@ export default class HaktalNews extends React.Component {
 
   dateParse = (x) => String(x).substring(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/, '$1.$2.$3')
 
-  renderItem({item}) {
-      return(
-        <View style={{width:"100%", height: 183}}>
-            <Image
-            // react-native에서 resizeMode에 대해서 따로 알아볼 것.
-                style={{width:"100%", height:"68.75%", backgroundColor: "#ff0000"}}
-                source={{uri: 'http://13.124.193.165:3000/static/' + item.news_image}}
-            ></Image>
-            <View style={{width:"100%", height:"31.25%", flexDirection:"row", alignItems:'center', justifyContent:"space-between", flex: 1}}>
-                <Text style={{alignItems:'center', justifyContent:"center", flex: 1, fontSize:15, marginHorizontal:5.5}}>기한 : {this.dateParse(item.date_start)} ~ {this.dateParse(item.date_end)}</Text>
-                <TouchableOpacity style={{width: "26.7%", height: "64%", alignItems:"center", justifyContent:"center", borderRadius: 5, backgroundColor: "#ed6578", marginHorizontal: 6}}
-                    onPress={() => this.props.navigation.navigate('EventDetail', {id : item.id, userEmail: this.state.userEmail})}
-                    activeOpacity={0.8}>
-                    <Text style={{color: "white", padding: 5}}>자세히 보기</Text>
-                </TouchableOpacity>
-            </View>
-        </View>
-      );
+  renderItem = ({item}) => {
+    return(
+      <View style={{width:"100%", height: 183}}>
+          <Image
+          // react-native에서 resizeMode에 대해서 따로 알아볼 것.
+              style={{width:"100%", height:"68.75%", backgroundColor: "#ff0000"}}
+              source={{uri: 'http://13.124.193.165:3000/static/' + item.news_image}}
+              resizeMode={'stretch'}
+          ></Image>
+          <View style={{width:"100%", height:"31.25%", flexDirection:"row", alignItems:'center', justifyContent:"space-between", flex: 1}}>
+              <Text style={{alignItems:'center', justifyContent:"center", flex: 1, fontSize:15, marginHorizontal:5.5}}>기한 : {this.dateParse(item.date_start)} ~ {this.dateParse(item.date_end)}</Text>
+              <TouchableOpacity style={{width: "26.7%", height: "64%", alignItems:"center", justifyContent:"center", borderRadius: 5, backgroundColor: "#ed6578", marginHorizontal: 6}}
+                  onPress={() => this.props.navigation.navigate('EventDetail', {id : item.id, userEmail: this.state.userEmail})}
+                  activeOpacity={0.8}>
+                  <Text style={{color: "white", padding: 5}}>자세히 보기</Text>
+              </TouchableOpacity>
+          </View>
+      </View>
+    );
   }
 
   render() {
     return (
       <SafeAreaView style={{flex:1}}>
         <MyHeader navigation={this.props.navigation} pageTitle={this.state.pageTitle}></MyHeader>
-        <FlatList
-            style={{width:"100%", height:"100%",}}
-            data={this.state.data}
-            renderItem={({item}) => this.renderItem({ item })}
-            keyExtractor={item => String(item.id)}
-        />
+        <View style={{marginHorizontal: 16, marginTop: 16, flex: 1}}>
+          <FlatList
+              style={{width:"100%", height:"100%"}}
+              data={this.state.data}
+              renderItem={this.renderItem}
+              keyExtractor={item => String(item.id)}
+          />
+
+        </View> 
         <MyFooter navigation={this.props.navigation} newsBoolean={true} userEmail={this.state.userEmail}></MyFooter>
       </SafeAreaView>
     );

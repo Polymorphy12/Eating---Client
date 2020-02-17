@@ -90,7 +90,7 @@ export default class MenuDetails extends Component {
         </View>
 
         <View style={{flex: 1, justifyContent: 'flex-end'}}>
-          <View style={{flexDirection: 'row', justifyContent: 'space-between', marginBottom: 28}}>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 16, marginBottom: 28}}>
             <TouchableOpacity style={{width: '49%', height: 50, borderWidth: 1, borderColor: '#ed6578', borderRadius: 100, alignItems: 'center', justifyContent: 'center'}}
                               onPress={() => {
                                 axios.post('http://13.124.193.165:3000/cart',{

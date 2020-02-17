@@ -188,7 +188,7 @@ export default class ShoppingCart extends Component {
                                       (this.state.dinnerOrderList.length === 0 ? true : false)
                                     }
                             onPress={() => {
-                              // 이 onPress 함수는 주문내역의 변경이 있건 없건 주문 목록을 업데이트하도록 구현되어있다. 서버에 불필요한 부하를 주지 않을까? 개선할 방법을 차차 생각해보자.
+                              // 이 onPress 함수는 주문내역의 변경이 있건 없건 주문 목록을 업데이트하도록 구현되어있다. 서버에 불필요한 부하를 주지 않을까? 개선할 방법을 생각해보자.
                               var menusToUpdate = [];
                               var menusToUpdateTarget = this.state.timeSelect === 'lunch' ? this.state.lunchOrderList : this.state.dinnerOrderList;
                               for (let i = 0; i < menusToUpdateTarget.length; i++) {

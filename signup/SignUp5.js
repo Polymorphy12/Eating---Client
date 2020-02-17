@@ -13,6 +13,7 @@ export default class SignUp5 extends React.Component {
             emailFilled: false,
             pswdFilled: false,
             repswdFilled: false,
+            emailAuthBool: false,
             pageTitle: "회원가입",
             _userName: props.navigation.getParam('userName'),
             optionalCheckBoxChecked: props.navigation.getParam('optionalCheckBoxChecked'),
@@ -35,7 +36,7 @@ export default class SignUp5 extends React.Component {
         else this.setState({repswdFilled: false});
     }
 
-
+    regExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
 
     render() {
         const removeEmojis = (string) => {
@@ -62,18 +63,19 @@ export default class SignUp5 extends React.Component {
 
                     <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 14}}>
                         <TextInput
-                            style={{width: '80%', fontFamily: 'S-CoreDream4-ExtraLight', fontSize: 16, letterSpacing: -0.23, color: '#6e6e6e', padding: 0}}
+                            style={{width: '50%', fontFamily: 'S-CoreDream4-ExtraLight', fontSize: 16, letterSpacing: -0.23, color: '#6e6e6e', padding: 0}}
                             onChangeText={userEmail => {
+                                this.state.emailAuthBool = false;
                                 this.setState({userEmail});
                                 this.onEmailFill(userEmail);
                             }}
-                            maxLength={20}
+                            maxLength={40}
                             keyboardType='email-address'
                             placeholder={'welcome@eating.com'}
                             placeholderTextColor={'#d2d2d2'}
                         />
 
-                        <TouchableOpacity style={{height:28, alignItems:"center", justifyContent: 'center', borderRadius: 5, backgroundColor: "#ed6578"}}
+                        <TouchableOpacity style={{width: 92, height:28, alignItems:"center", justifyContent: 'center', borderRadius: 5, backgroundColor: "#ed6578"}}
                                             onPress={() => {
                                                 if(!this.state.userEmail)
                                                 {
@@ -81,8 +83,13 @@ export default class SignUp5 extends React.Component {
                                                     ToastAndroid.show('이메일을 입력해 주세요.', ToastAndroid.SHORT);
                                                     return;
                                                 }
+                                                if(!this.state.userEmail.match(this.regExp))
+                                                {
+                                                    ToastAndroid.show('잘못된 이메일 형식입니다.', ToastAndroid.SHORT);
+                                                    return;
+                                                }
 
-                                                axios.post('http://13.124.193.165:3000/users/overlapCheck', {
+                                                axios.post('http://13.124.193.165:3000/emailAuth/signUpEmailAuth', {
                                                     params: {
                                                         userEmail : this.state.userEmail,
                                                     }
@@ -93,9 +100,54 @@ export default class SignUp5 extends React.Component {
                                                     throw error;
                                                 });
                                             }}
-                                            activeOpacity={0.8}
-                                            disabled={this.state.empty}>
-                            <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 14, lineHeight: 22, letterSpacing: -0.2, color: '#ffffff', marginHorizontal: 6}}>중복확인</Text>
+                                            activeOpacity={0.8}>
+                            <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 14, lineHeight: 22, letterSpacing: -1.5, color: '#ffffff', marginHorizontal: 6}}>인증번호 받기</Text>
+                        </TouchableOpacity>
+                    </View>
+
+                    <Text
+                        style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 20, letterSpacing: -0.28, color: '#030303', borderBottomWidth: 1, borderBottomColor: 'gray', marginTop: 42}}
+                    >이메일 인증번호를 입력해주세요.</Text>
+
+                    <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 14}}>
+                        <TextInput
+                            style={{width: '50%', fontFamily: 'S-CoreDream4-ExtraLight', fontSize: 16, letterSpacing: -0.23, color: '#6e6e6e', padding: 0}}
+                            onChangeText={emailAuthText => {
+                                this.setState({emailAuthText});
+                            }}
+                            maxLength={6}
+                            keyboardType='number-pad'
+                            placeholder={'245352'}
+                            placeholderTextColor={'#d2d2d2'}
+                        />
+
+                        <TouchableOpacity style={{width: 92, height:28, alignItems:"center", justifyContent: 'center', borderRadius: 5, backgroundColor: "#ed6578"}}
+                                            onPress={() => {
+                                                if(!this.state.emailAuthText)
+                                                {
+                                                    ToastAndroid.show('인증번호를 입력해 주세요.', ToastAndroid.SHORT);
+                                                    return;
+                                                }
+
+                                                axios.post('http://13.124.193.165:3000/emailAuth/signUpEmailAuthCheck', {
+                                                    params: {
+                                                        userEmail : this.state.userEmail,
+                                                        emailAuthText: this.state.emailAuthText,
+                                                    }
+                                                }).then(response => {
+                                                    if (response.data === -1)       ToastAndroid.show('시스템에 문제가 생겼습니다. 고객센터에 문의해주세요.', ToastAndroid.SHORT);
+                                                    else if (response.data === 0)   ToastAndroid.show('잘못된 인증번호입니다.', ToastAndroid.SHORT);
+                                                    else if (response.data === 1) {
+                                                        ToastAndroid.show('이메일 인증에 성공했습니다.', ToastAndroid.SHORT);
+                                                        this.setState({emailAuthBool: true});
+                                                    }
+                                                }).catch(function(error) {
+                                                    console.log('There has been a problem with your fetch operation: ' + error.message);
+                                                    throw error;
+                                                });
+                                            }}
+                                            activeOpacity={0.8}>
+                            <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 14, lineHeight: 22, letterSpacing: -1.5, color: '#ffffff', marginHorizontal: 6}}>확인하기</Text>
                         </TouchableOpacity>
                     </View>
 
@@ -140,7 +192,7 @@ export default class SignUp5 extends React.Component {
                                     //이거 없다는 알림 + 진행 종료하는 로직
                                     ToastAndroid.show('이메일을 입력해 주세요.', ToastAndroid.SHORT);
                                     return;
-                                } 
+                                }
                                 else if(!this.state.pass_word)
                                 {
                                     //이거 없다는 알림 + 진행 종료하는 로직
@@ -151,6 +203,10 @@ export default class SignUp5 extends React.Component {
                                 {
                                     //이거 없다는 알림 + 진행 종료하는 로직
                                     ToastAndroid.show('비밀번호를 재입력해 주세요.', ToastAndroid.SHORT);
+                                    return;
+                                }
+                                else if(!this.state.emailAuthBool) {
+                                    ToastAndroid.show('이메일이 인증되지 않았습니다.', ToastAndroid.SHORT);
                                     return;
                                 }
 
@@ -197,7 +253,6 @@ export default class SignUp5 extends React.Component {
                             <Text style={{fontFamily: 'S-CoreDream-6Bold', fontSize: 20, color: '#ffffff'}}>다음으로</Text>
                         </TouchableOpacity>
                     </View>
-
 
                 </View>
             </SafeAreaView>

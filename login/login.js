@@ -16,7 +16,7 @@ export default class LogIn extends Component {
             pageTitle: '로그인',
         } 
             
-      }
+    }
 
     render() {
         const {navigation } = this.props;
@@ -111,7 +111,7 @@ export default class LogIn extends Component {
                                                 navigation.navigate("signUp1");
                                             }}>
                             <Text style={{fontFamily: 'S-CoreDream-4Regular', fontSize:14, letterSpacing: -0.7, color: '#000000',}}>새로 오셨어요? </Text>
-                            <Text style={{fontFamily: 'S-CoreDream-7ExtraBold', fontSize:14, letterSpacing: -0.7, color: '#000000',}}>회원가입 하기!</Text>
+                            <Text style={{fontFamily: 'S-CoreDream-7ExtraBold', fontSize:14, letterSpacing: -0.7, color: '#000000',}}> 회원가입 하기!</Text>
                         </TouchableOpacity>
 
                     </View>

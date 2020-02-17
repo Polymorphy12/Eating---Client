@@ -21,19 +21,18 @@ export default class LocationSet extends Component {
 
   componentDidMount(){
     axios.get('http://13.124.193.165:3000/location',{
-          params: {
-            userEmail : this.state.userEmail
-
-          }
-      })
-      .then(response => {
-        this.setState({data : response.data});
-      })
-      .catch(function(error) {
-        console.log('There has been a problem with your fetch operation: ' + error.message);
-      // ADD THIS THROW error
-       throw error;
-     });
+        params: {
+          userEmail : this.state.userEmail
+        }
+    })
+    .then(response => {
+      this.setState({data : response.data});
+    })
+    .catch(function(error) {
+      console.log('There has been a problem with your fetch operation: ' + error.message);
+    // ADD THIS THROW error
+      throw error;
+    });
   
   }
 
@@ -62,14 +61,12 @@ export default class LocationSet extends Component {
                   source={{uri: 'http://13.124.193.165:3000/static/' + item.location_map}}> 
                 </Image>
               </View>
-              <View style={{height: 86, justifyContent: 'space-evenly'}}>
-                <View style={{flexDirection: 'row'}}>
-                  <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 15, lineHeight: 22, letterSpacing: -0.21, color: '#686868'}}>점심  </Text>
-                  <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 15, lineHeight: 22, letterSpacing: -0.21, color: '#000000'}}>11:50</Text>
-                </View>
-                <View style={{flexDirection: 'row'}}>
-                  <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 15, lineHeight: 22, letterSpacing: -0.21, color: '#686868'}}>저녁  </Text>
-                  <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 15, lineHeight: 22, letterSpacing: -0.21, color: '#000000'}}>17:50</Text>
+              <View style={{justifyContent: 'space-between', paddingRight: 16}}>
+                <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 16, letterSpacing: -0.8, color: '#686868'}}>배달일시</Text>
+                <View>
+                  <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 16, letterSpacing: -0.8, color: '#000000'}}>2월 10일</Text>
+                  <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 16, letterSpacing: -0.8, color: '#000000'}}>12:00 PM</Text>
+
                 </View>
               </View>
             </View>
@@ -93,13 +90,13 @@ export default class LocationSet extends Component {
             
             <ShoppingCartProgressBar progress={1}></ShoppingCartProgressBar>
             
-            <ScrollView style = {{marginHorizontal : 16, marginTop: 8, borderWidth : 1, borderRadius: 4}}>
+            <ScrollView style = {{marginHorizontal : 16, marginTop: 8, borderWidth : 1, borderRadius: 5}}>
               <Text style={{fontFamily: 'S-CoreDream-6Bold', fontSize: 20, letterSpacing: -1, color: '#000000', marginHorizontal: 16, marginTop: 16}}>배달장소</Text>
               <FlatList 
                 data={this.state.data}
                 renderItem={this._renderItem}
                 extraData={this.state}
-                contentContainerStyle={{marginBottom: 12}}/>
+                contentContainerStyle={{marginBottom: 16}}/>
             </ScrollView>
             
             <View style={{alignItems: 'center', justifyContent: 'center'}}>
