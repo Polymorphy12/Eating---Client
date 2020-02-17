@@ -70,7 +70,10 @@ export default class SignUp5 extends React.Component {
                                 this.onEmailFill(userEmail);
                             }}
                             maxLength={40}
-                            keyboardType='email-address'
+                            keyboardType={'email-address'}
+                            returnKeyType={'next'}
+                            onSubmitEditing={() => { this.authTextInput.focus(); }}
+                            blurOnSubmit={false}
                             placeholder={'welcome@eating.com'}
                             placeholderTextColor={'#d2d2d2'}
                         />
@@ -116,7 +119,11 @@ export default class SignUp5 extends React.Component {
                                 this.setState({emailAuthText});
                             }}
                             maxLength={6}
-                            keyboardType='number-pad'
+                            keyboardType={'number-pad'}
+                            returnKeyType={'next'}
+                            onSubmitEditing={() => { this.passwordTextInput.focus(); }}
+                            blurOnSubmit={false}
+                            ref={(input) => { this.authTextInput = input; }}
                             placeholder={'245352'}
                             placeholderTextColor={'#d2d2d2'}
                         />
@@ -163,6 +170,10 @@ export default class SignUp5 extends React.Component {
                                 this.setState({pass_word});
                                 this.onPswdFill(pass_word);}}
                             maxLength={20}
+                            returnKeyType={'next'}
+                            onSubmitEditing={() => { this.passwordCheckTextInput.focus(); }}
+                            blurOnSubmit={false}
+                            ref={(input) => { this.passwordTextInput = input; }}
                             placeholder={"영문 숫자 조합 8자리 이상 입력해 주세요."}
                             placeholderTextColor={'#d2d2d2'}
                         />
@@ -179,6 +190,7 @@ export default class SignUp5 extends React.Component {
                                 this.setState({pass_word_check});
                                 this.onRepswdFill(pass_word_check);}}
                             maxLength={20}
+                            ref={(input) => { this.passwordCheckTextInput = input; }}
                             placeholder={"영문 숫자 조합 8자리 이상 입력해 주세요."}
                             placeholderTextColor={'#d2d2d2'}
                         />

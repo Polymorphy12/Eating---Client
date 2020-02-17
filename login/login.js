@@ -21,18 +21,18 @@ export default class LogIn extends Component {
     render() {
         const {navigation } = this.props;
         return (
-            <View
-                style= {{
-                    flex: 1,
-                }}>
+            <View style= {{flex: 1}}>
                 <MyHeader navigation={this.props.navigation} pageTitle={this.state.pageTitle}></MyHeader>
                 <View style={{flex: 1, marginHorizontal: 16}}>
                     <TextInput
                         style={email}
                         placeholder= "이메일 주소 입력"
                         placeholderTextColor={"#b9c2ce"}
-                        onChangeText={(e_mail) => this.setState({e_mail})}
+                        keyboardType={'email-address'}
                         returnKeyType={'next'}
+                        onSubmitEditing={() => { this.passwordTextInput.focus(); }}
+                        blurOnSubmit={false}
+                        onChangeText={(e_mail) => this.setState({e_mail})}
                     />
 
                     <TextInput
@@ -40,6 +40,7 @@ export default class LogIn extends Component {
                         secureTextEntry = {true}
                         placeholder= "비밀번호 입력"
                         placeholderTextColor={"#b9c2ce"}
+                        ref={(input) => { this.passwordTextInput = input; }}
                         onChangeText={(pass_word) => this.setState({pass_word})}
                     />
 
