@@ -24,7 +24,7 @@ export default class SignUp6 extends React.Component {
                 >회원가입이 완료되었습니다.</Text>
 
                 <View style={{flex: 1, width: "100%", alignItems:"center", justifyContent: 'flex-end'}}>
-                    <TouchableOpacity style={{width: "84.4%", height: 48, alignItems:"center", justifyContent: 'center', borderRadius: 50, backgroundColor: '#ed6578', marginBottom: 60}}
+                    <TouchableOpacity style={{width: "84.4%", aspectRatio: 304 / 48, alignItems:"center", justifyContent: 'center', borderRadius: 50, backgroundColor: '#ed6578', marginBottom: 60}}
                                         onPress={() => this.props.navigation.navigate('Home')}
                                         activeOpacity={0.8}>
                         <Text style={{fontFamily: 'S-CoreDream-6Bold', fontSize: 20, color: '#ffffff'}}>메인화면으로</Text>

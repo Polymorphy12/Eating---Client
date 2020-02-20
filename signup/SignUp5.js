@@ -16,7 +16,7 @@ export default class SignUp5 extends React.Component {
             emailAuthBool: false,
             pageTitle: "회원가입",
             _userName: props.navigation.getParam('userName'),
-            optionalCheckBoxChecked: props.navigation.getParam('optionalCheckBoxChecked'),
+            receiveSMSBool: props.navigation.getParam('receiveSMSBool'),
             phoneNum: props.navigation.getParam('phoneNum'),
         }
     }
@@ -61,9 +61,9 @@ export default class SignUp5 extends React.Component {
                         style={{fontFamily: 'S-CoreDream-4Regular', fontSize: 12, letterSpacing: -0.17, color: '#9b9b9b', marginTop: 12}}
                     >로그인과 회원가입에 필요합니다.</Text>
 
-                    <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 14}}>
+                    <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 14}}>
                         <TextInput
-                            style={{width: '50%', fontFamily: 'S-CoreDream4-ExtraLight', fontSize: 16, letterSpacing: -0.23, color: '#6e6e6e', padding: 0}}
+                            style={{width: '68.6%', fontFamily: 'S-CoreDream4-ExtraLight', fontSize: 16, letterSpacing: -0.23, color: '#6e6e6e', padding: 0}}
                             onChangeText={userEmail => {
                                 this.state.emailAuthBool = false;
                                 this.setState({userEmail});
@@ -78,7 +78,7 @@ export default class SignUp5 extends React.Component {
                             placeholderTextColor={'#d2d2d2'}
                         />
 
-                        <TouchableOpacity style={{width: 92, height:28, alignItems:"center", justifyContent: 'center', borderRadius: 5, backgroundColor: "#ed6578"}}
+                        <TouchableOpacity style={{width: '26.8%', aspectRatio: 88 / 28, alignItems:"center", justifyContent: 'center', borderRadius: 5, backgroundColor: "#ed6578"}}
                                             onPress={() => {
                                                 if(!this.state.userEmail)
                                                 {
@@ -112,9 +112,9 @@ export default class SignUp5 extends React.Component {
                         style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 20, letterSpacing: -0.28, color: '#030303', borderBottomWidth: 1, borderBottomColor: 'gray', marginTop: 42}}
                     >이메일 인증번호를 입력해주세요.</Text>
 
-                    <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 14}}>
+                    <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 14}}>
                         <TextInput
-                            style={{width: '50%', fontFamily: 'S-CoreDream4-ExtraLight', fontSize: 16, letterSpacing: -0.23, color: '#6e6e6e', padding: 0}}
+                            style={{width: '68.6%', fontFamily: 'S-CoreDream4-ExtraLight', fontSize: 16, letterSpacing: -0.23, color: '#6e6e6e', padding: 0}}
                             onChangeText={emailAuthText => {
                                 this.setState({emailAuthText});
                             }}
@@ -128,7 +128,7 @@ export default class SignUp5 extends React.Component {
                             placeholderTextColor={'#d2d2d2'}
                         />
 
-                        <TouchableOpacity style={{width: 92, height:28, alignItems:"center", justifyContent: 'center', borderRadius: 5, backgroundColor: "#ed6578"}}
+                        <TouchableOpacity style={{width: '26.8%', aspectRatio: 88 / 28, alignItems:"center", justifyContent: 'center', borderRadius: 5, backgroundColor: "#ed6578"}}
                                             onPress={() => {
                                                 if(!this.state.emailAuthText)
                                                 {
@@ -197,7 +197,7 @@ export default class SignUp5 extends React.Component {
                     </View>
 
                     <View style={{flex: 1, width: "100%", alignItems:"center", justifyContent: 'flex-end'}}>
-                        <TouchableOpacity style={{width: "84.4%", height: 48, alignItems: "center", justifyContent: 'center', borderRadius: 50, backgroundColor: (this.state.emailFilled && this.state.pswdFilled && this.state.repswdFilled) ? '#ed6578' : '#fadee2', marginBottom: 60}}
+                        <TouchableOpacity style={{width: "84.4%", aspectRatio: 304 / 48, alignItems: "center", justifyContent: 'center', borderRadius: 50, backgroundColor: (this.state.emailFilled && this.state.pswdFilled && this.state.repswdFilled) ? '#ed6578' : '#fadee2', marginBottom: 60}}
                             onPress={() => {
                                 if(!this.state.userEmail)
                                 {
@@ -228,7 +228,7 @@ export default class SignUp5 extends React.Component {
                                         password : this.state.pass_word,
                                         passwordCheck : this.state.pass_word_check,
                                         userName: this.state._userName,
-                                        optionalCheckBoxChecked: this.state.optionalCheckBoxChecked,
+                                        receiveSMSBool: this.state.receiveSMSBool,
                                         phoneNum: this.state.phoneNum,
                                     }
                                 }).then(response => {

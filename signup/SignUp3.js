@@ -12,7 +12,7 @@ export default class SignUp3 extends React.Component {
         empty: true,
         pageTitle: "회원가입",
         _userName: props.navigation.getParam('userName'),
-        optionalCheckBoxChecked: props.navigation.getParam('optionalCheckBoxChecked'),
+        receiveSMSBool: props.navigation.getParam('receiveSMSBool'),
         phoneNum: '',
     }
   }
@@ -43,11 +43,11 @@ export default class SignUp3 extends React.Component {
                 />
                 
                 <View style={{flex: 1, width: "100%", alignItems:"center", justifyContent: 'flex-end'}}>
-                    <TouchableOpacity style={{width: "84.4%", height: 48, alignItems:"center", justifyContent: 'center', borderRadius: 50, backgroundColor: this.state.empty ? '#fadee2' : '#ed6578', marginBottom: 60}}
+                    <TouchableOpacity style={{width: "84.4%", aspectRatio: 304 / 48, alignItems:"center", justifyContent: 'center', borderRadius: 50, backgroundColor: this.state.empty ? '#fadee2' : '#ed6578', marginBottom: 60}}
                                         onPress={() => this.props.navigation.navigate('signUp4',
                                             {   
                                                 userName: this.state._userName,
-                                                optionalCheckBoxChecked: this.state.optionalCheckBoxChecked,
+                                                receiveSMSBool: this.state.receiveSMSBool,
                                                 phoneNum: this.state.phoneNum,
                                             }
                                         )}

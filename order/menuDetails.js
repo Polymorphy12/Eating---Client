@@ -50,10 +50,7 @@ export default class MenuDetails extends Component {
   render() {
     return (
       <View style={{flex: 1}}>
-        <OrderHeader 
-        navigation={this.props.navigation} 
-        pageTitle={this.state.pageTitle}
-        username={this.state.userEmail}></OrderHeader>
+        <OrderHeader navigation={this.props.navigation} pageTitle={this.state.pageTitle} username={this.state.userEmail}></OrderHeader>
 
         <View style={{marginHorizontal: 16}}>
           <View style={{alignItems: 'center', justifyContent: 'center', marginTop: 24, marginBottom: 40}}>
@@ -91,7 +88,7 @@ export default class MenuDetails extends Component {
 
         <View style={{flex: 1, justifyContent: 'flex-end'}}>
           <View style={{flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 16, marginBottom: 28}}>
-            <TouchableOpacity style={{width: '49%', height: 50, borderWidth: 1, borderColor: '#ed6578', borderRadius: 100, alignItems: 'center', justifyContent: 'center'}}
+            <TouchableOpacity style={{width: '48.8%', aspectRatio: 4, borderWidth: 1, borderColor: '#ed6578', borderRadius: 100, alignItems: 'center', justifyContent: 'center'}}
                               onPress={() => {
                                 axios.post('http://13.124.193.165:3000/cart',{
                                   params: {
@@ -113,7 +110,7 @@ export default class MenuDetails extends Component {
               <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 15, letterSpacing: -0.75, color: '#ed6578'}}>바로 구매하기</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={{width: '49%', height: 50, backgroundColor: '#ed6578', borderRadius: 100, alignItems: 'center', justifyContent: 'center'}}
+            <TouchableOpacity style={{width: '48.8%', aspectRatio: 4, backgroundColor: '#ed6578', borderRadius: 100, alignItems: 'center', justifyContent: 'center'}}
                               onPress={() => {
                                 axios.post('http://13.124.193.165:3000/cart',{
                                   params: {

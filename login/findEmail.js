@@ -32,7 +32,7 @@ export default class FindEmail extends Component {
 
                     <View style={{flexDirection: 'row', justifyContent: 'space-between', marginTop: 24}}>
                         <TextInput
-                            style={{width: '66.6%', fontFamily: 'S-CoreDream4-ExtraLight', fontSize:16, letterSpacing: -0.8, color: '#030303', borderWidth: 1, borderColor: '#6e6e6e', paddingHorizontal: 16}}
+                            style={{width: '66.6%', aspectRatio: 208 / 32, fontFamily: 'S-CoreDream4-ExtraLight', fontSize:16, letterSpacing: -0.8, color: '#030303', borderWidth: 1, borderColor: '#6e6e6e', paddingHorizontal: 16, paddingVertical: 0}}
                             placeholder={"휴대전화 번호 ('-' 제외)"}
                             placeholderTextColor={"#b9c2ce"}
                             keyboardType={'number-pad'}
@@ -48,7 +48,7 @@ export default class FindEmail extends Component {
                     </View>
 
                     <TextInput
-                        style={{fontFamily: 'S-CoreDream4-ExtraLight', fontSize:16, letterSpacing: -0.8, color: '#030303', borderWidth: 1, borderColor: '#6e6e6e', marginTop: 14, paddingHorizontal: 16}}
+                        style={{width: '100%', aspectRatio: 328 / 32 , fontFamily: 'S-CoreDream4-ExtraLight', fontSize:16, letterSpacing: -0.8, color: '#030303', borderWidth: 1, borderColor: '#6e6e6e', marginTop: 14, paddingHorizontal: 16, paddingVertical: 0}}
                         placeholder={"6자리 인증번호"}
                         placeholderTextColor={"#b9c2ce"}
                         keyboardType={'number-pad'}
@@ -56,7 +56,7 @@ export default class FindEmail extends Component {
                         onChangeText={(authNum) => this.setState({authNum})}
                     />
 
-                    <TouchableOpacity style={{height: '7.5%', backgroundColor: '#ed6578', borderRadius: 100, alignItems: 'center', justifyContent: 'center', marginTop: 35}}
+                    <TouchableOpacity style={{width: '100%', aspectRatio: 328 / 48, backgroundColor: '#ed6578', borderRadius: 100, alignItems: 'center', justifyContent: 'center', marginTop: 36}}
                                         onPress={() => {
 
                                             if(this.state.phoneNum === "")

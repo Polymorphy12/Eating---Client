@@ -5,9 +5,9 @@ import { Header, Title, Left, Right } from 'native-base';
 export default class MyFooter extends React.Component {
     render() {
         return(
-            <View style = {footer}>
-              
-              <TouchableOpacity style = {footerBox}
+            <View style = {{flexDirection: 'row', width: '100%', aspectRatio: 360 / 56, borderTopWidth: 1, borderTopColor: '#e4e4e4'}}>
+              <TouchableOpacity style = {{flex: 1, alignItems: 'center', justifyContent: 'center'}}
+                disabled={this.props.orderBoolean}
                 onPress={() => {
                   //ToastAndroid.show(JSON.stringify(this.props.navigation), ToastAndroid.SHORT);
                   this.props.navigation.navigate("SelectRestaurant");
@@ -22,62 +22,34 @@ export default class MyFooter extends React.Component {
                 </Image>
               </TouchableOpacity>
 
-              <TouchableOpacity style = {footerBox}
-              onPress={() => {
-                this.props.navigation.navigate("haktalNews", {userEmail: this.props.userEmail});
-                console.log(this.props);
-              }}>
+              <TouchableOpacity style = {{flex: 1, alignItems: 'center', justifyContent: 'center'}}
+                disabled={this.props.newsBoolean}
+                onPress={() => {
+                  this.props.navigation.navigate("haktalNews", {userEmail: this.props.userEmail});
+                  console.log(this.props);
+                }}>
                 <Image
                   style={{width:55, height:55}}
                   source={this.props.newsBoolean ?
-                          require('../assets/images/drawable-hdpi/아이콘_학탈소식_active.png')
-                          : require('../assets/images/drawable-hdpi/아이콘_학탈소식_disabled.png')}>
+                          require('../assets/images/drawable-hdpi/아이콘_잇힝소식_active.png')
+                          : require('../assets/images/drawable-hdpi/아이콘_잇힝소식_disabled.png')}>
                 </Image>
               </TouchableOpacity>
 
-              <TouchableOpacity style = {footerBox}
-              onPress={() => {
-                this.props.navigation.navigate("mypage", {userEmail: this.props.userEmail});
-                console.log(this.props);
-              }}>
-              <Image
-                style={{width:55, height:55}}
-                source={this.props.mypageBoolean ?
-                        require('../assets/images/drawable-hdpi/아이콘_마이학탈_active.png')
-                        :require('../assets/images/drawable-hdpi/아이콘_마이학탈_disabled.png')}>
-              </Image>
+              <TouchableOpacity style = {{flex: 1, alignItems: 'center', justifyContent: 'center'}}
+                disabled={this.props.mypageBoolean}
+                onPress={() => {
+                  this.props.navigation.navigate("mypage", {userEmail: this.props.userEmail});
+                  console.log(this.props);
+                }}>
+                <Image
+                  style={{width:55, height:55}}
+                  source={this.props.mypageBoolean ?
+                          require('../assets/images/drawable-hdpi/아이콘_마이학탈_active.png')
+                          :require('../assets/images/drawable-hdpi/아이콘_마이학탈_disabled.png')}>
+                </Image>
               </TouchableOpacity>
             </View>        
             );
     }
 }
-
-const styles = StyleSheet.create({
-    header: {height: 43, flexDirection: "row", backgroundColor: "white"},
-    headerLeft: {flex: 1},
-    headerRight: {flex: 1},
-    headerTitle: {flex: 1, color: "black", alignItems: 'center', justifyContent: 'center', paddingTop: 7},
-});
-
-const footer ={
-    height: 80,
-    //backgroundColor: "rgba(248, 248, 248, 0.98)",
-    borderTopWidth: 1,
-    borderTopColor: '#e4e4e4',
-    flexDirection: 'row',
-    justifyContent: "center",
-    alignItems: "center"
-  }
-  
-  const footerBox ={
-    margin: 20,
-    justifyContent: "center",
-    alignItems: "center",
-    width: 89.3,
-    height: 40,
-    backgroundColor: "rgba(185, 202, 210, 0)"
-  }
-
-/*
-
-*/

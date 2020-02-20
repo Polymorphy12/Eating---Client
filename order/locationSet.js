@@ -11,9 +11,10 @@ export default class LocationSet extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      pageTitle: "수령 장소",
+      pageTitle: "배달 주문하기",
       userEmail : props.navigation.getParam('userEmail', ''),
       timeSelect : props.navigation.getParam('timeSelect'),
+      deliv_date: props.navigation.getParam('deliv_date'),
       itemPressed : '0'
     }
   } 
@@ -64,9 +65,8 @@ export default class LocationSet extends Component {
               <View style={{justifyContent: 'space-between', paddingRight: 16}}>
                 <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 16, letterSpacing: -0.8, color: '#686868'}}>배달일시</Text>
                 <View>
-                  <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 16, letterSpacing: -0.8, color: '#000000'}}>2월 10일</Text>
-                  <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 16, letterSpacing: -0.8, color: '#000000'}}>12:00 PM</Text>
-
+                  <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 16, letterSpacing: -0.8, color: '#000000'}}>{this.state.deliv_date.substr(6)}</Text>
+                  <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 16, letterSpacing: -0.8, color: '#000000'}}>{this.state.timeSelect === 'lunch' ? `12:00 PM` : '06:00 PM'}</Text>
                 </View>
               </View>
             </View>
@@ -101,7 +101,7 @@ export default class LocationSet extends Component {
             
             <View style={{alignItems: 'center', justifyContent: 'center'}}>
                 <TouchableOpacity
-                    style={{width: '80%', height: 44, borderRadius: 100, alignItems: 'center', justifyContent: 'center', backgroundColor: this.state.itemPressed === '0' ? '#dddddd' : "#ed6578", marginVertical: 32}}
+                    style={{width: '80%', aspectRatio: 288 / 44, borderRadius: 100, alignItems: 'center', justifyContent: 'center', backgroundColor: this.state.itemPressed === '0' ? '#dddddd' : "#ed6578", marginVertical: 32}}
                     title="first"
                     onPress={() => {
                       if(this.state.itemPressed == '0') {
@@ -115,7 +115,7 @@ export default class LocationSet extends Component {
                         })
                         .then(response => {
                           //ToastAndroid.show(JSON.stringify(response.data), ToastAndroid.SHORT);
-                          navigation.navigate("purchase", {userEmail : this.state.userEmail, timeSelect : this.state.timeSelect});
+                          navigation.navigate("purchase", {userEmail : this.state.userEmail, timeSelect : this.state.timeSelect, deliv_date: this.state.deliv_date});
                         })
                         .catch(function(error) {
                           console.log('There has been a problem with your fetch operation: ' + error.message);
@@ -124,7 +124,7 @@ export default class LocationSet extends Component {
                       });
                     }}
                   >
-                  <Text style={letsGetStarted}>결제 수단 선택</Text>
+                  <Text style={{fontFamily: 'S-CoreDream-6Bold', fontSize: 24, letterSpacing: -1.2, color: '#ffffff'}}>결제 수단 선택하기</Text>
                 </TouchableOpacity>
             </View>
           </View>

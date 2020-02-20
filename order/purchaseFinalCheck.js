@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import { Text, View, Button, ImageBackground, TouchableOpacity, ScrollView, FlatList, Image, Alert, Modal, ToastAndroid } from "react-native";
 import OrderHeader from "../Component/OrderHeader";
-import CutLine from '../Component/CutLine';
 import ShoppingCartProgressBar from '../Component/ShoppingCartProgressBar';
-import MyFooter from "../Component/MyFooter";
 import axios from "axios";
+import moment from 'moment-timezone';
 
 export default class PurchaseFinalCheck extends Component {
     
@@ -14,13 +13,14 @@ export default class PurchaseFinalCheck extends Component {
             pageTitle: "주문내역",
             userEmail : props.navigation.getParam('userEmail', ''),
             timeSelect : props.navigation.getParam('timeSelect'),
+            deliv_date: props.navigation.getParam('deliv_date'),
             modalVisible: false,
             selectedLocation: '0',
             locationData: [],
             reloadFlag: 0,
             data: [],
             price_info : {},
-            deliv_info : {}
+            deliv_info : {},
         }
     }
 
@@ -48,6 +48,19 @@ export default class PurchaseFinalCheck extends Component {
             // ADD THIS THROW error
             throw error;
         });
+
+        this.timer = setInterval(() => {
+            // this.setState({curTime: moment().tz('Asia/Seoul').format('YYYY년 MM월 DD일 hh:mm:ss')});
+            this.setState(
+                {
+                    lunchTimeOut: moment('1200', 'HHmm').diff(moment().tz('Asia/Seoul'), 'minutes') < 40 ? true : false,
+                    dinnerTimeOut: moment('1800', 'HHmm').diff(moment().tz('Asia/Seoul'), 'minutes') < 40 ? true : false,
+                });
+        }, 333);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.timer);
     }
 
     renderLocation = ({item}) => (
@@ -84,8 +97,8 @@ export default class PurchaseFinalCheck extends Component {
                             {/* <Text>{JSON.stringify(this.state.locationData)}</Text> */}
 
                             <View style={{alignItems: 'center', justifyContent: 'center', marginVertical: 32}}>
-                                <TouchableOpacity style={{width: '78.9%', height: 36, alignItems: 'center', justifyContent: 'center', borderRadius: 100, backgroundColor: this.state.selectedLocation === '0' ? '#dddddd' :'#ed6578'}}
-                                                    disabled={this.state.selectedLocation === '0' ? true : false}
+                                <TouchableOpacity style={{width: '100%', aspectRatio: 240 / 36, alignItems: 'center', justifyContent: 'center', borderRadius: 100, backgroundColor: (this.state.selectedLocation === '0') || (this.state.timeSelect === 'lunch' ? this.state.lunchTimeOut : this.state.dinnerTimeOut) ? '#dddddd' :'#ed6578'}}
+                                                    disabled={(this.state.selectedLocation === '0' ? true : false) || (this.state.timeSelect === 'lunch' ? this.state.lunchTimeOut : this.state.dinnerTimeOut)}
                                                     onPress={() => {
                                                         axios.put('http://13.124.193.165:3000/location',{
                                                             userEmail : this.state.userEmail,
@@ -127,7 +140,7 @@ export default class PurchaseFinalCheck extends Component {
                         <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 16, letterSpacing: -0.23, color: '#686868'}}>배달일시</Text>
                         {/* <Text>{this.state.deliv_info.order_no}</Text> */}
                         <View>
-                            <Text style={{fontFamily: 'S-CoreDream-4Regular', fontSize: 16, letterSpacing: -0.23, color: '#000000', marginLeft: 32}}>2월 10일</Text>
+                            <Text style={{fontFamily: 'S-CoreDream-4Regular', fontSize: 16, letterSpacing: -0.23, color: '#000000', marginLeft: 32}}>{this.state.deliv_date}</Text>
                             <Text style={{fontFamily: 'S-CoreDream-4Regular', fontSize: 16, letterSpacing: -0.23, color: '#000000', marginLeft: 32}}>{this.state.timeSelect === 'lunch' ? '점심 (오전 12시 00분)' : '저녁 (오후 6시 00분)'}</Text>
                         </View>
                     </View>
@@ -139,8 +152,9 @@ export default class PurchaseFinalCheck extends Component {
                         </View>
 
                         <TouchableOpacity style={{marginRight: 8}}
+                                            disabled={this.state.timeSelect === 'lunch' ? this.state.lunchTimeOut : this.state.dinnerTimeOut}
                                             onPress={() => this.setState({modalVisible: true})}>
-                            <Text style={{fontFamily: 'S-CoreDream-4Regular', fontSize: 12, letterSpacing: -0.6, color: '#ed6578'}}>변경하기</Text>
+                            <Text style={{fontFamily: 'S-CoreDream-4Regular', fontSize: 12, letterSpacing: -0.6, color: this.state.timeSelect === 'lunch' ? (this.state.lunchTimeOut ? '#dddddd' : '#ed6578') : (this.state.dinnerTimeOut ?  '#dddddd' : '#ed6578')}}>변경하기</Text>
                         </TouchableOpacity>
                     </View>
                     <View style={{flexDirection: 'row', margin: 16}}>
@@ -169,7 +183,17 @@ export default class PurchaseFinalCheck extends Component {
                         <Text style={{fontFamily: 'S-CoreDream-6Bold', fontSize: 16, letterSpacing: -0.8, color: '#ed6578'}}>{this.numberWithCommas(this.state.price_info.total_price - this.state.price_info.discount)} 원</Text>
                     </View>
                 </View>
-                {/* <Text>{JSON.stringify(this.state.locationData)}</Text> */}
+                
+                <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+                    <TouchableOpacity style={{width: '80%', aspectRatio: 4, borderWidth: 1, alignItems: 'center', justifyContent: 'center'}}
+                                        onPress={() => this.props.navigation.navigate('setPurchase', {userEmail: this.state.userEmail, timeSelect: this.state.timeSelect})}>
+                        <Text>(디버그용 버튼)</Text>
+                        <Text>만일 이 버튼이 배포때 남아있다면</Text>
+                        <Text>우리가 좆됐다는 의미입니다.</Text>
+                    </TouchableOpacity>
+                </View>
+
+                {/* <Text>{JSON.stringify(this.state.dinnerTimeOut)}</Text> */}
             </View>
 
             

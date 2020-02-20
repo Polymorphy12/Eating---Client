@@ -5,6 +5,7 @@ import {Header, Left, Right, Title} from 'native-base';
 import axios from 'axios';
 import OrderHeader from "../Component/OrderHeader";
 import MyFooter from "../Component/MyFooter";
+import SelectRestaurantClock from '../Component/selectRestaurantClock'
 import { SafeAreaView } from "react-navigation";
 
 export default class SelectRestaurant extends Component {
@@ -14,11 +15,12 @@ export default class SelectRestaurant extends Component {
     super(props)
     this.state = { 
       progress: 1, 
-      pageTitle: "업체 선택", 
+      pageTitle: "주문하기", 
       lunchRestList: [],
       dinnerRestList: [],
       timeSelect: 'lunch',
-      userEmail : props.navigation.getParam('userEmail', '')
+      userEmail : props.navigation.getParam('userEmail', ''),
+
     }
     //console.log(this.state.restaurant_name);
   }
@@ -78,13 +80,13 @@ export default class SelectRestaurant extends Component {
 
             <View style = {orderDueContainer}>
               <View style={toggleContainer}>
-                <TouchableOpacity style={{width: '50%', height: 40, borderBottomWidth: 2, borderBottomColor: this.state.timeSelect === 'lunch' ? '#ed6578' : '#ffffff', alignItems: 'center', justifyContent: 'center'}}
+                <TouchableOpacity style={{width: '50%', aspectRatio: 164 / 32, borderBottomWidth: 2, borderBottomColor: this.state.timeSelect === 'lunch' ? '#ed6578' : '#ffffff', alignItems: 'center', justifyContent: 'center'}}
                                   disabled={this.state.timeSelect === 'lunch'}
                                   onPress={() => this.setState({timeSelect: 'lunch'})}>
                   <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 20, letterSpacing: 1.31, color: this.state.timeSelect === 'lunch' ? '#ed6578' : '#000000'}}>점심</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={{width: '50%', height: 40, borderBottomWidth: 2, borderBottomColor: this.state.timeSelect === 'dinner' ? '#ed6578' : '#ffffff', alignItems: 'center', justifyContent: 'center'}}
+                <TouchableOpacity style={{width: '50%', aspectRatio: 164 / 32, borderBottomWidth: 2, borderBottomColor: this.state.timeSelect === 'dinner' ? '#ed6578' : '#ffffff', alignItems: 'center', justifyContent: 'center'}}
                                   disabled={this.state.timeSelect === 'dinner'}
                                   onPress={() => this.setState({timeSelect: 'dinner'})}>
                   <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 20, letterSpacing: 1.31, color: this.state.timeSelect === 'dinner' ? '#ed6578' : '#000000'}}>저녁</Text>
@@ -92,7 +94,7 @@ export default class SelectRestaurant extends Component {
               </View>
 
               <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                <Text style = {orderDue}>{this.state.timeSelect === 'lunch' ? `점심 주문 마감 시간: 09:30 AM` : `저녁 주문 마감 시간: 03:30 PM`}</Text>
+                <SelectRestaurantClock style={{height: 20, alignItems: 'center', justifyContent: 'center', marginVertical: 32}} timeSelect={this.state.timeSelect}></SelectRestaurantClock>
               </View>
 
               <FlatList 
@@ -109,53 +111,6 @@ export default class SelectRestaurant extends Component {
       }
 }
 
-const restaurantTitle = {
-  fontFamily: "S-CoreDream-4",
-  fontSize: 14,
-  fontWeight: "normal",
-  fontStyle: "normal",
-  lineHeight: 18,
-  letterSpacing: 0.91,
-  textAlign: "left",
-  color: "#000000"
-};
-
-const orderAvailable = {
-  fontFamily: "S-CoreDream-4",
-  fontSize: 12,
-  fontWeight: "normal",
-  fontStyle: "normal",
-  lineHeight: 15,
-  letterSpacing: 0.78,
-  textAlign: "left",
-  color: "#ff2d3f"
-};
-
-const popularMenu = {
-  fontFamily: "S-CoreDream-4",
-  fontSize: 9,
-  fontWeight: "normal",
-  fontStyle: "normal",
-  lineHeight: 10,
-  letterSpacing: 0.59,
-  textAlign: "left",
-  color: "rgba(0, 0, 0, 0.5)"
-};
-
-const titleText = {
-  // width: 225.6,
-  // height: 25,
-  flex:1,
-  fontFamily: "AppleSDGothicNeo",
-  fontSize: 23,
-  fontWeight: "800",
-  fontStyle: "normal",
-  // lineHeight: 25,
-  letterSpacing: -0.24,
-  textAlign: "center",
-  color: "#000"
-};
-
 const toggleContainer = {
   marginTop: 20,
   flexDirection: 'row',
@@ -165,63 +120,4 @@ const toggleContainer = {
 const orderDueContainer = {
   flex: 1,
   marginHorizontal: 16,
-}
-
-const orderDue = {
-  marginTop: 30,
-  marginBottom: 32,
-  fontFamily: "S-CoreDream-4Regular",
-  fontSize: 18,
-  fontWeight: "500",
-  fontStyle: "normal",
-  letterSpacing: -0.9,
-  color: "#000000"
-}
-
-const background = {
-  flexDirection: 'row',
-  width: '100%',
-  height: 84,
-  borderRadius: 4,
-  backgroundColor: '#ffffff',
-  alignItems: 'center',
-  marginHorizontal: 16,
-};
-
-const listView = {
-  // flex: 1,
-  backgroundColor: 'red',
-  justifyContent: 'center',
-  alignItems: 'center'
-}
-
-const navBar = {
-  height: 70,
-  //opacity: 0.51,
-  alignItems: "center",
-  justifyContent: "center",
-  flexDirection: 'row',
-  backgroundColor: "#ffffff",
-  borderBottomWidth: 0, 
-  //shadowOffset: {height: 0, width: 0}, 
-  //shadowOpacity: 0, 
-  elevation: 0
-};
-
-
-const footer ={
-  height: 80,
-  backgroundColor: "rgba(248, 248, 248, 0.98)",
-  flexDirection: 'row',
-  justifyContent: "center",
-  alignItems: "center"
-}
-
-const footerBox ={
-  margin: 20,
-  justifyContent: "center",
-  alignItems: "center",
-  width: 89.3,
-  height: 40,
-  backgroundColor: "rgba(185, 202, 210, 0)"
 }
