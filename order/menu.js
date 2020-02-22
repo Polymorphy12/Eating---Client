@@ -49,7 +49,7 @@ export default class Menu extends Component {
   }
     
   _renderItem = ({item}) => (
-    <TouchableOpacity style = {{width: '100%', height: 72, flexDirection: 'row', borderTopWidth: 1, borderTopColor: '#eeeeee'}}
+    <TouchableOpacity style = {{width: '100%', aspectRatio: 328 / 72, flexDirection: 'row', borderTopWidth: 1, borderTopColor: '#eeeeee'}}
                       onPress={() => this.props.navigation.navigate('menuDetails',
                         {
                           userEmail: this.state.userEmail,
@@ -82,7 +82,7 @@ export default class Menu extends Component {
         {/* <Text>{JSON.stringify(this.state.data[0])}</Text> */}
 
         <View style={{marginHorizontal: 16}}>
-          <TouchableOpacity style={{height: 52, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}
+          <TouchableOpacity style={{aspectRatio: 328 / 52, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}
                             onPress={() => this.setState({showPopularList: !this.state.showPopularList})}>
             <Text style={{fontFamily: 'S-CoreDream5-Medium', fontSize: 16, letterSpacing: -0.23, color: '#000000'}}>인기메뉴</Text>
             <Image style={{width: 30, height: 30}} 
@@ -106,7 +106,7 @@ export default class Menu extends Component {
 
         <View style={{marginHorizontal: 16}}>
 
-          <TouchableOpacity style={{height: 52, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}
+          <TouchableOpacity style={{aspectRatio: 328 / 52, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}
                             onPress={() => this.setState({showElseList: !this.state.showElseList})}>
             <Text style={{fontFamily: 'S-CoreDream5-Medium', fontSize: 16, letterSpacing: -0.23, color: '#000000'}}>모든메뉴</Text>
             <Image style={{width: 30, height: 30}} 

@@ -5,6 +5,7 @@ import OrderHeader from "../Component/OrderHeader";
 import MyFooter from "../Component/MyFooter";
 import ShoppingCartProgressBar from '../Component/ShoppingCartProgressBar';
 import axios from "axios";
+import moment from "moment";
 
 export default class ShoppingCart extends Component {
     
@@ -151,13 +152,13 @@ export default class ShoppingCart extends Component {
           <Text style={{fontFamily: 'S-CoreDream-6Bold', fontSize: 20, letterSpacing: -1, color: '#000000', margin: 16}}>주문 목록</Text>
 
           <View style={{flexDirection: 'row'}}>
-            <TouchableOpacity style={{width: '50%', height: 40, borderBottomWidth: 2, borderBottomColor: this.state.timeSelect === 'lunch' ? '#ed6578' : '#ffffff', alignItems: 'center', justifyContent: 'center'}}
+            <TouchableOpacity style={{width: '50%', aspectRatio: 164 / 32, borderBottomWidth: 2, borderBottomColor: this.state.timeSelect === 'lunch' ? '#ed6578' : '#ffffff', alignItems: 'center', justifyContent: 'center'}}
                               disabled={this.state.timeSelect === 'lunch'}
                               onPress={() => this.setState({timeSelect: 'lunch'})}>
               <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 20, letterSpacing: 1.31, color: this.state.timeSelect === 'lunch' ? '#ed6578' : '#000000'}}>점심</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={{width: '50%', height: 40, borderBottomWidth: 2, borderBottomColor: this.state.timeSelect === 'dinner' ? '#ed6578' : '#ffffff', alignItems: 'center', justifyContent: 'center'}}
+            <TouchableOpacity style={{width: '50%', aspectRatio: 164 / 32, borderBottomWidth: 2, borderBottomColor: this.state.timeSelect === 'dinner' ? '#ed6578' : '#ffffff', alignItems: 'center', justifyContent: 'center'}}
                               disabled={this.state.timeSelect === 'dinner'}
                               onPress={() => this.setState({timeSelect: 'dinner'})}>
               <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 20, letterSpacing: 1.31, color: this.state.timeSelect === 'dinner' ? '#ed6578' : '#000000'}}>저녁</Text>
@@ -181,27 +182,37 @@ export default class ShoppingCart extends Component {
         </ScrollView>
 
         <View style={{alignItems: 'center', marginVertical: 32}}>
-          <TouchableOpacity style={{width: '80%', height: 44, alignItems: 'center', justifyContent: 'center', borderRadius: 100,
+          <TouchableOpacity style={{width: '80%', aspectRatio: 288 / 44, alignItems: 'center', justifyContent: 'center', borderRadius: 100,
                                     backgroundColor: this.state.timeSelect === 'lunch' ? (this.state.lunchOrderList.length === 0 ? '#dddddd' : '#ed6578') : (this.state.dinnerOrderList.length === 0 ? '#dddddd' : '#ed6578')}}
                             disabled={this.state.timeSelect === 'lunch' ?
                                       (this.state.lunchOrderList.length === 0 ? true : false) :
                                       (this.state.dinnerOrderList.length === 0 ? true : false)
                                     }
                             onPress={() => {
-                              // 이 onPress 함수는 주문내역의 변경이 있건 없건 주문 목록을 업데이트하도록 구현되어있다. 서버에 불필요한 부하를 주지 않을까? 개선할 방법을 차차 생각해보자.
+                              // 이 onPress 함수는 주문내역의 변경이 있건 없건 주문 목록을 업데이트하도록 구현되어있다. 서버에 불필요한 부하를 주지 않을까? 개선할 방법을 생각해보자.
                               var menusToUpdate = [];
                               var menusToUpdateTarget = this.state.timeSelect === 'lunch' ? this.state.lunchOrderList : this.state.dinnerOrderList;
                               for (let i = 0; i < menusToUpdateTarget.length; i++) {
                                 var tempObj = {id: menusToUpdateTarget[i].id, amount: menusToUpdateTarget[i].amount};
                                 menusToUpdate = menusToUpdate.concat(tempObj);
                               }
+                              var deliv_date = this.state.timeSelect === 'lunch' ?
+                                                  (moment('0930', 'HHmm').diff(moment().tz('Asia/Seoul'), 'minutes') > 0 ? moment().tz('Asia/Seoul').format('YYYY년 MM월 DD일') : moment().tz('Asia/Seoul').add(1, 'days').format('YYYY년 MM월 DD일')) :
+                                                  (moment('1600', 'HHmm').diff(moment().tz('Asia/Seoul'), 'minutes') > 0 ? moment().tz('Asia/Seoul').format('YYYY년 MM월 DD일') : moment().tz('Asia/Seoul').add(1, 'days').format('YYYY년 MM월 DD일'));
+
                               axios.post('http://13.124.193.165:3000/cart/updateShoppingCart', {
                                 params: {
                                   menusToUpdate: menusToUpdate,
+                                  deliv_date: deliv_date,
                                 }
                               }).then(response => {
                                 //ToastAndroid.show(JSON.stringify(response.data), ToastAndroid.SHORT);
-                                if (response.data === true) this.props.navigation.navigate("locationSet", {userEmail : this.state.userEmail, timeSelect : this.state.timeSelect});
+                                if (response.data === true) this.props.navigation.navigate("locationSet", 
+                                  {
+                                    userEmail : this.state.userEmail,
+                                    timeSelect : this.state.timeSelect,
+                                    deliv_date: deliv_date,
+                                  });
                                 else ToastAndroid.show('시스템에 문제가 생겼습니다. 고객센터에 문의해 주세요.', ToastAndroid.SHORT);
                               }).catch(error => {
                                 console.log('There has been a problem with your fetch operation: ' + error.message);

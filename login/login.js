@@ -14,32 +14,32 @@ export default class LogIn extends Component {
             e_mail : "",
             pass_word : "",
             pageTitle: '로그인',
-        } 
-            
-      }
+        }
+    }
 
     render() {
         const {navigation } = this.props;
         return (
-            <View
-                style= {{
-                    flex: 1,
-                }}>
+            <View style= {{flex: 1}}>
                 <MyHeader navigation={this.props.navigation} pageTitle={this.state.pageTitle}></MyHeader>
                 <View style={{flex: 1, marginHorizontal: 16}}>
                     <TextInput
-                        style={email}
-                        placeholder= "이메일 주소 입력"
+                        style={{width: '100%', aspectRatio: 328 / 40, borderWidth: 1, borderColor: '#6e6e6e', fontFamily: "S-CoreDream4-ExtraLight", fontSize: 16, color: "#202020", marginTop: 48, paddingHorizontal: 16}}
+                        placeholder= {"이메일 주소 입력"}
                         placeholderTextColor={"#b9c2ce"}
-                        onChangeText={(e_mail) => this.setState({e_mail})}
+                        keyboardType={'email-address'}
                         returnKeyType={'next'}
+                        onSubmitEditing={() => { this.passwordTextInput.focus(); }}
+                        blurOnSubmit={false}
+                        onChangeText={(e_mail) => this.setState({e_mail})}
                     />
 
                     <TextInput
-                        style={password}
+                        style={{width: '100%', aspectRatio: 328 / 40, borderWidth: 1, borderColor: '#6e6e6e', fontFamily: "S-CoreDream4-ExtraLight", fontSize: 16, color: "#202020", marginTop: 12, paddingHorizontal: 16}}
                         secureTextEntry = {true}
                         placeholder= "비밀번호 입력"
                         placeholderTextColor={"#b9c2ce"}
+                        ref={(input) => { this.passwordTextInput = input; }}
                         onChangeText={(pass_word) => this.setState({pass_word})}
                     />
 
@@ -70,7 +70,7 @@ export default class LogIn extends Component {
                         </View>
                     </View>
 
-                    <TouchableOpacity style={{height: '7.5%', backgroundColor: '#ed6578', borderRadius: 100, alignItems: 'center', justifyContent: 'center', marginTop: 35}}
+                    <TouchableOpacity style={{width: '100%', aspectRatio: 328 / 48, backgroundColor: '#ed6578', borderRadius: 100, alignItems: 'center', justifyContent: 'center', marginTop: 35}}
                                         onPress={() => {
 
                                             if(this.state.e_mail == "" || this.state.pass_word == "")
@@ -111,33 +111,21 @@ export default class LogIn extends Component {
                                                 navigation.navigate("signUp1");
                                             }}>
                             <Text style={{fontFamily: 'S-CoreDream-4Regular', fontSize:14, letterSpacing: -0.7, color: '#000000',}}>새로 오셨어요? </Text>
-                            <Text style={{fontFamily: 'S-CoreDream-7ExtraBold', fontSize:14, letterSpacing: -0.7, color: '#000000',}}>회원가입 하기!</Text>
+                            <Text style={{fontFamily: 'S-CoreDream-7ExtraBold', fontSize:14, letterSpacing: -0.7, color: '#000000',}}> 회원가입 하기!</Text>
                         </TouchableOpacity>
-
                     </View>
-                    
 
-
+                    {/* <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+                        <TouchableOpacity style={{width: '80%', aspectRatio: 4, borderWidth: 1, alignItems: 'center', justifyContent: 'center'}}
+                                            onPress={() => this.props.navigation.navigate('checkOrder')}>
+                            <Text>(체크오더 테스트)</Text>
+                        </TouchableOpacity>
+                    </View> */}
                 </View>
-                
-                
             </View>
         );
     }
 }
-
-const email = {
-    fontFamily: "S-CoreDream4-ExtraLight",
-    fontSize: 16,
-    fontWeight: "normal",
-    fontStyle: "normal",
-    letterSpacing: 0,
-    color: "#202020",
-    borderWidth: 1,
-    borderColor: '#6e6e6e',
-    marginTop: 48,
-    paddingHorizontal: 16,
-  };
 
   const password = {
     fontFamily: "S-CoreDream4-ExtraLight",

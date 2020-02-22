@@ -31,13 +31,13 @@ export default class FindEmailResult extends Component {
                         {`고객님의 아이디는\n${this.props.navigation.getParam('userEmail')} 입니다.`}
                     </Text>
 
-                    <View style={{height: '7.5%', flexDirection: 'row', justifyContent: 'space-between', marginTop: 48}}>
-                        <TouchableOpacity style={{width: '46%', height: '100%', backgroundColor: '#ed6578', borderRadius: 100, alignItems: 'center', justifyContent: 'center'}}
+                    <View style={{flexDirection: 'row', justifyContent: 'space-between', marginTop: 48}}>
+                        <TouchableOpacity style={{width: '46%', aspectRatio: 152 / 48, backgroundColor: '#ed6578', borderRadius: 100, alignItems: 'center', justifyContent: 'center'}}
                                             onPress={() => this.props.navigation.navigate("LogIn")}>
                             <Text style={{fontFamily: 'S-CoreDream-6Bold', fontSize:20, letterSpacing: -1, color: '#ffffff'}}>로그인</Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={{width: '46%', height: '100%', backgroundColor: '#ffffff', borderRadius: 100, borderWidth:1, borderColor: '#000000', alignItems: 'center', justifyContent: 'center'}}
+                        <TouchableOpacity style={{width: '46%', aspectRatio: 152 / 48, backgroundColor: '#ffffff', borderRadius: 100, borderWidth:1, borderColor: '#000000', alignItems: 'center', justifyContent: 'center'}}
                                             onPress={() => this.props.navigation.navigate('findPassword')}>
                             <Text style={{fontFamily: 'S-CoreDream-6Bold', fontSize:20, letterSpacing: -1, color: '#000000'}}>비밀번호 찾기</Text>
                         </TouchableOpacity>

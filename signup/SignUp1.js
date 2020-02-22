@@ -14,7 +14,7 @@ export default class SignUp1 extends React.Component {
       eatingCheckBoxChecked: false,
       EFCheckBoxChecked: false,
       personalInfoCheckBoxChecked: false,
-      optionalCheckBoxChecked: false,
+      receiveSMSBool: false,
       pageTitle: "회원가입",
     }
   }
@@ -45,7 +45,7 @@ export default class SignUp1 extends React.Component {
           </View>
 
           <View style={{backgroundColor: '#f5f5f5', paddingHorizontal: 16}}>
-            <View style={{flexDirection: 'row', justifyContent: 'space-between', marginTop: 18, marginBottom: 18}}>
+            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 18, marginBottom: 18}}>
               <View style={{flexDirection: 'row'}}>
                 <CheckBox isChecked={this.state.eatingCheckBoxChecked}
                           checkedCheckBoxColor={'#ed6578'}
@@ -58,12 +58,12 @@ export default class SignUp1 extends React.Component {
                 <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize:16, letterSpacing: -0.23, color: '#000000', marginLeft: 16}}>잇힝 이용약관</Text>
               </View>
 
-              <TouchableOpacity style={{backgroundColor: '#ffffff', width: '15.9%', borderRadius: 8, borderWidth: 1, borderColor: '#000000', alignItems: 'center', justifyContent: 'center'}}>
+              <TouchableOpacity style={{backgroundColor: '#ffffff', width: '15.9%', aspectRatio: 52 / 20, borderRadius: 8, borderWidth: 1, borderColor: '#000000', alignItems: 'center', justifyContent: 'center'}}>
                 <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 10, letterSpacing: -0.14, color: '#000000'}}>내용확인</Text>
               </TouchableOpacity>
             </View>
 
-            <View style={{flexDirection: 'row', justifyContent: 'space-between', marginBottom: 18}}>
+            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18}}>
               <View style={{flexDirection: 'row'}}>
                 <CheckBox isChecked={this.state.EFCheckBoxChecked}
                           checkedCheckBoxColor={'#ed6578'}
@@ -76,12 +76,12 @@ export default class SignUp1 extends React.Component {
                 <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize:16, letterSpacing: -0.23, color: '#000000', marginLeft: 16}}>전자금융거래 이용약관</Text>
               </View>
 
-              <TouchableOpacity style={{backgroundColor: '#ffffff', width: '15.9%', borderRadius: 8, borderWidth: 1, borderColor: '#000000', alignItems: 'center', justifyContent: 'center'}}>
+              <TouchableOpacity style={{backgroundColor: '#ffffff', width: '15.9%', aspectRatio: 52 / 20, borderRadius: 8, borderWidth: 1, borderColor: '#000000', alignItems: 'center', justifyContent: 'center'}}>
                 <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 10, letterSpacing: -0.14, color: '#000000'}}>내용확인</Text>
               </TouchableOpacity>
             </View>
 
-            <View style={{flexDirection: 'row', justifyContent: 'space-between', marginBottom: 18}}>
+            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18}}>
               <View style={{flexDirection: 'row'}}>
                 <CheckBox isChecked={this.state.personalInfoCheckBoxChecked}
                           checkedCheckBoxColor={'#ed6578'}
@@ -94,7 +94,7 @@ export default class SignUp1 extends React.Component {
                 <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize:16, letterSpacing: -0.23, color: '#000000', marginLeft: 16}}>개인정보 수집이용</Text>
               </View>
 
-              <TouchableOpacity style={{backgroundColor: '#ffffff', width: '15.9%', borderRadius: 8, borderWidth: 1, borderColor: '#000000', alignItems: 'center', justifyContent: 'center'}}>
+              <TouchableOpacity style={{backgroundColor: '#ffffff', width: '15.9%', aspectRatio: 52 / 20, borderRadius: 8, borderWidth: 1, borderColor: '#000000', alignItems: 'center', justifyContent: 'center'}}>
                 <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 10, letterSpacing: -0.14, color: '#000000'}}>내용확인</Text>
               </TouchableOpacity>
             </View>
@@ -103,9 +103,9 @@ export default class SignUp1 extends React.Component {
           <View style={{marginHorizontal: 16, marginTop: 18}}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <TouchableOpacity style={{width: 24, height: 24, alignItems: 'center', justifyContent: 'center'}}
-                                onPress={() => this.setState({optionalCheckBoxChecked: !this.state.optionalCheckBoxChecked})}>
-                <View style={{width: 20, height: 20, borderRadius: 100, borderWidth: 2, borderColor: this.state.optionalCheckBoxChecked ? '#ed6578' : '#757575', alignItems: 'center', justifyContent: 'center' }}>
-                  <View style={{width: 10, height: 10, borderRadius: 100, backgroundColor: this.state.optionalCheckBoxChecked ? '#ed6578' : '#ffffff'}}></View>
+                                onPress={() => this.setState({receiveSMSBool: !this.state.receiveSMSBool})}>
+                <View style={{width: 20, height: 20, borderRadius: 100, borderWidth: 2, borderColor: this.state.receiveSMSBool ? '#ed6578' : '#757575', alignItems: 'center', justifyContent: 'center' }}>
+                  <View style={{width: 10, height: 10, borderRadius: 100, backgroundColor: this.state.receiveSMSBool ? '#ed6578' : '#ffffff'}}></View>
                 </View>
               </TouchableOpacity>
               <Text style={{fontFamily: 'S-CoreDream-6Bold', fontSize: 18, letterSpacing: -0.25, color: '#000000', marginLeft: 16}}>(선택) 마케팅 정보 메일 SMS 수신</Text>
@@ -113,9 +113,9 @@ export default class SignUp1 extends React.Component {
           </View>
 
           <View style={{flex: 1, width: "100%", alignItems:"center", justifyContent: 'flex-end'}}>
-            <TouchableOpacity style={{width: "84.4%", height: 48, alignItems:"center", justifyContent: 'center', borderRadius: 50, backgroundColor: this.state.mendatoryCheckBoxChecked ? '#ed6578' : '#fadee2', marginBottom: 60}}
+            <TouchableOpacity style={{width: "84.4%", aspectRatio: 304 / 48, alignItems:"center", justifyContent: 'center', borderRadius: 50, backgroundColor: this.state.mendatoryCheckBoxChecked ? '#ed6578' : '#fadee2', marginBottom: 60}}
                               disabled={!this.state.mendatoryCheckBoxChecked}
-                              onPress={() => this.props.navigation.navigate('signUp2', {optionalCheckBoxChecked: this.state.optionalCheckBoxChecked})}
+                              onPress={() => this.props.navigation.navigate('signUp2', {receiveSMSBool: this.state.receiveSMSBool})}
                               activeOpacity={0.8}>
               <Text style={{fontFamily: 'S-CoreDream-6Bold', fontSize: 24, color: '#ffffff'}}>다음으로</Text>
             </TouchableOpacity>
