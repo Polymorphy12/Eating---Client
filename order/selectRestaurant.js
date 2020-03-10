@@ -5,43 +5,46 @@ import {Header, Left, Right, Title} from 'native-base';
 import axios from 'axios';
 import OrderHeader from "../Component/OrderHeader";
 import MyFooter from "../Component/MyFooter";
-import SelectRestaurantClock from '../Component/selectRestaurantClock'
+import SelectRestaurantClock from '../Component/selectRestaurantClock';
 import { SafeAreaView } from "react-navigation";
 
 export default class SelectRestaurant extends Component {
 
 
   constructor(props) {
-    super(props)
+    super(props);
     this.state = { 
       progress: 1, 
       pageTitle: "주문하기", 
       lunchRestList: [],
       dinnerRestList: [],
       timeSelect: 'lunch',
-      userEmail : props.navigation.getParam('userEmail', ''),
 
-    }
+      // 현재는 자동로그인 개발 도중이라 로그인 플로우가 불안정하다, 임시로 디폴트 계정을 넣어놓은 것이니 나중에 수정하자.
+      // userEmail : props.navigation.getParam('userEmail'),
+      userEmail : props.navigation.getParam('userEmail', 'Klad'),
+    };
     //console.log(this.state.restaurant_name);
+    
   }
     
   componentDidMount() {
-    axios.get('http://13.124.193.165:3000/restaurants', {
-      params: {
-        timeSelect : this.state.timeSelect,
-      }
-    })
+    axios.get('http://13.124.193.165:3000/restaurants')
       .then(response => {
         for(let i = 0; i < response.data.length; i++) {
-          if (response.data[i].lunch)   this.setState({lunchRestList: this.state.lunchRestList.concat(response.data[i])})
-          if (response.data[i].dinner)  this.setState({dinnerRestList: this.state.dinnerRestList.concat(response.data[i])})
+          if (response.data[i].lunch)   this.state.lunchRestList = this.state.lunchRestList.concat(response.data[i])
+          if (response.data[i].dinner)  this.state.dinnerRestList = this.state.dinnerRestList.concat(response.data[i])
         }
+
+        this.setState({reloadFlag: 0});
       })
       .catch(function(error) {
         console.log('There has been a problem with your fetch operation: ' + error.message);
       // ADD THIS THROW error
       throw error;
     });
+
+    
   }    
 
   _renderItem = ({item}) => (
@@ -105,6 +108,7 @@ export default class SelectRestaurant extends Component {
               />
 
             </View>
+            
             <MyFooter navigation={this.props.navigation} orderBoolean={true} userEmail={this.state.userEmail}></MyFooter>
           </View>
         );

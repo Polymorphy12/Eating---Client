@@ -11,17 +11,14 @@ export default class MyPage extends Component {
     super(props);
     this.state = {
       userEmail: props.navigation.getParam('userEmail'),
-      buttonColor: "#fadee2",
       pageTitle: "마이페이지" ,
-      isVisible: false,
+      modalVisible: false,
       data: {},
 
     };
   };
 
   componentDidMount(){
-    //console.log('SelectRestaurant componentDidMount!!');
-    
     axios.post('http://13.124.193.165:3000/users/mypage',{
           params: {
             userEmail: this.state.userEmail,
@@ -37,293 +34,111 @@ export default class MyPage extends Component {
        throw error;
      });
   }
-  
-  
 
+  render() {
+    return (
+      <View style= {{ flex: 1 }}>
+        <MyHeader navigation={this.props.navigation} pageTitle={this.state.pageTitle}></MyHeader>
 
-      render() {
-        const {navigation } = this.props.navigation;
-        return (
-          <View style= {{ flex: 1 }}>
-            <MyHeader navigation={this.props.navigation} pageTitle={this.state.pageTitle}></MyHeader>
-            <ScrollView contentContainerStyle = {totalContainer}>
-              {/*
-                컨테이너 1 : 
-                  등급 이미지 + ({this.state.등급} + {this.state.이름 또는 this.props.이름}) +  수정 이미지 
-              */}
-                <View style = {background}>
-                  {/*
-                    랭크를 나타내는 모달.
-                    컴포넌트화 시켜서 나중에 해야할 일을 덜자.
-                  */}
-                  <Modal
-                    animationType = {"fade"}
-                    transparent = {true}
-                    visible = {this.state.isVisible}
-                    onRequestClose = {() => {console.log("Modal has been closed.")}}
-                  >
-                    
-                    <View style={{
-                            flex: 1,
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            backgroundColor : "#00000080"
-                            }}>
-                      <View style = {{width : "75%", height : "75%", backgroundColor: "#fff" }}>
-                        {/* 제목, 설명, 닫기 버튼 담는 컨테이너 */}
-                        <View style = {{marginTop : "4.4%", marginBottom: "3.4%", marginLeft : "5.8%"}}>
-                          {/* 제목, 닫기 버튼 담는 컨테이너 */}
-                          <View style = {{flexDirection: 'row'}}>
-                            
-                            {/* 제목 */}
-                            <Text style = {{marginBottom : "2%" ,fontFamily: "S-CoreDream4", fontSize: 17, fontWeight: "200", 
-                        fontStyle: "normal", lineHeight: 20, letterSpacing: -0.41, textAlign: "left", color: "#000000"}}>잇힝 등급</Text>
-                            {/* 닫기 버튼 */}
-                            <TouchableOpacity 
-                            style = {{width: 24, height : 24, marginLeft : 'auto', marginRight : '6%'}} 
-                            onPress = {() => {this.setState({isVisible: !this.state.isVisible})}}>
-                              <Image
-                              style = {{width: 24, height : 24}}
-                              source={require('../assets/images/drawable-xxxhdpi/아이콘_닫기.png')}>
-                              </Image>
-                            </TouchableOpacity>
-                          </View>
-                          
-                          {/* 설명 */}
-                          <Text style = {{fontFamily: "S-CoreDream4", fontSize: 11,fontWeight: "200",fontStyle: "normal",lineHeight: 13,
-                                          letterSpacing: -0.26,textAlign: "left", color: "#000000"}}>
-                                            잇힝은 회원님들의 구매 이력에 따른 결과를 등급으로 보여드리고 있습니다 :)</Text>
+        <Modal animationType={"fade"} transparent={true} visible={this.state.modalVisible} onRequestClose={() => this.setState({modalVisible: false})}>
+          <View style={{flex: 1, alignItems: 'center', backgroundColor : "#00000080"}}>
+            <View style={{width: '75.6%', alignItems: 'flex-end', marginTop: 60}}>
+              <TouchableOpacity style = {{marginRight: 8}} 
+                                onPress = {() => {this.setState({modalVisible: false})}}>
+                <Image style = {{width: 24, height : 24}} source={require('../assets/images/drawable-xxxhdpi/아이콘_닫기.png')}></Image>
+              </TouchableOpacity>
 
-                        </View>
-                        {/* 등급 담는 컨테이너 */}
-                        <View style = {{marginLeft : "13.97%", justifyContent : 'center'}}>
-                          <View style = {{flexDirection : 'row', alignItems: 'center', margin: "0.84%"}}>
-                            <Image
-                            style = {{width: 60, height : 60}}
-                            source={require('../assets/images/drawable-xxxhdpi/고객등급_브론즈.png')}>
-                            </Image>
-                            <Text style = {{marginLeft : "10%",fontFamily: "S-CoreDream6",fontSize: 18,fontWeight: "bold",fontStyle: "normal",lineHeight: 22,
-                            letterSpacing: 0,textAlign: "left",color: "#707070"}}>브론즈</Text>
-                          </View>
-                          <View style = {{flexDirection : 'row', alignItems: 'center', margin: "0.84%"}}>
-                            <Image
-                            style = {{width: 60, height : 60}}
-                            source={require('../assets/images/drawable-xxxhdpi/고객등급_실버.png')}>
-                            </Image>
-                            <Text style = {{marginLeft : "10%",fontFamily: "S-CoreDream6",fontSize: 18,fontWeight: "bold",fontStyle: "normal",lineHeight: 22,
-                            letterSpacing: 0,textAlign: "left",color: "#707070"}}>실버</Text>
-                          </View>
-                          <View style = {{flexDirection : 'row', alignItems: 'center', margin: "0.84%"}}>
-                            <Image
-                            style = {{width: 60, height : 60}}
-                            source={require('../assets/images/drawable-xxxhdpi/고객등급_골드.png')}>
-                            </Image>
-                            <Text style = {{marginLeft : "10%",fontFamily: "S-CoreDream6",fontSize: 18,fontWeight: "bold",fontStyle: "normal",lineHeight: 22,
-                            letterSpacing: 0,textAlign: "left",color: "#707070"}}>골드</Text>
-                          </View>
-                          <View style = {{flexDirection : 'row', alignItems: 'center', margin: "0.84%"}}>
-                            <Image
-                            style = {{width: 60, height : 60}}
-                            source={require('../assets/images/drawable-xxxhdpi/고객등급_플래티넘.png')}>
-                            </Image>
-                            <Text style = {{marginLeft : "10%",fontFamily: "S-CoreDream6",fontSize: 18,fontWeight: "bold",fontStyle: "normal",lineHeight: 22,
-                            letterSpacing: 0,textAlign: "left",color: "#707070"}}>플래티넘</Text>
-                          </View>
-                          <View style = {{flexDirection : 'row', alignItems: 'center', margin: "0.84%"}}>
-                            <Image
-                            style = {{width: 60, height : 60}}
-                            source={require('../assets/images/drawable-xxxhdpi/고객등급_다이아.png')}>
-                            </Image>
-                            <Text style = {{marginLeft : "10%",fontFamily: "S-CoreDream6",fontSize: 18,fontWeight: "bold",fontStyle: "normal",lineHeight: 22,
-                            letterSpacing: 0,textAlign: "left",color: "#707070"}}>다이아</Text>
-                          </View>
-                        </View>
-                      </View>
-                    </View>
-                  </Modal>
-                  <TouchableOpacity 
-                  style={{width: 60, height : 60, marginRight : "7.8%", marginLeft: "4.4%"}}
-                  onPress = {() => {this.setState({isVisible: true})}}>
-                  <Image
-                    style = {{width: 60, height : 60, marginRight : "7.8%", marginLeft: "4.4%"}}
-                    source={require('../assets/images/drawable-xxxhdpi/고객등급_브론즈.png')}>
+              <View style={{width: '100%', aspectRatio: 272 / 480, backgroundColor: '#ffffff', marginTop: 17, padding: 16}}>
+                <Text style={{fontFamily: 'S-CoreDream-6Bold', fontSize: 17, letterSpacing: -0.41, color: '#000000'}}>잇힝 등급</Text>
+                <Text style={{fontFamily: 'S-CoreDream-4Regular', fontSize: 11, letterSpacing: -0.26, color: '#000000', marginTop: 12}}>잇힝은 회원님들의 구매 이력에 따른 결과를 등급으로 보여드리고 있습니다 :)</Text>
 
-                  </Image>
-                  </TouchableOpacity>
-                  
-                  <View style = {{flexDirection: 'column' }}>
-                    <Text
-                    style = {{width: 76, height: 20, fontFamily: "S-CoreDream4", fontSize: 17, fontWeight: "200", 
-                    fontStyle: "normal", lineHeight: 20, letterSpacing: -0.41, textAlign: "left", color: "#6e6e6e"}}
-                    >브론즈 </Text>
-                    <Text
-                    style = {{width: 76, height: 20, fontFamily: "S-CoreDream4", fontSize: 17, fontWeight: "200", 
-                    fontStyle: "normal", lineHeight: 20, letterSpacing: -0.41, textAlign: "left", color: "#000000"}}
-                    >{this.state.data.user_name}</Text>
+                <View style={{margin: 20}}>
+                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <Image style={{width: 70, height: 70}} source={require('../assets/images/drawable-xxxhdpi/rank_1_bronze.png')}></Image>
+                    <Text style={{fontFamily: 'S-CoreDream-6Bold', fontSize: 18, color: '#707070', marginLeft: 26}}>브론즈</Text>
                   </View>
-                  <TouchableOpacity style={{width: 60, height : 60, marginLeft: 'auto', marginRight: '6.67%'}}
-                    onPress={() => this.props.navigation.navigate('personalInfo', {userEmail: this.state.userEmail, userName: this.state.data.user_name})}>
 
-                    <Image 
-                    style = {{width: 60, height : 60, marginLeft: 'auto', marginRight: '6.67%'}}
-                    source={require('../assets/images/drawable-xxxhdpi/아이콘_수정.png')}></Image>
+                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <Image style={{width: 70, height: 70}} source={require('../assets/images/drawable-xxxhdpi/rank_2_silver.png')}></Image>
+                    <Text style={{fontFamily: 'S-CoreDream-6Bold', fontSize: 18, color: '#707070', marginLeft: 26}}>실버</Text>
+                  </View>
+
+                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <Image style={{width: 70, height: 70}} source={require('../assets/images/drawable-xxxhdpi/rank_3_gold.png')}></Image>
+                    <Text style={{fontFamily: 'S-CoreDream-6Bold', fontSize: 18, color: '#707070', marginLeft: 26}}>골드</Text>
+                  </View>
+
+                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <Image style={{width: 70, height: 70}} source={require('../assets/images/drawable-xxxhdpi/rank_4_platinum.png')}></Image>
+                    <Text style={{fontFamily: 'S-CoreDream-6Bold', fontSize: 18, color: '#707070', marginLeft: 26}}>플래티넘</Text>
+                  </View>
+
+                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <Image style={{width: 70, height: 70}} source={require('../assets/images/drawable-xxxhdpi/rank_5_diamond.png')}></Image>
+                    <Text style={{fontFamily: 'S-CoreDream-6Bold', fontSize: 18, color: '#707070', marginLeft: 26}}>다이아</Text>
+                    <Image style={{width: 16, height: 16, marginLeft: 4}} source={require('../assets/images/drawable-xxxhdpi/rank_5_diamond_deco.png')}></Image>
+                  </View>
+                </View>
+              </View>
+            </View>
+          </View>
+        </Modal>
+        
+        <View style={{width: '100%', aspectRatio: 360 / 90, borderBottomWidth: 1, borderBottomColor: '#d8d8d8', paddingHorizontal: 16}}>
+          <View style={{flexDirection: 'row', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'space-between'}}>
+            <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
+              <TouchableOpacity onPress={() => this.setState({modalVisible: true})}>
+                <Image style={{width: 48, height: 48, marginLeft: 16}}
+                        source={this.state.data.user_rank === 1 ? require('../assets/images/drawable-xxxhdpi/rank_2_silver.png') :
+                                this.state.data.user_rank === 2 ? require('../assets/images/drawable-xxxhdpi/rank_3_gold.png') :
+                                this.state.data.user_rank === 3 ? require('../assets/images/drawable-xxxhdpi/rank_4_platinum.png') : 
+                                this.state.data.user_rank === 4 ? require('../assets/images/drawable-xxxhdpi/rank_5_diamond.png') : require('../assets/images/drawable-xxxhdpi/rank_1_bronze.png')}/>
+              </TouchableOpacity>
+
+              <View style={{flex: 1, marginLeft: 24}}>
+                <Text style={{fontFamily: 'S-CoreDream-4Regular', fontSize: 17, letterSpacing: -0.41, color: '#6e6e6e'}}>{this.state.data.user_nickname}</Text>
+
+                <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                  <Text style={{fontFamily: 'S-CoreDream-4Regular', fontSize: 17, letterSpacing: -0.41, color: '#000000'}}>{this.state.data.user_name}</Text>
+
+                  <TouchableOpacity style={{borderRadius: 5, backgroundColor: '#666666'}}
+                                    onPress={() => this.props.navigation.navigate('personalInfo', {userEmail: this.state.userEmail})}>
+                    <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 12, letterSpacing: -0.6, color: '#ffffff', paddingHorizontal: 13, paddingVertical: 5}}>개인정보 수정</Text>
                   </TouchableOpacity>
                 </View>
-              {/*
-                컨테이너 2 : 가로 정렬.
-                  ("다음 등급은?" + 다음등급) 
-              */}
-                <View style = {{flexDirection : 'row', paddingTop:"1.25%",paddingBottom:"1.25%", 
-                borderTopWidth: 1, borderBottomWidth: 1, borderColor:"#d8d8d8"}}>
-                    <Text
-                    style = {{height: 20, marginLeft: "4.4%", marginRight:"5.9%", fontFamily: "S-CoreDream4", fontSize: 17, fontWeight: "200", 
-                    fontStyle: "normal", lineHeight: 20, letterSpacing: -0.41, textAlign: "left", color: "#9b9b9b"}}>다음 등급은?</Text>
-                    <Text
-                    style = {{height: 20, fontFamily: "S-CoreDream4", fontSize: 17, fontWeight: "200", 
-                    fontStyle: "normal", lineHeight: 20, letterSpacing: -0.41, textAlign: "left", color: "#6e6e6e"}}>실버</Text>
-                </View>
-                <View style = {{height : "1.25%", backgroundColor : "#d8d8d8"}}></View>
-              {/*
-                컨테이너 3 : 윗쪽 정렬.
-                  Touchable Opacity (고객 만족 센터)
-                  Touchable Opacity (취소/환불 내역)
-                  Touchable Opacity (리뷰 관리)
-                  Touchable Opacity (학식탈출 안내)
-              */}
-                <View>
-                  <PlainListItem itemTitle = "고객만족센터" 
-                  navigation = {this.props.navigation} 
-                  onPress = {() => {
-                    this.props.navigation.navigate("CustomerSatisfaction");
-                  }}/>
-                  <PlainListItem itemTitle = "취소/환불 내역"/>
-                  <PlainListItem itemTitle = "리뷰 관리"/>
-                  <PlainListItem itemTitle = "잇힝 안내"
-                  navigation = {this.props.navigation} 
-                  onPress = {() => {
-                    this.props.navigation.navigate("Announcement");
-                  }}/>
-                  <PlainListItem itemTitle = "내 주문내역 보러가기"
-                                  navigation = {this.props.navigation} 
-                                  onPress = {() => {
-                                    this.props.navigation.navigate("orderHistory", {userEmail: this.state.userEmail});
-                  }}/>
-                </View>
-            </ScrollView>
-              
-            <MyFooter navigation={this.props.navigation} mypageBoolean={true} userEmail={this.state.userEmail}></MyFooter>
-            
-            {/* <View style={orderButtonContainer}>
-                <TouchableOpacity
-                    style={orderButton}
-                    title="first"
-                    onPress={() => {
-                        // navigation.navigate("logIn");
-                    }}>
-                    <Text style={letsGetStarted}>확인</Text>
-                </TouchableOpacity>
-            </View> */}
+              </View>
+            </View>
+
           </View>
-        );
-      }
+        </View>
+
+        <View style={{flexDirection: 'row', width: '100%', aspectRatio: 360 / 42, paddingHorizontal: 16, alignItems: 'center'}}>
+          <Text style={{fontFamily: 'S-CoreDream-4Regular', fontSize: 17, letterSpacing: -0.41, color: '#9b9b9b'}}>다음 등급은?</Text>
+          <Text style={{fontFamily: 'S-CoreDream-4Regular', fontSize: 17, letterSpacing: -0.41, color: '#6e6e6e', marginLeft: 20}}>{this.state.data.user_rank === 0 ? '실버' :
+                                                                                                                                    this.state.data.user_rank === 1 ? '골드' :
+                                                                                                                                    this.state.data.user_rank === 2 ? '플래티넘' :
+                                                                                                                                    this.state.data.user_rank === 3 ? '다이아몬드' : ''}</Text>
+        </View>
+
+        <View style={{height: 8, backgroundColor: '#d8d8d8'}}></View>
+
+        <PlainListItem itemTitle='현재 주문 내역'     onPress={() => this.props.navigation.navigate('orderHistory', {userEmail: this.state.userEmail})}></PlainListItem>
+        <PlainListItem itemTitle='즐겨찾는 메뉴 목록' onPress={() => this.props.navigation.navigate('bookmark', {userEmail: this.state.userEmail})}></PlainListItem>
+
+        <View style={{height: 8, backgroundColor: '#d8d8d8'}}></View>
+
+        <PlainListItem itemTitle='고객만족센터'       onPress={() => this.props.navigation.navigate('customerSatisfaction', {userEmail: this.state.userEmail})}></PlainListItem>
+        <PlainListItem itemTitle='취소/환불 내역'     onPress={() => this.props.navigation.navigate('mypage')}></PlainListItem>
+        <PlainListItem itemTitle='내가 쓴 리뷰'       onPress={() => this.props.navigation.navigate('mypage')}></PlainListItem>
+        <PlainListItem itemTitle='공지사항'           onPress={() => this.props.navigation.navigate('mypage')}></PlainListItem>
+        
+        {/* <Text>{JSON.stringify(this.state.data)}</Text> */}
+
+        {/* 풋터를 바닥에 두기 위한 빈 공간 */}
+        <View style={{flex: 1}}></View>
+
+        <MyFooter navigation={this.props.navigation} mypageBoolean={true} userEmail={this.state.userEmail}></MyFooter>
+      </View>
+    );
+  }
 }
-
-const totalContainer = {
-  flex: 1,
-  backgroundColor: "white",
-  // alignItems: "center",
-  //justifyContent: "center",
-  zIndex: -1
-}
-
-const titleText = {
-  // width: 225.6,
-  // height: 25,
-  fontFamily: "AppleSDGothicNeo",
-  fontSize: 23,
-  fontWeight: "800",
-  fontStyle: "normal",
-  // lineHeight: 25,
-  letterSpacing: -0.24,
-  textAlign: "center",
-  color: "#ffffff"
-};
-
-
-const background = {
-  height: 160,
-  borderRadius: 4,
-  backgroundColor: '#fff',
-  borderStyle: "solid",
-  borderWidth: 0,
-  flexDirection: 'row',
-  alignItems: 'center',
-  borderTopWidth : 1,
-  borderTopColor: "#f0f0f0",
-};
-
-const listView = {
-//   // flex: 1,
-//   justifyContent: 'center',
-//   alignItems: 'center'
-}
-
-const locationInfoContainer = {
-    margin: 35
-}
-
-const locationName = {
-  
-  fontFamily: "S-CoreDream-5",
-  fontSize: 17,
-  fontWeight: "500",
-  fontStyle: "normal",
-  letterSpacing: 0,
-  color: "#273951"
-}
-
-const receivingTime = {
-  fontFamily: "S-CoreDream-5",
-  fontSize: 13,
-  fontWeight: "500",
-  fontStyle: "normal",
-  letterSpacing: 0,
-  color: "#a2a9b3"
-}
-
-
-const navBar = {
-  height: 70,
-  //opacity: 0.51,
-  alignItems: "center",
-  justifyContent: "center",
-  backgroundColor: "#ff1d30"
-};
-
-const orderButtonContainer = {
-    alignItems: "center",
-    justifyContent: "center",
-    margin : 20
-}
-
-const orderButton = {
-    width: 335,
-    height: 58,
-    borderRadius: 100,
-    backgroundColor: "#ff3345",
-    alignItems: "center",
-    justifyContent: "center"
-};
-
-
-
-const letsGetStarted = {
-    fontFamily: "SCDream6",
-    fontSize: 20,
-    fontWeight: "bold",
-    fontStyle: "normal",
-    letterSpacing: 0,
-    textAlign: "center",
-    color: "#fff"
-};

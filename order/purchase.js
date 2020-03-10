@@ -74,44 +74,44 @@ export default class Purchase extends Component {
     
 
   render() {
-    const {navigation } = this.props;
+    // const {navigation } = this.props;
 
-    const temp = this.state.data;
-    const order_history = [];
+    // const temp = this.state.data;
+    // const order_history = [];
 
-    // console.log("temp" , temp);
-    // console.log("this.state" , this.state.data.length);
+    // // console.log("temp" , temp);
+    // // console.log("this.state" , this.state.data.length);
 
-    let calculateProcess = "";
-    let calculate = 0;
-    //데이터 따라 scrollview에 넣어줄 컴포넌트.
-    for(let i = 0; i < this.state.data.length; i++){
-      order_history.push(
-        <View style = {background} key = {i}>
-            {/* 메뉴 사진 */}
-            <Image style={{width: 80, height : 86, borderWidth: 1, borderColor: "#979797"}}
-                    source={{uri: 'http://13.124.193.165:3000/static/' + this.state.data[i].menu_image}}>
-            </Image>
-            <View style = {locationInfoContainer}>
-                <Text style={locationName}>{this.state.data[i].restaurant_name}</Text>
-                <View>
-                  <Text style={receivingTime}>{this.state.data[i].menu_name}</Text>
-                  <Text style={receivingTime}>{this.state.data[i].amount}개</Text>
-                </View>
-                <Text style={receivingTime}>{this.state.data[i].menu_price}</Text>
-            </View>
-        </View>
-      );
+    // let calculateProcess = "";
+    // let calculate = 0;
+    // //데이터 따라 scrollview에 넣어줄 컴포넌트.
+    // for(let i = 0; i < this.state.data.length; i++){
+    //   order_history.push(
+    //     <View style = {background} key = {i}>
+    //         {/* 메뉴 사진 */}
+    //         <Image style={{width: 80, height : 86, borderWidth: 1, borderColor: "#979797"}}
+    //                 source={{uri: 'http://13.124.193.165:3000/static/' + this.state.data[i].menu_image}}>
+    //         </Image>
+    //         <View style = {locationInfoContainer}>
+    //             <Text style={locationName}>{this.state.data[i].restaurant_name}</Text>
+    //             <View>
+    //               <Text style={receivingTime}>{this.state.data[i].menu_name}</Text>
+    //               <Text style={receivingTime}>{this.state.data[i].amount}개</Text>
+    //             </View>
+    //             <Text style={receivingTime}>{this.state.data[i].menu_price}</Text>
+    //         </View>
+    //     </View>
+    //   );
       
-      if(i == 0)
-        calculateProcess += this.numberWithCommas(this.state.data[i].menu_price) + " * " + this.state.data[i].amount;
-      else if (i < this.state.data.length) {
-        calculateProcess += " + " + this.numberWithCommas(this.state.data[i].menu_price)+ " * " + this.state.data[i].amount;
-      } 
-      if (i == this.state.data.length - 1) {
-        calculateProcess += " = "
-      }
-    }
+    //   if(i == 0)
+    //     calculateProcess += this.numberWithCommas(this.state.data[i].menu_price) + " * " + this.state.data[i].amount;
+    //   else if (i < this.state.data.length) {
+    //     calculateProcess += " + " + this.numberWithCommas(this.state.data[i].menu_price)+ " * " + this.state.data[i].amount;
+    //   } 
+    //   if (i == this.state.data.length - 1) {
+    //     calculateProcess += " = "
+    //   }
+    // }
     
     return (
       <View style= {{ flex: 1 }}>

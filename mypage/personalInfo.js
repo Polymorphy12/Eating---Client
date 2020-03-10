@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import {Text, TextInput, View, TouchableOpacity, Image, StyleSheet, ToastAndroid, Alert} from 'react-native';
 import axios from "axios";
+import PlainListItem from "../Component/PlainListItem";
 import MyHeader from "../Component/MyHeader";
 import MyFooter from "../Component/MyFooter";
 import { ScrollView } from "react-native-gesture-handler";
@@ -23,180 +24,27 @@ export default class personalInfo extends Component {
         return (
             <View style={{flex: 1}}>
                 <MyHeader navigation={this.props.navigation} pageTitle={this.state.pageTitle}></MyHeader>
-                <ScrollView contentContainerStyle = {totalContainer}>
-                    <View style = {background}>
-                        <TouchableOpacity 
-                            style={{width: 60, height : 60, marginRight : "7.8%", marginLeft: "4.4%"}}
-                            onPress = {() => {this.setState({isVisible: true})}}>
-                            <Image
-                                style = {{width: 60, height : 60, marginRight : "7.8%", marginLeft: "4.4%"}}
-                                source={require('../assets/images/drawable-xxxhdpi/고객등급_브론즈.png')}></Image>
-                        </TouchableOpacity>
-                        
-                        <View style = {{flexDirection: 'column' }}>
-                            <Text
-                                style = {{width: 76, height: 20, fontFamily: "S-CoreDream4", fontSize: 17, fontWeight: "200", 
-                                fontStyle: "normal", lineHeight: 20, letterSpacing: -0.41, textAlign: "left", color: "#6e6e6e"}}
-                            >브론즈</Text>
+                
+                <View style={{width: '100%', aspectRatio: 360 / 92, borderBottomWidth: 1, borderBottomColor: '#f0f0f0', justifyContent: 'center', paddingHorizontal:16}}>
+                    <Text style={{fontFamily: 'S-CoreDream-4Regular', fontSize: 16, letterSpacing: -0.38, color: '#6e6e6e'}}>이메일 아이디</Text>
+                    <Text style={{fontFamily: 'S-CoreDream-4Regular', fontSize: 14, letterSpacing: -0.34, color: '#000000', marginHorizontal: 4}}>{this.state.userEmail}</Text>
+                </View>
 
-                            <TextInput
-                                style={{width: 76, height: 25, fontFamily: "S-CoreDream4", fontSize: 17, fontWeight: "200", 
-                                    fontStyle: "normal", lineHeight: 20, letterSpacing: -0.41, textAlign: "left", color: "#000000",
-                                    margin: 0, padding: 0, borderBottomWidth: 1}}
-                                maxLength={12}
-                                placeholder={this.state.userName}
-                                onChangeText={(newUserName) => {
-                                    this.setState({newUserName});
-                                }}
-                            />
-                        </View>
+                <PlainListItem itemTitle='닉네임 변경'              onPress={() => this.props.navigation.navigate('changeNickname', {userEmail: this.state.userEmail})}></PlainListItem>
+                <PlainListItem itemTitle='비밀번호 변경'            onPress={() => this.props.navigation.navigate('changePassword', {userEmail: this.state.userEmail})}></PlainListItem>
+                <PlainListItem itemTitle='인증 휴대폰 번호 변경'    onPress={() => this.props.navigation.navigate('changePhoneNum', {userEmail: this.state.userEmail})}></PlainListItem>
+                {/* <PlainListItem itemTitle='회원 탈퇴'                onPress={() => this.props.navigation.navigate('withdrawal', {userEmail: this.state.userEmail})}></PlainListItem> */}
+                
+                {/* 풋터를 바닥에 두기 위한 빈 공간 */}
+                <View style={{flex: 1}}></View>
 
-                        <TouchableOpacity style={{width: 30, height : 30, marginLeft: 'auto', marginRight: '10%'}}
-                                            disabled={this.state.newUserName == '' ? true : false}
-                                            onPress = {() => {
-                                                Alert.alert('유저명을 변경하려 합니다.', '정말로 변경하시겠습니까?', [
-                                                        {
-                                                            text: '변경',
-                                                            onPress : () => {
-                                                                axios.post('http://13.124.193.165:3000/users/changeUserName', {
-                                                                    params: {
-                                                                        userEmail: this.state.userEmail,
-                                                                        newUserName: this.state.newUserName,
-                                                                    }
-                                                                }).then(response => {
-                                                                    ToastAndroid.show(JSON.stringify(response.data), ToastAndroid.SHORT);
-                                                                    this.setState({userName : this.state.newUserName});
-                                                                }).catch((error) => {
-                                                                    console.log('There has been a problem with your fetch operation: ' + error.message);
-                                                                    // ADD THIS THROW error
-                                                                    throw error;
-                                                                });
-                                                            }
-                                                        },
-                                                        {text: '취소', onPress : () => ToastAndroid.show('취소되었습니다.', ToastAndroid.SHORT)}
-                                                    ],
-                                                    {cancelable: false}
-                                                );
-                                            }}>
-                            <Image 
-                                style = {{width: 30, height : 30, marginLeft: 'auto', marginRight: '6.67%',}}
-                                source={require('../assets/images/drawable-xxxhdpi/아이콘_체크.png')}></Image>
-                        </TouchableOpacity>
-                    </View>
+                <View style={{alignItems: 'flex-end', marginBottom: 80, paddingHorizontal: 20}}>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('withdrawal', {userEmail: this.state.userEmail})}>
+                        <Text style={{fontFamily: 'S-CoreDream-4Regular', fontSize: 10, letterSpacing: -0.24, color: '#9f9f9f'}}>회원탈퇴</Text>
+                    </TouchableOpacity>
+                </View>
 
-                    {/* 이메일 아이디 수정? 수정이 가능하게 할건가? 이메일이 곧 아이디이니까 아닌 것 같다. 옆에 버튼도 없고 */}
-                    <View style={{height: 90, borderTopWidth: 1, borderTopColor: '#d8d8d8'}}>
-                        <Text style={{fontFamily: "S-CoreDream4", fontSize: 10, fontWeight: "200", 
-                                    fontStyle: "normal", lineHeight: 20, letterSpacing: -0.41, marginLeft: '4.4%', marginTop: '4%', textAlign: "left", color: "#6e6e6e"}}>이메일 아이디</Text>
-
-                        <Text style={{height: 35, fontFamily: "S-CoreDream4", fontSize: 12, fontWeight: "200", 
-                                    fontStyle: "normal", lineHeight: 20, letterSpacing: -0.41, marginLeft: '5.5%', padding: 0, textAlign: "left", color: "#000000",}}>
-                            {this.state.userEmail}
-                        </Text>
-                    </View>
-                    
-                    {/* 비밀번호 수정 */}
-                    <View style={{height: 90, borderTopWidth:1, borderTopColor: '#f0f0f0', borderBottomWidth: 1, borderBottomColor: '#f0f0f0',}}>
-                        <Text style={{fontFamily: "S-CoreDream4", fontSize: 10, fontWeight: "200", 
-                                        fontStyle: "normal", lineHeight: 20, letterSpacing: -0.41, marginLeft: '4.4%', marginTop: '4%', marginBottom: '1%', textAlign: "left", color: "#6e6e6e"}}>비밀번호</Text>
-                        
-                        <View style={{height: 25, flexDirection: 'row'}}>
-                            <TextInput style={{fontFamily: "S-CoreDream4", fontSize: 12, fontWeight: "200", flex: 0.6,
-                                            fontStyle: "normal", lineHeight: 20, letterSpacing: -0.41, marginLeft: '4.4%', padding: 0, textAlign: "left", color: "#000000", backgroundColor: '#d8d8d8'}}
-                                        placeholder={'4자 이상'}
-                                        maxLength={20}
-                                        secureTextEntry={true}
-                                        onChangeText={newPassword => {
-                                            this.setState({newPassword});
-                                        }}>
-
-                            </TextInput>
-
-                            <View style={{flex: 0.4, marginLeft: 'auto', alignItems: 'center', justifyContent: 'center'}}>
-                                <TouchableOpacity style={{marginLeft: '7.5%'}}
-                                                    disabled={this.state.newPassword == '' ? true : false}
-                                                    onPress = {() => {
-                                                        Alert.alert('비밀번호를 변경하려 합니다.', '정말로 변경하시겠습니까?', [
-                                                                {
-                                                                    text: '변경',
-                                                                    onPress : () => {
-                                                                        axios.post('http://13.124.193.165:3000/users/changePassword', {
-                                                                            params: {
-                                                                                userEmail: this.state.userEmail,
-                                                                                newPassword: this.state.newPassword,
-                                                                            }
-                                                                        }).then(response => {
-                                                                            ToastAndroid.show(JSON.stringify(response.data), ToastAndroid.SHORT);
-                                                                            
-                                                                        }).catch((err) => {
-                                                                            console.log('There has been a problem with your fetch operation: ' + error.message);
-                                                                            // ADD THIS THROW error
-                                                                            throw error;
-                                                                        });
-                                                                    }
-                                                                },
-                                                                {text: '취소', onPress : () => ToastAndroid.show('취소되었습니다.', ToastAndroid.SHORT)}
-                                                            ],
-                                                            {cancelable: false}
-                                                        );
-
-                                                        // axios.post('http://13.124.193.165:3000/users/changePassword', {
-                                                        //     params: {
-                                                        //         userEmail: this.state.userEmail,
-                                                        //         newPassword: this.state.newPassword,
-                                                        //     }
-                                                        // }).then(response => {
-                                                        //     ToastAndroid.show(JSON.stringify(response.data), ToastAndroid.SHORT);
-                                                        // }).catch((err) => {
-                                                        //     console.log('There has been a problem with your fetch operation: ' + error.message);
-                                                        //     // ADD THIS THROW error
-                                                        //     throw error;
-                                                        // });
-                                                    }}>
-                                    <Text style={{fontFamily: "S-CoreDream6-Bold", fontSize: 15, lineHeight: 20, letterSpacing: -0.41, color: '#6e6e6e'}}>수정</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                    </View>
-
-                    {/* 휴대폰 인증 */}
-                    <View style={{height: 90, borderBottomWidth: 1, borderBottomColor: '#f0f0f0'}}>
-                        <View style={{flexDirection: 'row', marginBottom: '1%'}}>
-                            <Text style={{fontFamily: "S-CoreDream4", fontSize: 10, fontWeight: "200", 
-                                        fontStyle: "normal", lineHeight: 20, letterSpacing: -0.41, marginLeft: '4.4%', marginTop: '4%', textAlign: "left", color: "#6e6e6e"}}>휴대폰 인증</Text>
-                            <Text style={{fontFamily: "S-CoreDream4", fontSize: 7, fontWeight: "200", 
-                                        fontStyle: "normal", lineHeight: 20, letterSpacing: -0.41, marginLeft: '4.4%', marginTop: '4%', textAlign: "left", color: "#6e6e6e"}}>휴대폰 번호를 (-) 없이 입력해 주세요.</Text>
-                        </View>
-                        
-                        <View style={{height: 25, flexDirection: 'row'}}>
-                            <TextInput style={{fontFamily: "S-CoreDream4", fontSize: 12, fontWeight: "200", flex: 0.6,
-                                            fontStyle: "normal", lineHeight: 20, letterSpacing: -0.41, marginLeft: '4.4%', padding: 0, textAlign: "left", color: "#000000", backgroundColor: '#d8d8d8'}}
-                                        placeholder={'01012345678'}
-                                        maxLength={11}
-                                        onChangeText={newPhoneNumber => {
-                                            this.setState({newPhoneNumber});
-                                        }}>
-
-                            </TextInput>
-
-                            <View style={{flex: 0.4, marginLeft: 'auto', alignItems: 'center', justifyContent: 'center'}}>
-                                <TouchableOpacity style={{marginLeft: '7.5%'}}>
-                                    <Text style={{fontFamily: "S-CoreDream6-Bold", fontSize: 15, lineHeight: 20, letterSpacing: -0.41, color: '#6e6e6e'}}>재인증</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                    </View>
-                    <View style={{alignItems: 'flex-end'}}>
-                        <TouchableOpacity style={{marginRight: '11%', marginTop: '2.5%',}}
-                                        onPress={() => this.props.navigation.navigate('withdrawal', {userEmail: this.state.userEmail})}>
-                            <Text style={{fontFamily: "S-CoreDream6-Bold", fontSize: 10, lineHeight: 20, letterSpacing: -0.41, color: '#9f9f9f'}}>회원탈퇴</Text>
-                        </TouchableOpacity>
-                        
-                    </View>
-
-                </ScrollView>
                 <MyFooter navigation={this.props.navigation} mypageBoolean={true} userEmail={this.state.userEmail}></MyFooter>
-
             </View>
         );
     }

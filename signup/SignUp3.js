@@ -12,6 +12,7 @@ export default class SignUp3 extends React.Component {
         empty: true,
         pageTitle: "회원가입",
         _userName: props.navigation.getParam('userName'),
+        userNickname: props.navigation.getParam('userNickname'),
         receiveSMSBool: props.navigation.getParam('receiveSMSBool'),
         phoneNum: '',
     }
@@ -44,9 +45,10 @@ export default class SignUp3 extends React.Component {
                 
                 <View style={{flex: 1, width: "100%", alignItems:"center", justifyContent: 'flex-end'}}>
                     <TouchableOpacity style={{width: "84.4%", aspectRatio: 304 / 48, alignItems:"center", justifyContent: 'center', borderRadius: 50, backgroundColor: this.state.empty ? '#fadee2' : '#ed6578', marginBottom: 60}}
-                                        onPress={() => this.props.navigation.navigate('signUp4',
+                                        onPress={() => this.props.navigation.replace('signUp4',
                                             {   
                                                 userName: this.state._userName,
+                                                userNickname: this.state.userNickname,
                                                 receiveSMSBool: this.state.receiveSMSBool,
                                                 phoneNum: this.state.phoneNum,
                                             }
@@ -56,6 +58,8 @@ export default class SignUp3 extends React.Component {
                         <Text style={{fontFamily: 'S-CoreDream-6Bold', fontSize: 20, color: '#ffffff'}}>인증번호 발송하기</Text>
                     </TouchableOpacity>
                 </View>
+
+                {/* <Text>{JSON.stringify(this.state)}</Text> */}
 
             </View>
         </SafeAreaView>

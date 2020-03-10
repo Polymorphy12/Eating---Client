@@ -10,7 +10,7 @@ export default class MyFooter extends React.Component {
                 disabled={this.props.orderBoolean}
                 onPress={() => {
                   //ToastAndroid.show(JSON.stringify(this.props.navigation), ToastAndroid.SHORT);
-                  this.props.navigation.navigate("SelectRestaurant");
+                  this.props.navigation.navigate("SelectRestaurant", {userEmail: this.props.userEmail});
                   console.log(this.props);
                 }}>
                 <Image
@@ -45,8 +45,8 @@ export default class MyFooter extends React.Component {
                 <Image
                   style={{width:55, height:55}}
                   source={this.props.mypageBoolean ?
-                          require('../assets/images/drawable-hdpi/아이콘_마이학탈_active.png')
-                          :require('../assets/images/drawable-hdpi/아이콘_마이학탈_disabled.png')}>
+                          require('../assets/images/drawable-hdpi/아이콘_마이페이지_active.png')
+                          :require('../assets/images/drawable-hdpi/아이콘_마이페이지_disabled.png')}>
                 </Image>
               </TouchableOpacity>
             </View>        

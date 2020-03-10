@@ -39,6 +39,8 @@ export default class FindEmail extends Component {
                             maxLength={11}
                             onChangeText={(phoneNum) => this.setState({phoneNum})}
                             returnKeyType={'next'}
+                            onSubmitEditing={() => { this.phoneAuthTextInput.focus(); }}
+                            blurOnSubmit={false}
                         />
 
                         <TouchableOpacity  style={{width: '27.8%', backgroundColor: '#ed6578', borderRadius: 10, alignItems: 'center', justifyContent: 'center'}}>
@@ -54,6 +56,7 @@ export default class FindEmail extends Component {
                         keyboardType={'number-pad'}
                         maxLength={6}
                         onChangeText={(authNum) => this.setState({authNum})}
+                        ref={(input) => { this.phoneAuthTextInput = input; }}
                     />
 
                     <TouchableOpacity style={{width: '100%', aspectRatio: 328 / 48, backgroundColor: '#ed6578', borderRadius: 100, alignItems: 'center', justifyContent: 'center', marginTop: 36}}

@@ -50,11 +50,12 @@ export default class Menu extends Component {
     
   _renderItem = ({item}) => (
     <TouchableOpacity style = {{width: '100%', aspectRatio: 328 / 72, flexDirection: 'row', borderTopWidth: 1, borderTopColor: '#eeeeee'}}
-                      onPress={() => this.props.navigation.navigate('menuDetails',
+                      onPress={() => this.props.navigation.push('menuDetails',
                         {
                           userEmail: this.state.userEmail,
                           restaurant_name: this.state.restaurant_name,
                           timeSelect: this.state.timeSelect,
+                          menuID: item.menu_id,
                           menuImage: item.menu_image,
                           menuName: item.menu_name,
                           menuPrice: item.menu_price,

@@ -28,8 +28,8 @@ export default class OrderHeader extends React.Component {
             //   </Right>
             // </Header>
 
-            <View style={{borderBottomWidth: 1, borderBottomColor: '#d6d6d6'}}>
-                <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', margin: 16}}>
+            <View style={{width: '100%', aspectRatio: 360 / 52, borderBottomWidth: 1, borderBottomColor: '#d6d6d6'}}>
+                <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingTop: 16, paddingBottom: 12}}>
                     <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
                       <Image style={{width: 24, height: 24}}
                               source={require('../assets/images/drawable-xxxhdpi/아이콘_뒤로가기.png')}></Image>

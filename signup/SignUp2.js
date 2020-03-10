@@ -17,11 +17,6 @@ export default class SignUp2 extends React.Component {
     };
   }
 
-  onFill = (text) => {
-    if (text === "") this.setState({empty: true, _userName: text});
-    else this.setState({empty: false, _userName: text});
-  }
-
   render() {
     return (
       <SafeAreaView style={{flex: 1}}>
@@ -30,23 +25,43 @@ export default class SignUp2 extends React.Component {
         <View style={{flex: 1, marginHorizontal: 16}}>
           <ProgressBar progress={this.state.progress}></ProgressBar>
 
+          {/* 이름 입력칸 */}
           <Text
             style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 20, letterSpacing: -0.28, color: '#030303', borderBottomWidth: 1, borderColor: 'gray'}}
           >이름을 입력해주세요.</Text>
 
           <TextInput
             style={{fontFamily: 'S-CoreDream4-ExtraLight', fontSize: 16, letterSpacing: -0.23, color: '#6e6e6e', padding: 0, marginTop: 32}}
-            onChangeText={text => this.onFill(text)}
+            onChangeText={_userName => this.setState({_userName})}
             maxLength={12}
             placeholder="김유니"
             placeholderTextColor={'#d2d2d2'}
+            returnKeyType={'next'}
+            onSubmitEditing={() => { this.userNicknameTextInput.focus(); }}
+            blurOnSubmit={false}
           />
 
+          {/* 닉네임 입력칸 */}
+          <Text
+            style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 20, letterSpacing: -0.28, color: '#030303', borderBottomWidth: 1, borderColor: 'gray', marginTop: 32}}
+          >닉네임을 입력해주세요.</Text>
+
+          <TextInput
+            style={{fontFamily: 'S-CoreDream4-ExtraLight', fontSize: 16, letterSpacing: -0.23, color: '#6e6e6e', padding: 0, marginTop: 32}}
+            onChangeText={userNickname => this.setState({userNickname})}
+            maxLength={20}
+            placeholder="머랭이"
+            placeholderTextColor={'#d2d2d2'}
+            ref={(input) => { this.userNicknameTextInput = input; }}
+          />
+
+          {/* <Text>{JSON.stringify(this.state)}</Text> */}
+
           <View style={{flex: 1, width: "100%", alignItems:"center", justifyContent: 'flex-end'}}>
-            <TouchableOpacity style={{width: "84.4%", aspectRatio: 304 / 48, alignItems:"center", justifyContent: 'center', borderRadius: 50, backgroundColor: this.state.empty ? '#fadee2' : '#ed6578', marginBottom: 60}}
-              onPress={() => this.props.navigation.navigate('signUp3', {userName: this.state._userName, receiveSMSBool: this.state.receiveSMSBool})}
+            <TouchableOpacity style={{width: "84.4%", aspectRatio: 304 / 48, alignItems:"center", justifyContent: 'center', borderRadius: 50, backgroundColor: (!this.state._userName || !this.state.userNickname) ? '#fadee2' : '#ed6578', marginBottom: 60}}
+              onPress={() => this.props.navigation.replace('signUp3', {userName: this.state._userName, userNickname: this.state.userNickname, receiveSMSBool: this.state.receiveSMSBool})}
               activeOpacity={0.8}
-              disabled={this.state.empty}>
+              disabled={!this.state._userName || !this.state.userNickname}>
               <Text style={{fontFamily: 'S-CoreDream-6Bold', fontSize: 24, color: '#ffffff'}}>다음으로</Text>
             </TouchableOpacity>
           </View>

@@ -6,12 +6,13 @@ import MyFooter from "../Component/MyFooter";
 import ShoppingCartProgressBar from '../Component/ShoppingCartProgressBar';
 import axios from "axios";
 import moment from "moment";
+import { SafeAreaView } from "react-navigation";
 
 export default class ShoppingCart extends Component {
     
   
   constructor(props) {
-    super(props)
+    super(props);
     this.state = { 
       progress: 1,
       pageTitle: "장바구니",
@@ -22,7 +23,7 @@ export default class ShoppingCart extends Component {
       userEmail : props.navigation.getParam('userEmail', ''),
       amount : props.navigation.getParam('menu_amount', 0),
       reloadFlag: 0,
-    }
+    };
   }
   
   componentDidMount(){
@@ -144,7 +145,7 @@ export default class ShoppingCart extends Component {
     }
 
     return (
-      <View style={{flex: 1}}>
+      <SafeAreaView style={{flex: 1}}>
         <OrderHeader navigation={this.props.navigation} pageTitle={this.state.pageTitle} username={this.state.userEmail}></OrderHeader>
         <ShoppingCartProgressBar progress={0}></ShoppingCartProgressBar>
 
@@ -197,13 +198,13 @@ export default class ShoppingCart extends Component {
                                 menusToUpdate = menusToUpdate.concat(tempObj);
                               }
                               var deliv_date = this.state.timeSelect === 'lunch' ?
-                                                  (moment('0930', 'HHmm').diff(moment().tz('Asia/Seoul'), 'minutes') > 0 ? moment().tz('Asia/Seoul').format('YYYY년 MM월 DD일') : moment().tz('Asia/Seoul').add(1, 'days').format('YYYY년 MM월 DD일')) :
-                                                  (moment('1600', 'HHmm').diff(moment().tz('Asia/Seoul'), 'minutes') > 0 ? moment().tz('Asia/Seoul').format('YYYY년 MM월 DD일') : moment().tz('Asia/Seoul').add(1, 'days').format('YYYY년 MM월 DD일'));
+                                                  (moment('0930', 'HHmm').diff(moment().tz('Asia/Seoul'), 'minutes') > 0 ? moment().tz('Asia/Seoul') : moment().tz('Asia/Seoul').add(1, 'days')) :
+                                                  (moment('1600', 'HHmm').diff(moment().tz('Asia/Seoul'), 'minutes') > 0 ? moment().tz('Asia/Seoul') : moment().tz('Asia/Seoul').add(1, 'days'));
 
                               axios.post('http://13.124.193.165:3000/cart/updateShoppingCart', {
                                 params: {
                                   menusToUpdate: menusToUpdate,
-                                  deliv_date: deliv_date,
+                                  deliv_date: deliv_date.format('YYYY-MM-DD'),
                                 }
                               }).then(response => {
                                 //ToastAndroid.show(JSON.stringify(response.data), ToastAndroid.SHORT);
@@ -211,7 +212,7 @@ export default class ShoppingCart extends Component {
                                   {
                                     userEmail : this.state.userEmail,
                                     timeSelect : this.state.timeSelect,
-                                    deliv_date: deliv_date,
+                                    deliv_date: deliv_date.format('YYYY년 MM월 DD일'),
                                   });
                                 else ToastAndroid.show('시스템에 문제가 생겼습니다. 고객센터에 문의해 주세요.', ToastAndroid.SHORT);
                               }).catch(error => {
@@ -223,7 +224,7 @@ export default class ShoppingCart extends Component {
             <Text style={{fontFamily: 'S-CoreDream-6Bold', fontSize: 24, letterSpacing: -1.2, color: '#ffffff'}}>수령 장소 고르기</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </SafeAreaView>
     );
   }
 }
