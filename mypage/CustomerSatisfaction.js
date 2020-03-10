@@ -9,15 +9,46 @@ export default class CustomerSatisfaction extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { buttonColor: "#fadee2", pageTitle: "고객만족센터" , isVisible: false};
+        this.state = { 
+            pageTitle: "고객만족센터"
+        };
     };
 
     render(){
         return(
             <View style= {{ flex: 1 }}>
                 <MyHeader navigation={this.props.navigation} pageTitle={this.state.pageTitle}></MyHeader>
+
                 <ScrollView>
-                    <TouchableOpacity style = {{flexDirection: 'row', borderColor : "#f0f0f0", borderTopWidth: 1, borderBottomWidth : 1, paddingTop : "4%", paddingBottom: "4%"}}
+                    <TouchableOpacity style = {itemContainer}
+                                        onPress={() => Linking.canOpenURL("fb://page/1007718226284774/").then(supported => {
+                                            if (supported) {
+                                                Linking.openURL("fb://page/1007718226284774/");
+                                            } else {
+                                                alert('sorry invalid url')
+                                            }
+                                        })}>
+                        <Image style = {itemImage}
+                                source={require('../assets/images/drawable-xxxhdpi/아이콘_페이스북.png')}
+                                resizeMode={"contain"}></Image>
+                        <Text style = {itemText}>{`잇힝 페이스북`}</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style = {itemContainer}
+                                        onPress={() => Linking.canOpenURL(`https://www.instagram.com/eating_teamds/?igshid=1h23t2v6kh7i2`).then(supported => {
+                                            if (supported) {
+                                                Linking.openURL(`https://www.instagram.com/eating_teamds/?igshid=1h23t2v6kh7i2`);
+                                            } else {
+                                                alert('sorry invalid url')
+                                            }
+                                        })}>
+                        <Image style = {itemImage}
+                                source={require('../assets/images/drawable-xxxhdpi/아이콘_인스타그램.png')}
+                                resizeMode={"contain"}></Image>
+                        <Text style = {itemText}>{`잇힝 인스타그램`}</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style = {itemContainer}
                                         onPress={() => Linking.canOpenURL("https://pf.kakao.com/_xdEwNj").then(supported => {
                                             if (supported) {
                                                 Linking.openURL("https://pf.kakao.com/_xdEwNj");
@@ -25,56 +56,19 @@ export default class CustomerSatisfaction extends Component {
                                                 alert('sorry invalid url')
                                             }
                                         })}>
-                        <Image style = {{marginLeft : "4.4%", width: 32, height : 32}}
+                        <Image style = {itemImage}
                                 source={require('../assets/images/drawable-xxxhdpi/아이콘_카카오톡.png')}
                                 resizeMode={"contain"}></Image>
-                        <View style = {{marginLeft : "4.4%", height: 32, justifyContent: 'center'}}>
-                            <Text style = {{fontFamily: "S-CoreDream4", fontSize: 15, fontWeight: "200", fontStyle: "normal", letterSpacing: -0.41, color: "#000000"}}>{`Eating! 카카오톡 플친`}</Text>
-                        </View>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style = {{flexDirection: 'row', borderColor : "#f0f0f0", borderTopWidth: 1, borderBottomWidth : 1, paddingTop : "4%", paddingBottom: "4%"}}
-                                        onPress={() => Linking.canOpenURL(`https://www.instagram.com/eating_teamds/?igshid=1h23t2v6kh7i2`).then(supported => {
-                                            if (supported) {
-                                                Linking.openURL(`https://www.instagram.com/eating_teamds/?igshid=1h23t2v6kh7i2`);
-                                            } else {
-                                                alert('sorry invalid url')
-                                            }
-                                        })}>
-                        <Image style = {{marginLeft : "4.4%", width: 32, height : 32}}
-                                source={require('../assets/images/drawable-xxxhdpi/아이콘_인스타그램.png')}
-                                resizeMode={"contain"}></Image>
-                        <View style = {{marginLeft : "4.4%", height: 32, justifyContent: 'center'}}>
-                            <Text style = {{fontFamily: "S-CoreDream4", fontSize: 15, fontWeight: "200", fontStyle: "normal", letterSpacing: -0.41, color: "#000000"}}>{`Eating! 인스타그램`}</Text>
-                        </View>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style = {{flexDirection: 'row', borderColor : "#f0f0f0", borderTopWidth: 1, borderBottomWidth : 1, paddingTop : "4%", paddingBottom: "4%"}}
-                                        onPress={() => Linking.canOpenURL(`https://www.instagram.com/eating_teamds/?igshid=1h23t2v6kh7i2`).then(supported => {
-                                            if (supported) {
-                                                Linking.openURL(`https://www.instagram.com/eating_teamds/?igshid=1h23t2v6kh7i2`);
-                                            } else {
-                                                alert('sorry invalid url')
-                                            }
-                                        })}>
-                        <Image style = {{marginLeft : "4.4%", width: 32, height : 32}}
-                                source={require('../assets/images/drawable-xxxhdpi/아이콘_이메일.png')}
-                                resizeMode={"contain"}></Image>
-                        <View style = {{marginLeft : "4.4%", height: 32, justifyContent: 'center'}}>
-                            <Text style = {{fontFamily: "S-CoreDream4", fontSize: 15, fontWeight: "200", fontStyle: "normal", letterSpacing: -0.41, color: "#000000"}}>{`Eating! 이메일`}</Text>
-                        </View>
+                        <Text style = {itemText}>{`잇힝 카카오톡 플친`}</Text>
                     </TouchableOpacity>
                 </ScrollView>
+
                 <MyFooter navigation={this.props.navigation} mypageBoolean={true} userEmail={this.state.userEmail}></MyFooter>
             </View>
         );
     }
 }
 
-const totalContainer = {
-    flex: 1,
-    backgroundColor: "white",
-    // alignItems: "center",
-    //justifyContent: "center",
-    zIndex: -1
-  }
+const itemContainer = {flexDirection: 'row', width: '100%', aspectRatio: 360 / 60, alignItems: 'center', borderBottomWidth : 1, borderColor : "#f0f0f0"};
+const itemImage = {marginLeft : "6.7%", width: 32, height : 32};
+const itemText = {fontFamily: "S-CoreDream-4Regular", fontSize: 15, letterSpacing: -0.36, color: "#000000", marginLeft : "2.8%"};

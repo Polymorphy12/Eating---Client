@@ -16,6 +16,7 @@ export default class SignUp5 extends React.Component {
             emailAuthBool: false,
             pageTitle: "회원가입",
             _userName: props.navigation.getParam('userName'),
+            userNickname: props.navigation.getParam('userNickname'),
             receiveSMSBool: props.navigation.getParam('receiveSMSBool'),
             phoneNum: props.navigation.getParam('phoneNum'),
         }
@@ -60,6 +61,7 @@ export default class SignUp5 extends React.Component {
                     <Text
                         style={{fontFamily: 'S-CoreDream-4Regular', fontSize: 12, letterSpacing: -0.17, color: '#9b9b9b', marginTop: 12}}
                     >로그인과 회원가입에 필요합니다.</Text>
+                    
 
                     <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 14}}>
                         <TextInput
@@ -142,7 +144,7 @@ export default class SignUp5 extends React.Component {
                                                         emailAuthText: this.state.emailAuthText,
                                                     }
                                                 }).then(response => {
-                                                    if (response.data === -1)       ToastAndroid.show('시스템에 문제가 생겼습니다. 고객센터에 문의해주세요.', ToastAndroid.SHORT);
+                                                    if (response.data === -1)       ToastAndroid.show('시스템에 문제가 발생했습니다. 고객센터에 문의해주세요.', ToastAndroid.SHORT);
                                                     else if (response.data === 0)   ToastAndroid.show('잘못된 인증번호입니다.', ToastAndroid.SHORT);
                                                     else if (response.data === 1) {
                                                         ToastAndroid.show('이메일 인증에 성공했습니다.', ToastAndroid.SHORT);
@@ -228,11 +230,12 @@ export default class SignUp5 extends React.Component {
                                         password : this.state.pass_word,
                                         passwordCheck : this.state.pass_word_check,
                                         userName: this.state._userName,
+                                        userNickname: this.state.userNickname,
                                         receiveSMSBool: this.state.receiveSMSBool,
                                         phoneNum: this.state.phoneNum,
                                     }
                                 }).then(response => {
-                                    if(response.data === true) this.props.navigation.navigate('signUp6');
+                                    if(response.data === true) this.props.navigation.replace('signUp6');
                                     else ToastAndroid.show(response.data, ToastAndroid.SHORT);
                                 }).catch((error) => {
                                     console.log('There has been a problem with your fetch operation: ' + error.message);

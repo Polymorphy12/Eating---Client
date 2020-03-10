@@ -97,6 +97,9 @@ export default class LocationSet extends Component {
                 renderItem={this._renderItem}
                 extraData={this.state}
                 contentContainerStyle={{marginBottom: 16}}/>
+
+              {/* <Text>{JSON.stringify(this.state.itemPressed)}</Text> */}
+              {/* <Text>{JSON.stringify(this.state.userEmail)}</Text> */}
             </ScrollView>
             
             <View style={{alignItems: 'center', justifyContent: 'center'}}>

@@ -10,7 +10,7 @@ export default class OrderHistory extends Component {
     super(props);
     this.state = {
       data: [],
-      pageTitle: '장바구니',
+      pageTitle: '현재 주문내역',
       userEmail : props.navigation.getParam('userEmail', ''),
     };
   }
@@ -45,7 +45,7 @@ export default class OrderHistory extends Component {
                     resizeMode={'cover'}></Image>
           </View>
           <View style={{marginLeft: 12, flexDirection: 'column', justifyContent: 'center'}}>
-            <Text style={{fontFamily: 'S-CoreDream-4Regular', fontSize: 9, lineHeight: 10, letterSpacing: 0.11, color: '#000000'}}>{this.dateParse(item.pay_date)} {item.lunch === true ? '점심' : '저녁'}</Text>
+            <Text style={{fontFamily: 'S-CoreDream-4Regular', fontSize: 9, lineHeight: 10, letterSpacing: 0.11, color: '#000000'}}>{this.dateParse(item.deliv_date)} {item.lunch === true ? '점심' : '저녁'}</Text>
             <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 14, lineHeight: 18, letterSpacing: 0.17, color: '#000000', marginTop: 7}}>{item.sample_restaurant}</Text>
             <Text style={{fontFamily: 'S-CoreDream-4Regular', fontSize: 9, lineHeight: 10, letterSpacing: 0.11, color: '#000000'}}>{item.sample_menu_name}</Text>
             <Text style={{fontFamily: 'S-CoreDream-4Regular', fontSize: 9, lineHeight: 10, letterSpacing: 0.11, color: '#000000'}}>₩ {this.numberWithCommas(item.sample_menu_price)}</Text>
@@ -74,10 +74,13 @@ export default class OrderHistory extends Component {
           data={this.state.data}
           renderItem={this._renderItem}
           contentContainerStyle={listView}/>
+          
         {/*<Text>{JSON.stringify(this.state.data)}</Text>*/}
+
         <TouchableOpacity style={{height: '6.9%', marginHorizontal: '10%', marginVertical: 23, borderRadius: 40, alignItems: 'center', justifyContent: 'center', backgroundColor: '#ed6578'}}>
           <Text style={{fontFamily: 'S-CoreDream-6Bold', fontSize: 14, lineHeight: 18, letterSpacing: 0.17, color: '#ffffff'}}>점심 주문 마감까지 남은 시간 00:51:29</Text>
         </TouchableOpacity>
+
         <MyFooter navigation={this.props.navigation} orderBoolean={true} userEmail={this.state.userEmail}></MyFooter>
       </View>
     );

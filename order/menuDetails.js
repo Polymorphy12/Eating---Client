@@ -12,11 +12,11 @@ export default class MenuDetails extends Component {
     this.state = { 
       progress: 1, 
       empty: false, 
-      buttonColor: "#fadee2", 
       pageTitle: props.navigation.getParam('restaurant_name', '봉구스밥버거'), 
       userEmail : props.navigation.getParam('userEmail', ""),
       restaurant_name: props.navigation.getParam('restaurant_name', '봉구스밥버거'),
       timeSelect: props.navigation.getParam('timeSelect'),
+      menuID: props.navigation.getParam('menuID'),
       menuImage : props.navigation.getParam('menuImage', ""),
       menuName : props.navigation.getParam('menuName', '더블치즈제육'),
       menuPrice : props.navigation.getParam('menuPrice', 2500),
@@ -47,6 +47,24 @@ export default class MenuDetails extends Component {
     }
   }
 
+  componentDidMount() {
+    axios.post('http://13.124.193.165:3000/menus/isBookmarked',{
+          params: {
+            userEmail : this.state.userEmail,
+            menuID: this.state.menuID,
+          }
+      })
+      .then(response => {
+          if (response.data === -1) ToastAndroid.show('시스템에 문제가 발생했습니다. 고객센터에 문의해주세요.', ToastAndroid.LONG);
+          else                      this.setState({isBookmarked: response.data});
+      })
+      .catch(error => {
+        console.log('There has been a problem with your fetch operation: ' + error.message);
+        // ADD THIS THROW error
+        throw error;
+      });
+  }
+
   render() {
     return (
       <View style={{flex: 1}}>
@@ -56,8 +74,37 @@ export default class MenuDetails extends Component {
           <View style={{alignItems: 'center', justifyContent: 'center', marginTop: 24, marginBottom: 40}}>
             <Image style={{width: 108, height: 108}}
                     source={{uri: 'http://13.124.193.165:3000/static/' + this.state.menuImage}}></Image>
-            <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 20, letterSpacing: -1, color: '#000000'}}>{this.state.menuName}</Text>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Text style={{fontFamily: 'S-CoreDream-5Medium', fontSize: 20, letterSpacing: -1, color: '#000000', marginLeft: 31}}>{this.state.menuName}</Text>
 
+              <TouchableOpacity onPress={() => {
+                                  axios.post('http://13.124.193.165:3000/menus/toggleBookmark',{
+                                    params: {
+                                      userEmail : this.state.userEmail,
+                                      menuID: this.state.menuID,
+                                    }
+                                  })
+                                  .then(response => {
+                                      if (response.data === -1) ToastAndroid.show('시스템에 문제가 발생했습니다. 고객센터에 문의해주세요.', ToastAndroid.LONG);
+                                      else if (response.data === 1) {
+                                        this.setState({isBookmarked: true});
+                                        ToastAndroid.show('즐겨찾기에 추가되었습니다.', ToastAndroid.SHORT);
+                                      }
+                                      else if (response.data === 2) {
+                                        this.setState({isBookmarked: false});
+                                        ToastAndroid.show('즐겨찾기에서 삭제되었습니다.', ToastAndroid.SHORT);
+                                      }
+                                  })
+                                  .catch(error => {
+                                    console.log('There has been a problem with your fetch operation: ' + error.message);
+                                    // ADD THIS THROW error
+                                    throw error;
+                                  });
+                                }}>
+                <Image  style={{width: 21, height: 21, marginLeft: 10}} 
+                        source={this.state.isBookmarked ? require('../assets/images/drawable-xxxhdpi/icon_bookmark_marked.png') : require('../assets/images/drawable-xxxhdpi/icon_bookmark_unmarked.png')}></Image>
+              </TouchableOpacity>
+            </View>
           </View>
 
           <View style={{flexDirection: 'row', justifyContent: 'space-between', borderBottomWidth: 1, borderBottomColor: '#d5d5d5', paddingBottom: 24}}>
@@ -85,6 +132,8 @@ export default class MenuDetails extends Component {
             </View>
           </View>
         </View>
+
+        {/* <Text>{JSON.stringify(this.state.isBookmarked)}</Text> */}
 
         <View style={{flex: 1, justifyContent: 'flex-end'}}>
           <View style={{flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 16, marginBottom: 28}}>

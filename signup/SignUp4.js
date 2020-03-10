@@ -13,6 +13,7 @@ export default class SignUp4 extends React.Component {
             empty: true,
             pageTitle: "회원가입",
             _userName: props.navigation.getParam('userName'),
+            userNickname: props.navigation.getParam('userNickname'),
             receiveSMSBool: props.navigation.getParam('receiveSMSBool'),
             phoneNum: props.navigation.getParam('phoneNum'),
         }
@@ -54,12 +55,16 @@ export default class SignUp4 extends React.Component {
                         </TouchableOpacity>
                     </View>
 
+                    {/* <Text>{JSON.stringify(this.state)}</Text> */}
+
+
                     <View style={{flex: 1, width: "100%", alignItems:"center", justifyContent: 'flex-end'}}>
                         <TouchableOpacity style={{width: "84.4%", aspectRatio: 304 / 48, alignItems:"center", justifyContent: 'center', borderRadius: 50, backgroundColor: this.state.empty ? '#fadee2' : '#ed6578', marginBottom: 60}}
                                             onPress={() => {
-                                                this.props.navigation.navigate('signUp5', 
+                                                this.props.navigation.replace('signUp5', 
                                                     {   
                                                         userName: this.state._userName,
+                                                        userNickname: this.state.userNickname,
                                                         receiveSMSBool: this.state.receiveSMSBool,
                                                         phoneNum: this.state.phoneNum,
                                                     }

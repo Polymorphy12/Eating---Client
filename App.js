@@ -1,5 +1,5 @@
-import {createAppContainer} from "react-navigation"
-import {createStackNavigator} from 'react-navigation-stack'
+import {createAppContainer} from "react-navigation";
+import {createStackNavigator} from 'react-navigation-stack';
 import MainActivity from "./main/mainActivity";
 import LogIn from "./login/login";
 import FindEmail from "./login/findEmail";
@@ -19,9 +19,13 @@ import OrderHistoryDetails from "./order/orderHistoryDetails";
 import HaktalNews from "./news/haktalNews";
 import EventDetail from "./news/EventDetail";
 import MyPage from "./mypage/mypage";
+import bookmark from './mypage/bookmark';
 import CustomerSatisfaction from "./mypage/CustomerSatisfaction";
 import Announcement from "./mypage/Announcement";
 import personalInfo from "./mypage/personalInfo";
+import changeNickname from './mypage/changeNickname';
+import changePassword from './mypage/changePassword';
+import changePhoneNum from './mypage/changePhoneNum';
 import withdrawal from "./mypage/withdrawal";
 import SignUp1 from "./signup/SignUp1";
 import SignUp2 from "./signup/SignUp2";
@@ -29,7 +33,8 @@ import SignUp3 from "./signup/SignUp3";
 import SignUp4 from "./signup/SignUp4";
 import SignUp5 from "./signup/SignUp5";
 import SignUp6 from "./signup/SignUp6";
-import CheckOrder from './restaurantSide/checkOrder'
+import CheckOrder from './restaurantSide/checkOrder';
+import menuManagement from './restaurantSide/menuManagement';
 
 const App = createStackNavigator(
   {
@@ -61,9 +66,14 @@ const App = createStackNavigator(
     
     //mypage
     mypage: {screen: MyPage},
+    bookmark: {screen: bookmark},
     personalInfo: {screen: personalInfo},
+    changeNickname: {screen: changeNickname},
+    changePassword: {screen: changePassword},
+    changePhoneNum: {screen: changePhoneNum},
     withdrawal: {screen: withdrawal},
-    CustomerSatisfaction : {screen: CustomerSatisfaction},
+
+    customerSatisfaction : {screen: CustomerSatisfaction},
     Announcement: {screen: Announcement},
 
     //signup
@@ -76,9 +86,12 @@ const App = createStackNavigator(
 
     //restaurantSide
     checkOrder: {screen: CheckOrder},
+    menuManagement: {screen: menuManagement},
   },
   
-  {initialRouteName: "Home", headerMode: "none"}
+  {initialRouteName: "SelectRestaurant", headerMode: "none"}
 );
+
+// console.disableYellowBox = true;
 
 export default createAppContainer(App)

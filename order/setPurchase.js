@@ -7,10 +7,8 @@ export default class SetPurchase extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        data: [1, 2, 3, 4, 5, 6,7,8],
         userEmail : props.navigation.getParam('userEmail', ''),
         timeSelect : props.navigation.getParam('timeSelect'),
-        data: {},
     };
   }
     
@@ -45,7 +43,6 @@ export default class SetPurchase extends Component {
                                         timeSelect : this.state.timeSelect,
                                     }
                                 }).then(response => {
-                                    //ToastAndroid.show(JSON.stringify(response.data), ToastAndroid.SHORT);
                                     this.setState({data: response.data});
                                     this.props.navigation.navigate("orderHistory", {userEmail: this.state.userEmail});
                                 }).catch(function(error) {
@@ -56,7 +53,7 @@ export default class SetPurchase extends Component {
             }}>
               <Text>(대충 결제가 완료되는 버튼)</Text>
             </TouchableOpacity>
-            <Text>{JSON.stringify(this.state.data)}</Text>
+            <Text>{this.state.data}</Text>
           </View>
         );
       }
