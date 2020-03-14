@@ -1,7 +1,37 @@
 import React, { Component } from "react";
-import { Text, View, Button, ImageBackground, TouchableOpacity } from "react-native";
+import { Text, View, Button, ImageBackground, TouchableOpacity, ToastAndroid } from "react-native";
+import AsyncStorage from '@react-native-community/async-storage';
+import axios from 'axios';
 
 export default class MainActivity extends Component {
+    
+    setItem = async(key, value) => {
+        try{
+            await AsyncStorage.setItem(key, value);
+        } catch(e){
+
+        }
+    };
+
+    getItem = async (key) => {
+        try{
+            const value = await AsyncStorage.getItem(key);
+            if(value !== null){
+                return value
+            }
+        } catch(e){
+
+        }
+    };
+
+    removeItem = async (key) =>{
+        try{
+            await AsyncStorage.removeItem(key);
+        } catch(e){
+
+        }
+    };
+    
     render() {
         const { navigation } = this.props;
         return (
@@ -22,7 +52,41 @@ export default class MainActivity extends Component {
                 <TouchableOpacity style={{width: '100%', aspectRatio: 328 / 58, borderRadius: 100, alignItems: 'center', justifyContent: 'center', backgroundColor: '#ed6578'}}
                                     title="first"
                                     onPress={() => {
-                                        navigation.navigate("LogIn");
+                                        
+                                        this.getItem("tkn").then((value)=>{
+                                            console.log(value);
+                                            //ToastAndroid.show(value, ToastAndroid.SHORT);
+                
+                                            if(value !==undefined){
+                                                
+                                                axios.get('http://13.124.193.165:3000/auth/auto_login', {
+                                                    params: {
+                                                        token : value
+                                                    }
+                                                })
+                                                .then(response =>{
+                                                    console.log(response.data);
+                                                    ToastAndroid.show(response.data.e_mail, ToastAndroid.SHORT);
+                                                    navigation.navigate("SelectRestaurant", {userEmail : response.data.e_mail});
+                                                })
+                                                .catch(function(error) {
+                                                    console.log('There has been a problem with your fetch operation: ' + error.message);
+                                                    // ADD THIS THROW error
+                                                    throw error;
+                                                });
+                                                
+                                                // ToastAndroid.show(value, ToastAndroid.SHORT);  
+                                                // console.log(value);
+                                            }
+                                            else {
+                                                navigation.navigate("LogIn");
+                                            }
+                                            
+                                        }).catch((e) => {
+                                            console.log(e);
+                                        });
+                                        
+                                        //navigation.navigate("LogIn");
                                     }}>
                     <Text style={{fontFamily: 'S-CoreDream-6Bold', fontSize: 18, letterSpacing: -0.9, color: '#ffffff'}}>이미 회원이세요? 로그인 하기!</Text>
                 </TouchableOpacity>

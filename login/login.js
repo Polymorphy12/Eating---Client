@@ -5,6 +5,7 @@ import { Toast } from "native-base";
 import axios from 'axios';
 import CheckBox from 'react-native-check-box';
 import MyHeader from "../Component/MyHeader";
+import AsyncStorage from '@react-native-community/async-storage'
 
 export default class LogIn extends Component {
 
@@ -16,6 +17,33 @@ export default class LogIn extends Component {
             pageTitle: '로그인',
         }
     }
+
+    setItem = async(key, value) => {
+        try{
+            await AsyncStorage.setItem(key, value);
+        } catch(e){
+
+        }
+    };
+
+    getItem = async (key) => {
+        try{
+            const value = await AsyncStorage.getItem(key);
+            if(value !== null){
+                return value
+            }
+        } catch(e){
+
+        }
+    };
+
+    removeItem = async (key) =>{
+        try{
+            await AsyncStorage.removeItem(key);
+        } catch(e){
+
+        }
+    };
 
     render() {
         const {navigation } = this.props;
@@ -88,7 +116,17 @@ export default class LogIn extends Component {
                                             })
                                                 .then(response => {
                                                     //ToastAndroid.show(JSON.stringify(response.data), ToastAndroid.SHORT);
-                                                    if(response.data === true) {
+                                                    if(response.data.success === true) {
+                                                        
+                                                        this.setItem('tkn', response.data.tkn);
+                                                        this.getItem("tkn").then((value) =>{
+                                                            
+                                                            ToastAndroid.show(value, ToastAndroid.SHORT);  
+                                                            console.log(value);
+                                                        }).catch((e) => {
+                                                            console.log(e);
+                                                        });
+                                                        
                                                         navigation.navigate("SelectRestaurant", {userEmail : this.state.e_mail});
                                                     }
                                                     else ToastAndroid.show('아이디 또는 비밀번호가 잘못되었습니다.', ToastAndroid.SHORT);

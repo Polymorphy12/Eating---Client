@@ -89,7 +89,7 @@ const App = createStackNavigator(
     menuManagement: {screen: menuManagement},
   },
   
-  {initialRouteName: "SelectRestaurant", headerMode: "none"}
+  {initialRouteName: "Home", headerMode: "none"}
 );
 
 // console.disableYellowBox = true;
